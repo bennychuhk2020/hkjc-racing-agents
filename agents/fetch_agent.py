@@ -173,7 +173,7 @@ def extract_race_meta(body_text: str, default_course: str) -> dict[str, str]:
 def parse_runners_from_dom(
     page, default_course: str
 ) -> tuple[list[dict[str, Any]], dict[str, str], dict[str, Any]]:
-  """解析排位表主表 + 各馬匹連結 + 賽前評語表格。"""
+  """解析排位表主表、馬匹資料連結及賽前評語。"""
   eval_result = page.evaluate("""
     () => {
       const title = document.title || "";
@@ -203,22 +203,22 @@ def parse_runners_from_dom(
   runners: list[dict[str, Any]] = []
   meta = extract_race_meta(eval_result.get("bodySnippet", ""), default_course)
 
-  # 1. 提取排位表「評語」區塊（通常為另一張包含「馬號 / 馬名 / 評語」嘅表格）
+  # 1. 提取頁面內任何包含「評語」嘅表格
   comments_by_no: dict[int, str] = {}
   comments_by_name: dict[str, str] = {}
   for tbl in eval_result.get("tables", []):
     rows = tbl.get("rows", [])
-    if len(rows) < 4:
+    if len(rows) < 3:
       continue
     header_texts = rows[0]["texts"]
     joined_h = " ".join(header_texts)
-    if "評語" in joined_h and ("馬名" in joined_h or "馬號" in joined_h or "編號" in joined_h):
+    if "評語" in joined_h:
       c_idx = next((i for i, h in enumerate(header_texts) if "評語" in h), -1)
       n_idx = next((i for i, h in enumerate(header_texts) if "馬名" in h), -1)
       no_idx = next((i for i, h in enumerate(header_texts) if any(k in h for k in ("馬號", "編號", "馬匹編號"))), -1)
       for r in rows[1:]:
         txts = r["texts"]
-        if c_idx != -1 and len(txts) > c_idx and txts[c_idx]:
+        if c_idx != -1 and len(txts) > c_idx and len(txts[c_idx].strip()) > 4:
           cmt = txts[c_idx].strip()
           if no_idx != -1 and len(txts) > no_idx and re.fullmatch(r"\d{1,2}", txts[no_idx].strip()):
             comments_by_no[int(txts[no_idx].strip())] = cmt
@@ -313,11 +313,12 @@ def parse_runners_from_dom(
           if "weight_diff" in col_map
           else ""
       )
-      weight_display = (
-          f"{int(weight_lbs)} ({weight_diff})"
-          if weight_diff and weight_diff not in {"-", "--", "0"}
-          else f"{int(weight_lbs)}"
-      )
+      if weight_diff and weight_diff not in {"-", "--", "0"}:
+        if not weight_diff.startswith(("+", "-")) and weight_diff.isdigit():
+          weight_diff = f"+{weight_diff}"
+        weight_display = f"{int(weight_lbs)} ({weight_diff})"
+      else:
+        weight_display = f"{int(weight_lbs)}"
 
       draw = safe_int(row[col_map["draw"]], 7) if "draw" in col_map else 7
       if not (1 <= draw <= 16):
@@ -336,413 +337,12 @@ def parse_runners_from_dom(
           if "rating_diff" in col_map
           else ""
       )
-      rating_display = (
-          f"{int(rating)} ({rating_diff})"
-          if rating_diff and rating_diff not in {"-", "--", "0"}
-          else f"{int(rating)}"
-      )
-
-      # 排位體重與上次賽後加減
-      body_weight: int | str = "N/A"
-      bw_display = "N/A"
-      if "body_weight" in col_map:
-        raw_bw_cell = row[col_map["body_weight"]].strip()
-        bw_val = safe_float(raw_bw_cell, None)
-        if bw_val is not None and 850 <= bw_val <= 1400:
-          body_weight = int(round(bw_val))
-          bw_diff = (
-              row[col_map["bw_diff"]].strip()
-              if "bw_diff" in col_map
-              else ""
-          )
-          bw_display = (
-              f"{body_weight} ({bw_diff})"
-              if bw_diff and bw_diff not in {"-", "--"}
-              else (raw_bw_cell if "(" in raw_bw_cell else str(body_weight))
-          )
-
-      jockey = (
-          clean_person_name(row[col_map["jockey"]], "N/A")
-          if "jockey" in col_map
-          else "N/A"
-      )
-      trainer = (
-          clean_person_name(row[col_map["trainer"]], "N/A")
-          if "trainer" in col_map
-          else "N/A"
-      )
-      recent_runs = (
-          row[col_map["recent_runs"]].strip() or "N/A"
-          if "recent_runs" in col_map
-          else "N/A"
-      )
-      best_time = (
-          row[col_map["best_time"]].strip() or "--"
-          if "best_time" in col_map
-          else "--"
-      )
-      gear = (
-          row[col_map["gear"]].strip() or "--"
-          if "gear" in col_map
-          else "--"
-      )
-      trump_raw = (
-          row[col_map["trump_card"]].strip()
-          if "trump_card" in col_map
-          else ""
-      )
-      trump_card = "王牌" if trump_raw and trump_raw not in {"-", "--"} else "未使用"
-
-      priority_raw = (
-          row[col_map["priority_entry"]].strip()
-          if "priority_entry" in col_map
-          else ""
-      )
-      priority_entry = (
-          "獲得" if priority_raw and priority_raw not in {"-", "--"} else "一般"
-      )
-
-      trainer_pref = (
-          row[col_map["trainer_pref"]].strip() or "--"
-          if "trainer_pref" in col_map
-          else "--"
-      )
-
-      comment = (
-          comments_by_no.get(horse_no)
-          or comments_by_name.get(horse_name)
-          or "N/A"
-      )
-
-      running_style = infer_running_style(
-          recent_runs, draw, meta.get("distance", "1400")
-      )
-
-      seen_nos.add(horse_no)
-      runners.append({
-          "no": horse_no,
-          "name": horse_name,
-          "horse_url": horse_url,
-          "draw": draw,
-          "weight_lbs": weight_lbs,
-          "weight_display": weight_display,
-          "rating": rating,
-          "rating_display": rating_display,
-          "jockey": jockey,
-          "trainer": trainer,
-          "recent_runs": recent_runs,
-          "running_style": running_style,
-          "body_weight": body_weight,
-          "bw_display": bw_display,
-          "best_time": best_time,
-          "gear": gear,
-          "trump_card": trump_card,
-          "priority_entry": priority_entry,
-          "trainer_pref": trainer_pref,
-          "comment": comment,
-          "age_sex": "N/A",
-          "season_stats": "N/A",
-          "days_since_last": "N/A",
-          "trackwork_summary": "N/A",
-          "win_odds": None,
-      })
-
-    if len(runners) >= 4:
-      break
-
-  return runners, meta, eval_result
-
-
-def enrich_horse_profile(page, horse_url: str) -> dict[str, str]:
-  """進入個別馬匹資料頁，提取年齡/性別、歷季出賽、距離上次出賽及晨操試閘摘要。"""
-  if not horse_url:
-    return {}
-  try:
-    page.goto(horse_url, wait_until="domcontentloaded", timeout=30000)
-    page.wait_for_timeout(1200)
-    text = page.evaluate(
-        "() => document.body ? document.body.innerText : ''"
-    )
-    clean_txt = re.sub(r"[ \t]+", " ", text)
-
-    out: dict[str, str] = {}
-
-    m_age = re.search(r"年齡\s*/\s*性別\s*[:：]?\s*([^\n]+)", clean_txt)
-    if m_age:
-      out["age_sex"] = m_age.group(1).strip()
-
-    m_stats = re.search(
-        r"冠-亞-季-總出賽次數\s*[:：]?\s*([0-9\-]+)", clean_txt
-    )
-    if m_stats:
-      out["season_stats"] = m_stats.group(1).strip()
-
-    # 計算距離上次出賽日數（由最近一場往績日期推算）
-    m_last_date = re.search(r"\b(\d{2})/(\d{2})/(\d{2,4})\b", clean_txt)
-    if m_last_date:
-      d_s, m_s, y_s = m_last_date.groups()
-      yr = int(y_s) + 2000 if len(y_s) == 2 else int(y_s)
-      try:
-        last_dt = datetime(yr, int(m_s), int(d_s), tzinfo=HKT)
-        diff_days = (datetime.now(HKT) - last_dt).days
-        if 0 <= diff_days <= 730:
-          out["days_since_last"] = f"{diff_days}日"
-      except ValueError:
-        pass
-
-    # 提取晨操／試閘次數統計
-    tw_parts = []
-    for label in ("試閘", "快操", "踱步", "游水"):
-      cnt = len(re.findall(label, clean_txt))
-      if cnt > 0:
-        tw_parts.append(f"{label}:{cnt}")
-    if tw_parts:
-      out["trackwork_summary"] = " ".join(tw_parts)
-
-    return out
-  except Exception:
-    return {}
-
-
-def extract_odds_from_json_tree(node: Any, odds_map: dict[int, float]) -> None:
-  if isinstance(node, dict):
-    no_val = None
-    for k in ("runnerNo", "horseNo", "clothNo"):
-      if k in node and node[k] is not None:
-        cand = safe_int(node[k], -1)
-        if 1 <= cand <= 16:
-          no_val = cand
-          break
-
-    if no_val is not None:
-      for ok in ("winOdds", "currentOdds"):
-        if ok in node and node[ok] not in (None, "", "-", "---"):
-          raw_o = node[ok]
-          if isinstance(raw_o, dict):
-            for sub_k in ("oddsValue", "value", "winOdds"):
-              if sub_k in raw_o:
-                o_float = safe_float(raw_o[sub_k], None)
-                if o_float is not None and 1.1 <= o_float <= 999.0:
-                  odds_map[no_val] = o_float
-                  break
-          else:
-            o_float = safe_float(raw_o, None)
-            if o_float is not None and 1.1 <= o_float <= 999.0:
-              odds_map[no_val] = o_float
-              break
-
-    for v in node.values():
-      extract_odds_from_json_tree(v, odds_map)
-  elif isinstance(node, list):
-    for item in node:
-      extract_odds_from_json_tree(item, odds_map)
-
-
-def fetch_win_odds_for_race(
-    page, race_date: str, course: str, race_no: int, runner_names: dict[int, str]
-) -> tuple[dict[int, float], dict[str, Any]]:
-  date_hyphen = race_date.replace("/", "-")
-  odds_url = f"{BET_WP_BASE_URL}/{date_hyphen}/{course}/{race_no}"
-  odds_map: dict[int, float] = {}
-  graphql_hits: list[dict[str, Any]] = []
-
-  def on_resp(resp: Response) -> None:
-    if "graphql" not in resp.url.lower():
-      return
-    try:
-      payload = resp.json()
-      if isinstance(payload, dict):
-        graphql_hits.append(payload)
-        extract_odds_from_json_tree(payload, odds_map)
-    except Exception:
-      pass
-
-  page.on("response", on_resp)
-  try:
-    page.goto(odds_url, wait_until="domcontentloaded", timeout=45000)
-    page.wait_for_timeout(4500)
-
-    if len(odds_map) < len(runner_names):
-      dom_rows = page.evaluate("""
-        () => {
-          const rows = Array.from(document.querySelectorAll("tr, [role='row']"));
-          return rows.map(r => r.innerText.replace(/\\s+/g, " ").trim()).filter(Boolean);
-        }
-        """)
-      for row_txt in dom_rows:
-        for h_no, h_name in runner_names.items():
-          if h_no in odds_map or not h_name or h_name not in row_txt:
-            continue
-          after_name = row_txt.split(h_name, 1)[1]
-          m = re.search(r"\b(\d{1,3}\.\d{1,2})\b", after_name)
-          if m:
-            val = safe_float(m.group(1), None)
-            if val is not None and 1.1 <= val <= 500.0:
-              odds_map[h_no] = val
-  except Exception as exc:
-    print(f"Race {race_no} odds fetch warning: {exc}")
-  finally:
-    page.remove_listener("response", on_resp)
-
-  if len(odds_map) < 3:
-    odds_map.clear()
-
-  diag = {
-      "race_no": race_no,
-      "odds_url": odds_url,
-      "graphql_count": len(graphql_hits),
-      "matched_odds_count": len(odds_map),
-      "sample_odds": dict(list(odds_map.items())[:5]),
-  }
-  return odds_map, diag
-
-
-def fetch_hkjc_race_data() -> dict[str, Any]:
-  races: list[dict[str, Any]] = []
-  debug_summary: list[dict[str, Any]] = []
-  odds_diagnostics: list[dict[str, Any]] = []
-  max_races_to_check = int(os.getenv("HKJC_MAX_RACES", "11"))
-  fetch_horse_profiles = os.getenv("HKJC_FETCH_HORSE_DETAILS", "true").lower() == "true"
-
-  with sync_playwright() as p:
-    browser = p.chromium.launch(
-        headless=True,
-        args=["--disable-blink-features=AutomationControlled", "--no-sandbox"],
-    )
-    context = browser.new_context(
-        locale="zh-HK",
-        timezone_id="Asia/Hong_Kong",
-        user_agent=(
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/131.0.0.0 Safari/537.36"
-        ),
-        viewport={"width": 1440, "height": 900},
-    )
-    page = context.new_page()
-
-    def route_handler(route):
-      if route.request.resource_type in {"image", "media", "font"}:
-        route.abort()
+      if rating_diff and rating_diff not in {"-", "--", "0"}:
+        if not rating_diff.startswith(("+", "-")) and rating_diff.isdigit():
+          rating_diff = f"+{rating_diff}"
+        rating_display = f"{int(rating)} ({rating_diff})"
       else:
-        route.continue_()
+        rating_display = f"{int(rating)}"
 
-    page.route("**/*", route_handler)
-
-    try:
-      initial_url = build_target_url(
-          race_date=os.getenv("HKJC_RACE_DATE", "").strip(),
-          course=os.getenv("HKJC_RACE_COURSE", "").strip().upper(),
-          race_no=1,
-      )
-      print(f"Loading initial racecard: {initial_url}")
-      page.goto(initial_url, wait_until="domcontentloaded", timeout=60000)
-      page.wait_for_timeout(3500)
-
-      race_date, course = detect_meeting_params(page)
-      print(f"Detected meeting -> race_date={race_date}, course={course}")
-
-      for race_no in range(1, max_races_to_check + 1):
-        target_url = build_target_url(
-            race_date=race_date, course=course, race_no=race_no
-        )
-        if race_no > 1:
-          print(f"Fetching Race {race_no} card: {target_url}")
-          page.goto(target_url, wait_until="domcontentloaded", timeout=60000)
-          page.wait_for_timeout(2500)
-
-        runners, meta, eval_info = parse_runners_from_dom(page, course)
-
-        if race_no in {1, 2}:
-          debug_summary.append({
-              "race_no": race_no,
-              "url": eval_info.get("url"),
-              "meta": meta,
-              "runner_count": len(runners),
-          })
-
-        if not runners:
-          print(f"No runners found for Race {race_no}, stopping loop.")
-          break
-
-        if (
-            races
-            and runners[0]["name"] == races[0]["runners"][0]["name"]
-            and len(runners) == len(races[0]["runners"])
-        ):
-          print(
-              f"Race {race_no} returned identical runners to Race 1, stopping."
-          )
-          break
-
-        races.append({
-            "race_no": race_no,
-            "distance": meta.get("distance", ""),
-            "course": meta.get("course", ""),
-            "class_name": meta.get("class_name", "N/A"),
-            "track_feature": meta.get("track_feature", "標準賽道"),
-            "runners": runners,
-        })
-        print(f"Race {race_no}: extracted {len(runners)} runners.")
-
-      # 補抓個別馬匹資料頁（年齡/性別、歷季冠亞季、距上次出賽、晨操試閘）
-      if fetch_horse_profiles and races:
-        print("Enriching horse profile details (age/sex, stats, trackwork)...")
-        for race_obj in races:
-          for r in race_obj["runners"]:
-            extra = enrich_horse_profile(page, r.get("horse_url", ""))
-            r.update(extra)
-
-      # 逐場抓取實時獨贏賠率
-      if race_date and races:
-        print("Fetching live win odds from bet.hkjc.com...")
-        for race_obj in races:
-          r_no = race_obj["race_no"]
-          runner_names = {r["no"]: r["name"] for r in race_obj["runners"]}
-          odds_map, o_diag = fetch_win_odds_for_race(
-              page, race_date, course, r_no, runner_names
-          )
-          odds_diagnostics.append(o_diag)
-          for r in race_obj["runners"]:
-            if r["no"] in odds_map:
-              r["win_odds"] = odds_map[r["no"]]
-          print(
-              f"Race {r_no} odds: matched {len(odds_map)}/{len(runner_names)} runners."
-          )
-    finally:
-      browser.close()
-
-  RAW_DEBUG_PATH.parent.mkdir(parents=True, exist_ok=True)
-  RAW_DEBUG_PATH.write_text(
-      json.dumps(
-          {
-              "racecard_summary": debug_summary,
-              "odds_diagnostics": odds_diagnostics,
-          },
-          ensure_ascii=False,
-          indent=2,
-      ),
-      encoding="utf-8",
-  )
-
-  result = {
-      "race_date": race_date or datetime.now(HKT).strftime("%Y-%m-%d"),
-      "course_code": course,
-      "source_url": build_target_url(
-          race_date=race_date, course=course, race_no=1
-      ),
-      "fetched_at_hkt": datetime.now(HKT).isoformat(),
-      "races": races,
-  }
-
-  OUTPUT_DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
-  OUTPUT_DATA_PATH.write_text(
-      json.dumps(result, ensure_ascii=False, indent=2),
-      encoding="utf-8",
-  )
-  print(f"Saved {len(races)} races to {OUTPUT_DATA_PATH}")
-  return result
-
-
-if __name__ == "__main__":
-  fetch_hkjc_race_data()
+      body_weight: int | str = "N/A"
+      bw_
