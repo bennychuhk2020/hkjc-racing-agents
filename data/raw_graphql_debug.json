@@ -28,144 +28,78 @@
       "race_no": 1,
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/1",
       "graphql_count": 10,
-      "matched_odds_count": 14,
-      "sample_odds": {
-        "1": 9.0,
-        "2": 11.0,
-        "3": 1.0,
-        "4": 6.0,
-        "5": 12.0
-      }
+      "matched_odds_count": 0,
+      "sample_odds": {}
     },
     {
       "race_no": 2,
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/2",
       "graphql_count": 10,
-      "matched_odds_count": 12,
-      "sample_odds": {
-        "1": 5.0,
-        "2": 4.0,
-        "3": 1.0,
-        "4": 3.0,
-        "5": 2.0
-      }
+      "matched_odds_count": 0,
+      "sample_odds": {}
     },
     {
       "race_no": 3,
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/3",
       "graphql_count": 10,
-      "matched_odds_count": 12,
-      "sample_odds": {
-        "1": 6.0,
-        "2": 3.0,
-        "3": 10.0,
-        "4": 1.0,
-        "5": 4.0
-      }
+      "matched_odds_count": 0,
+      "sample_odds": {}
     },
     {
       "race_no": 4,
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/4",
       "graphql_count": 10,
-      "matched_odds_count": 14,
-      "sample_odds": {
-        "1": 13.0,
-        "2": 1.0,
-        "3": 14.0,
-        "4": 8.0,
-        "5": 12.0
-      }
+      "matched_odds_count": 0,
+      "sample_odds": {}
     },
     {
       "race_no": 5,
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/5",
       "graphql_count": 10,
-      "matched_odds_count": 10,
-      "sample_odds": {
-        "1": 9.0,
-        "2": 4.0,
-        "3": 2.0,
-        "4": 8.0,
-        "5": 5.0
-      }
+      "matched_odds_count": 0,
+      "sample_odds": {}
     },
     {
       "race_no": 6,
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/6",
       "graphql_count": 10,
-      "matched_odds_count": 14,
-      "sample_odds": {
-        "1": 1.0,
-        "2": 10.0,
-        "3": 5.0,
-        "4": 9.0,
-        "5": 8.0
-      }
+      "matched_odds_count": 0,
+      "sample_odds": {}
     },
     {
       "race_no": 7,
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/7",
       "graphql_count": 10,
-      "matched_odds_count": 13,
-      "sample_odds": {
-        "1": 6.0,
-        "2": 12.0,
-        "3": 5.0,
-        "4": 10.0,
-        "5": 2.0
-      }
+      "matched_odds_count": 0,
+      "sample_odds": {}
     },
     {
       "race_no": 8,
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/8",
       "graphql_count": 10,
-      "matched_odds_count": 12,
-      "sample_odds": {
-        "1": 6.0,
-        "2": 9.0,
-        "3": 5.0,
-        "4": 3.0,
-        "5": 7.0
-      }
+      "matched_odds_count": 0,
+      "sample_odds": {}
     },
     {
       "race_no": 9,
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/9",
       "graphql_count": 10,
-      "matched_odds_count": 14,
-      "sample_odds": {
-        "1": 6.0,
-        "2": 12.0,
-        "3": 13.0,
-        "4": 5.0,
-        "5": 10.0
-      }
+      "matched_odds_count": 0,
+      "sample_odds": {}
     },
     {
       "race_no": 10,
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/10",
       "graphql_count": 10,
-      "matched_odds_count": 14,
-      "sample_odds": {
-        "1": 3.0,
-        "2": 14.0,
-        "3": 12.0,
-        "4": 4.0,
-        "5": 13.0
-      }
+      "matched_odds_count": 0,
+      "sample_odds": {}
     },
     {
       "race_no": 11,
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/11",
       "graphql_count": 10,
-      "matched_odds_count": 12,
-      "sample_odds": {
-        "1": 1.0,
-        "2": 11.0,
-        "3": 7.0,
-        "4": 10.0,
-        "5": 5.0
-      }
+      "matched_odds_count": 0,
+      "sample_odds": {}
     }
   ]
 }
