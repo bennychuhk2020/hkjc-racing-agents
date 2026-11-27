@@ -2,7 +2,12 @@
   {
     "race_no": 1,
     "url": "https://racing.hkjc.com/zh-hk/local/information/racecard?RaceNo=1",
-    "distance": "1400",
+    "meta": {
+      "distance": "1400",
+      "course": "沙田",
+      "class_name": "第五班",
+      "track_feature": "\"C\" 賽道"
+    },
     "runner_count": 14,
     "table_headers": [
       [
@@ -590,7 +595,12 @@
   {
     "race_no": 2,
     "url": "https://racing.hkjc.com/zh-hk/local/information/racecard?raceDate=2026/11/29&Racecourse=ST&RaceNo=2",
-    "distance": "1200",
+    "meta": {
+      "distance": "1200",
+      "course": "沙田",
+      "class_name": "第四班",
+      "track_feature": "全天候跑道"
+    },
     "runner_count": 12,
     "table_headers": [
       [

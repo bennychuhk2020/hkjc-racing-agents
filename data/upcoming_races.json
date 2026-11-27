@@ -2,12 +2,14 @@
   "race_date": "2026/11/29",
   "course_code": "ST",
   "source_url": "https://racing.hkjc.com/zh-hk/local/information/racecard?raceDate=2026/11/29&Racecourse=ST&RaceNo=1",
-  "fetched_at_hkt": "2026-11-27T15:56:34.858685+08:00",
+  "fetched_at_hkt": "2026-11-27T16:08:28.895515+08:00",
   "races": [
     {
       "race_no": 1,
       "distance": "1400",
       "course": "沙田",
+      "class_name": "第五班",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -15,6 +17,11 @@
           "draw": 9,
           "weight_lbs": 135.0,
           "rating": 40.0,
+          "jockey": "霍宏聲",
+          "trainer": "游達榮",
+          "recent_runs": "6/7/10/9/6/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -23,6 +30,11 @@
           "draw": 11,
           "weight_lbs": 135.0,
           "rating": 40.0,
+          "jockey": "何澤堯",
+          "trainer": "伍鵬志",
+          "recent_runs": "1/10/3/2/4/5",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -31,6 +43,11 @@
           "draw": 1,
           "weight_lbs": 133.0,
           "rating": 38.0,
+          "jockey": "艾兆禮",
+          "trainer": "丁冠豪",
+          "recent_runs": "8/4/2/3/4/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -39,6 +56,11 @@
           "draw": 6,
           "weight_lbs": 133.0,
           "rating": 38.0,
+          "jockey": "艾道拿",
+          "trainer": "黎昭昇",
+          "recent_runs": "9/6/3/6/9/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -47,6 +69,11 @@
           "draw": 12,
           "weight_lbs": 132.0,
           "rating": 37.0,
+          "jockey": "麥文堅",
+          "trainer": "蔡約翰",
+          "recent_runs": "5/9/14/5/13/9",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -55,6 +82,11 @@
           "draw": 14,
           "weight_lbs": 131.0,
           "rating": 36.0,
+          "jockey": "班德禮",
+          "trainer": "桂福特",
+          "recent_runs": "9/6/12/6/10/9",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -63,6 +95,11 @@
           "draw": 10,
           "weight_lbs": 131.0,
           "rating": 36.0,
+          "jockey": "奧爾民",
+          "trainer": "賀賢",
+          "recent_runs": "9/9/8/5/4/8",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -71,6 +108,11 @@
           "draw": 3,
           "weight_lbs": 131.0,
           "rating": 36.0,
+          "jockey": "梁家俊",
+          "trainer": "鄭俊偉",
+          "recent_runs": "9/1/1/6/3/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -79,6 +121,11 @@
           "draw": 2,
           "weight_lbs": 129.0,
           "rating": 34.0,
+          "jockey": "袁幸堯",
+          "trainer": "葉楚航",
+          "recent_runs": "7/10/13/9/7/10",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -87,6 +134,11 @@
           "draw": 7,
           "weight_lbs": 129.0,
           "rating": 34.0,
+          "jockey": "巴度",
+          "trainer": "巫偉傑",
+          "recent_runs": "10/6/6/7/7/12",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -95,6 +147,11 @@
           "draw": 4,
           "weight_lbs": 125.0,
           "rating": 30.0,
+          "jockey": "蔡明紹",
+          "trainer": "告東尼",
+          "recent_runs": "5/7/9/5/7/6",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -103,6 +160,11 @@
           "draw": 5,
           "weight_lbs": 118.0,
           "rating": 23.0,
+          "jockey": "潘頓",
+          "trainer": "大衛希斯",
+          "recent_runs": "7/5/3/2/3/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -111,6 +173,11 @@
           "draw": 13,
           "weight_lbs": 116.0,
           "rating": 21.0,
+          "jockey": "巫顯東",
+          "trainer": "韋達",
+          "recent_runs": "11/12/10/9/10/11",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -119,6 +186,11 @@
           "draw": 8,
           "weight_lbs": 115.0,
           "rating": 20.0,
+          "jockey": "潘明輝",
+          "trainer": "文家良",
+          "recent_runs": "4/5/7/8/6/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         }
       ]
@@ -127,6 +199,8 @@
       "race_no": 2,
       "distance": "1200",
       "course": "沙田",
+      "class_name": "第四班",
+      "track_feature": "全天候跑道",
       "runners": [
         {
           "no": 1,
@@ -134,6 +208,11 @@
           "draw": 5,
           "weight_lbs": 135.0,
           "rating": 60.0,
+          "jockey": "潘頓",
+          "trainer": "大衛希斯",
+          "recent_runs": "3/4/7/11/12/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -142,6 +221,11 @@
           "draw": 4,
           "weight_lbs": 135.0,
           "rating": 60.0,
+          "jockey": "何澤堯",
+          "trainer": "葉楚航",
+          "recent_runs": "2/4/1/9/2/11",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -150,6 +234,11 @@
           "draw": 1,
           "weight_lbs": 134.0,
           "rating": 59.0,
+          "jockey": "袁幸堯",
+          "trainer": "姚本輝",
+          "recent_runs": "1/2/4/9/2/12",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -158,6 +247,11 @@
           "draw": 3,
           "weight_lbs": 133.0,
           "rating": 58.0,
+          "jockey": "黃智弘",
+          "trainer": "方嘉柏",
+          "recent_runs": "12/9/7/7/10/12",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -166,6 +260,11 @@
           "draw": 2,
           "weight_lbs": 131.0,
           "rating": 56.0,
+          "jockey": "奧爾民",
+          "trainer": "游達榮",
+          "recent_runs": "7/4/1/9/6/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -174,6 +273,11 @@
           "draw": 11,
           "weight_lbs": 129.0,
           "rating": 54.0,
+          "jockey": "霍宏聲",
+          "trainer": "廖康銘",
+          "recent_runs": "6/7/12/6/2/1",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -182,6 +286,11 @@
           "draw": 8,
           "weight_lbs": 127.0,
           "rating": 52.0,
+          "jockey": "班德禮",
+          "trainer": "文家良",
+          "recent_runs": "12/1/9/6/13/10",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -190,6 +299,11 @@
           "draw": 10,
           "weight_lbs": 127.0,
           "rating": 52.0,
+          "jockey": "艾兆禮",
+          "trainer": "賀賢",
+          "recent_runs": "7/6/7/3/7/1",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -198,6 +312,11 @@
           "draw": 6,
           "weight_lbs": 125.0,
           "rating": 50.0,
+          "jockey": "巴度",
+          "trainer": "告東尼",
+          "recent_runs": "2/4/9/8/3/13",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -206,6 +325,11 @@
           "draw": 7,
           "weight_lbs": 120.0,
           "rating": 45.0,
+          "jockey": "楊明綸",
+          "trainer": "鄭俊偉",
+          "recent_runs": "7/11/12/9",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -214,6 +338,11 @@
           "draw": 9,
           "weight_lbs": 118.0,
           "rating": 43.0,
+          "jockey": "黃寶妮",
+          "trainer": "徐雨石",
+          "recent_runs": "10/9/10/9/11/11",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -222,6 +351,11 @@
           "draw": 12,
           "weight_lbs": 118.0,
           "rating": 43.0,
+          "jockey": "希威森",
+          "trainer": "桂福特",
+          "recent_runs": "7/5/9/11/8",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         }
       ]
@@ -230,6 +364,8 @@
       "race_no": 3,
       "distance": "1200",
       "course": "沙田",
+      "class_name": "第四班",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -237,6 +373,11 @@
           "draw": 6,
           "weight_lbs": 134.0,
           "rating": 60.0,
+          "jockey": "袁幸堯",
+          "trainer": "廖康銘",
+          "recent_runs": "2/8/3/8/8/9",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -245,6 +386,11 @@
           "draw": 3,
           "weight_lbs": 133.0,
           "rating": 59.0,
+          "jockey": "金誠剛",
+          "trainer": "葉楚航",
+          "recent_runs": "12/14/14",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -253,6 +399,11 @@
           "draw": 10,
           "weight_lbs": 132.0,
           "rating": 58.0,
+          "jockey": "巫顯東",
+          "trainer": "徐雨石",
+          "recent_runs": "8/9/13/11/11/8",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -261,6 +412,11 @@
           "draw": 1,
           "weight_lbs": 131.0,
           "rating": 57.0,
+          "jockey": "奧爾民",
+          "trainer": "蘇偉賢",
+          "recent_runs": "1/3/13/6",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -269,6 +425,11 @@
           "draw": 4,
           "weight_lbs": 128.0,
           "rating": 54.0,
+          "jockey": "艾道拿",
+          "trainer": "游達榮",
+          "recent_runs": "3/7/8/11/14/14",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -277,6 +438,11 @@
           "draw": 7,
           "weight_lbs": 126.0,
           "rating": 52.0,
+          "jockey": "潘頓",
+          "trainer": "賀賢",
+          "recent_runs": "3/4",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -285,6 +451,11 @@
           "draw": 12,
           "weight_lbs": 126.0,
           "rating": 52.0,
+          "jockey": "何澤堯",
+          "trainer": "呂健威",
+          "recent_runs": "6/3/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -293,6 +464,11 @@
           "draw": 5,
           "weight_lbs": 126.0,
           "rating": 52.0,
+          "jockey": "霍宏聲",
+          "trainer": "巫偉傑",
+          "recent_runs": "13/11/5/7/7/6",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -301,6 +477,11 @@
           "draw": 8,
           "weight_lbs": 126.0,
           "rating": 52.0,
+          "jockey": "楊明綸",
+          "trainer": "大衛希斯",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -309,6 +490,11 @@
           "draw": 2,
           "weight_lbs": 126.0,
           "rating": 52.0,
+          "jockey": "班德禮",
+          "trainer": "丁冠豪",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -317,6 +503,11 @@
           "draw": 11,
           "weight_lbs": 126.0,
           "rating": 52.0,
+          "jockey": "艾兆禮",
+          "trainer": "甘敏斯",
+          "recent_runs": "4/1/3/7/6/12",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -325,6 +516,11 @@
           "draw": 9,
           "weight_lbs": 126.0,
           "rating": 52.0,
+          "jockey": "梁家俊",
+          "trainer": "伍鵬志",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         }
       ]
@@ -333,6 +529,8 @@
       "race_no": 4,
       "distance": "1400",
       "course": "沙田",
+      "class_name": "第四班",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -340,6 +538,11 @@
           "draw": 13,
           "weight_lbs": 135.0,
           "rating": 60.0,
+          "jockey": "麥文堅",
+          "trainer": "黎昭昇",
+          "recent_runs": "9/7/5/12/4/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -348,6 +551,11 @@
           "draw": 1,
           "weight_lbs": 132.0,
           "rating": 57.0,
+          "jockey": "金誠剛",
+          "trainer": "游達榮",
+          "recent_runs": "6/10/8/11/8/10",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -356,6 +564,11 @@
           "draw": 14,
           "weight_lbs": 130.0,
           "rating": 55.0,
+          "jockey": "奧爾民",
+          "trainer": "桂福特",
+          "recent_runs": "9/10/6/12/6",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -364,6 +577,11 @@
           "draw": 8,
           "weight_lbs": 129.0,
           "rating": 54.0,
+          "jockey": "巴度",
+          "trainer": "告東尼",
+          "recent_runs": "5/2/2/1/7/10",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -372,6 +590,11 @@
           "draw": 12,
           "weight_lbs": 128.0,
           "rating": 53.0,
+          "jockey": "潘頓",
+          "trainer": "沈集成",
+          "recent_runs": "1/3/4/8/2/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -380,6 +603,11 @@
           "draw": 5,
           "weight_lbs": 128.0,
           "rating": 53.0,
+          "jockey": "黃寶妮",
+          "trainer": "韋達",
+          "recent_runs": "8/10/10/9/10/13",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -388,6 +616,11 @@
           "draw": 4,
           "weight_lbs": 127.0,
           "rating": 52.0,
+          "jockey": "希威森",
+          "trainer": "呂健威",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -396,6 +629,11 @@
           "draw": 11,
           "weight_lbs": 127.0,
           "rating": 52.0,
+          "jockey": "梁家俊",
+          "trainer": "羅富全",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -404,6 +642,11 @@
           "draw": 6,
           "weight_lbs": 127.0,
           "rating": 52.0,
+          "jockey": "艾道拿",
+          "trainer": "大衛希斯",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -412,6 +655,11 @@
           "draw": 9,
           "weight_lbs": 126.0,
           "rating": 51.0,
+          "jockey": "潘明輝",
+          "trainer": "巫偉傑",
+          "recent_runs": "6/3/4/5/8/5",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -420,6 +668,11 @@
           "draw": 3,
           "weight_lbs": 126.0,
           "rating": 51.0,
+          "jockey": "霍宏聲",
+          "trainer": "廖康銘",
+          "recent_runs": "3/4/10",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -428,6 +681,11 @@
           "draw": 2,
           "weight_lbs": 123.0,
           "rating": 48.0,
+          "jockey": "何澤堯",
+          "trainer": "葉楚航",
+          "recent_runs": "8/2/4/4/8/11",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -436,6 +694,11 @@
           "draw": 10,
           "weight_lbs": 119.0,
           "rating": 44.0,
+          "jockey": "袁幸堯",
+          "trainer": "文家良",
+          "recent_runs": "14/5/2/9/9/8",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -444,6 +707,11 @@
           "draw": 7,
           "weight_lbs": 116.0,
           "rating": 41.0,
+          "jockey": "蔡明紹",
+          "trainer": "蘇偉賢",
+          "recent_runs": "10/7/12/10/4/9",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         }
       ]
@@ -452,6 +720,8 @@
       "race_no": 5,
       "distance": "1000",
       "course": "沙田",
+      "class_name": "第二班",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -459,6 +729,11 @@
           "draw": 9,
           "weight_lbs": 135.0,
           "rating": 100.0,
+          "jockey": "麥文堅",
+          "trainer": "蔡約翰",
+          "recent_runs": "5/4/6/7/6/1",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -467,6 +742,11 @@
           "draw": 4,
           "weight_lbs": 132.0,
           "rating": 97.0,
+          "jockey": "黃寶妮",
+          "trainer": "告東尼",
+          "recent_runs": "13/9/8/15/10/10",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -475,6 +755,11 @@
           "draw": 2,
           "weight_lbs": 129.0,
           "rating": 94.0,
+          "jockey": "梁家俊",
+          "trainer": "姚本輝",
+          "recent_runs": "9/3/7/1/5/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -483,6 +768,11 @@
           "draw": 8,
           "weight_lbs": 126.0,
           "rating": 91.0,
+          "jockey": "何澤堯",
+          "trainer": "伍鵬志",
+          "recent_runs": "1/8/6/10/11/11",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -491,6 +781,11 @@
           "draw": 5,
           "weight_lbs": 120.0,
           "rating": 85.0,
+          "jockey": "楊明綸",
+          "trainer": "丁冠豪",
+          "recent_runs": "1/4/6/2/3/10",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -499,6 +794,11 @@
           "draw": 10,
           "weight_lbs": 120.0,
           "rating": 85.0,
+          "jockey": "班德禮",
+          "trainer": "大衛希斯",
+          "recent_runs": "2/7/4/7/11/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -507,6 +807,11 @@
           "draw": 6,
           "weight_lbs": 119.0,
           "rating": 84.0,
+          "jockey": "蔡明紹",
+          "trainer": "告東尼",
+          "recent_runs": "6/9/1/11/9/7",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -515,6 +820,11 @@
           "draw": 3,
           "weight_lbs": 118.0,
           "rating": 83.0,
+          "jockey": "艾兆禮",
+          "trainer": "羅富全",
+          "recent_runs": "2/1/4/8/2/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -523,6 +833,11 @@
           "draw": 1,
           "weight_lbs": 118.0,
           "rating": 83.0,
+          "jockey": "袁幸堯",
+          "trainer": "巫偉傑",
+          "recent_runs": "10/4/1/1/8/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -531,6 +846,11 @@
           "draw": 7,
           "weight_lbs": 115.0,
           "rating": 80.0,
+          "jockey": "巴度",
+          "trainer": "方嘉柏",
+          "recent_runs": "7/3/1/7/7/8",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         }
       ]
@@ -539,6 +859,8 @@
       "race_no": 6,
       "distance": "1600",
       "course": "沙田",
+      "class_name": "第四班",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -546,6 +868,11 @@
           "draw": 1,
           "weight_lbs": 135.0,
           "rating": 60.0,
+          "jockey": "何澤堯",
+          "trainer": "巫偉傑",
+          "recent_runs": "13/13/8/5/1/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -554,6 +881,11 @@
           "draw": 10,
           "weight_lbs": 133.0,
           "rating": 58.0,
+          "jockey": "艾道拿",
+          "trainer": "游達榮",
+          "recent_runs": "11/10/4/11",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -562,6 +894,11 @@
           "draw": 5,
           "weight_lbs": 129.0,
           "rating": 54.0,
+          "jockey": "班德禮",
+          "trainer": "羅富全",
+          "recent_runs": "6/1/11/12",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -570,6 +907,11 @@
           "draw": 9,
           "weight_lbs": 128.0,
           "rating": 53.0,
+          "jockey": "潘頓",
+          "trainer": "大衛希斯",
+          "recent_runs": "7/4/1/7/6/7",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -578,6 +920,11 @@
           "draw": 8,
           "weight_lbs": 127.0,
           "rating": 52.0,
+          "jockey": "蔡明紹",
+          "trainer": "文家良",
+          "recent_runs": "14",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -586,6 +933,11 @@
           "draw": 3,
           "weight_lbs": 125.0,
           "rating": 50.0,
+          "jockey": "麥文堅",
+          "trainer": "蔡約翰",
+          "recent_runs": "5/2/7/13/13",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -594,6 +946,11 @@
           "draw": 4,
           "weight_lbs": 125.0,
           "rating": 50.0,
+          "jockey": "潘明輝",
+          "trainer": "姚本輝",
+          "recent_runs": "10/11",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -602,6 +959,11 @@
           "draw": 13,
           "weight_lbs": 124.0,
           "rating": 49.0,
+          "jockey": "奧爾民",
+          "trainer": "呂健威",
+          "recent_runs": "10/13",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -610,6 +972,11 @@
           "draw": 6,
           "weight_lbs": 123.0,
           "rating": 48.0,
+          "jockey": "梁家俊",
+          "trainer": "告東尼",
+          "recent_runs": "14/11/12/7/8/7",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -618,6 +985,11 @@
           "draw": 14,
           "weight_lbs": 123.0,
           "rating": 48.0,
+          "jockey": "袁幸堯",
+          "trainer": "韋達",
+          "recent_runs": "7/4/6/1/1/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -626,6 +998,11 @@
           "draw": 11,
           "weight_lbs": 122.0,
           "rating": 47.0,
+          "jockey": "艾兆禮",
+          "trainer": "蘇偉賢",
+          "recent_runs": "11/8/11",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -634,6 +1011,11 @@
           "draw": 7,
           "weight_lbs": 122.0,
           "rating": 47.0,
+          "jockey": "黃智弘",
+          "trainer": "方嘉柏",
+          "recent_runs": "1/5/8/12/10/5",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -642,6 +1024,11 @@
           "draw": 2,
           "weight_lbs": 117.0,
           "rating": 42.0,
+          "jockey": "楊明綸",
+          "trainer": "鄭俊偉",
+          "recent_runs": "11/9/9/9/7",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -650,6 +1037,11 @@
           "draw": 12,
           "weight_lbs": 116.0,
           "rating": 41.0,
+          "jockey": "巴度",
+          "trainer": "桂福特",
+          "recent_runs": "1/4/3/1/6/9",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         }
       ]
@@ -658,6 +1050,8 @@
       "race_no": 7,
       "distance": "1600",
       "course": "沙田",
+      "class_name": "第二班",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -665,6 +1059,11 @@
           "draw": 6,
           "weight_lbs": 135.0,
           "rating": 95.0,
+          "jockey": "霍宏聲",
+          "trainer": "韋達",
+          "recent_runs": "3/10/8/4/1/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -673,6 +1072,11 @@
           "draw": 12,
           "weight_lbs": 134.0,
           "rating": 94.0,
+          "jockey": "艾兆禮",
+          "trainer": "姚本輝",
+          "recent_runs": "1/6/1/1/2/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -681,6 +1085,11 @@
           "draw": 5,
           "weight_lbs": 131.0,
           "rating": 91.0,
+          "jockey": "梁家俊",
+          "trainer": "巫偉傑",
+          "recent_runs": "9/4/9/6/1/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -689,6 +1098,11 @@
           "draw": 10,
           "weight_lbs": 127.0,
           "rating": 87.0,
+          "jockey": "何澤堯",
+          "trainer": "呂健威",
+          "recent_runs": "1/1/1/4/1/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -697,6 +1111,11 @@
           "draw": 2,
           "weight_lbs": 127.0,
           "rating": 87.0,
+          "jockey": "潘頓",
+          "trainer": "沈集成",
+          "recent_runs": "1/1/1/2/5/6",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -705,6 +1124,11 @@
           "draw": 4,
           "weight_lbs": 125.0,
           "rating": 85.0,
+          "jockey": "蔡明紹",
+          "trainer": "蔡約翰",
+          "recent_runs": "11/12/2/6/3/1",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -713,6 +1137,11 @@
           "draw": 8,
           "weight_lbs": 124.0,
           "rating": 84.0,
+          "jockey": "巴度",
+          "trainer": "告東尼",
+          "recent_runs": "8/3/7/4/6/11",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -721,6 +1150,11 @@
           "draw": 7,
           "weight_lbs": 123.0,
           "rating": 83.0,
+          "jockey": "奧爾民",
+          "trainer": "韋達",
+          "recent_runs": "12/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -729,6 +1163,11 @@
           "draw": 9,
           "weight_lbs": 123.0,
           "rating": 83.0,
+          "jockey": "班德禮",
+          "trainer": "蘇偉賢",
+          "recent_runs": "5/6/8/3/3/1",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -737,6 +1176,11 @@
           "draw": 13,
           "weight_lbs": 123.0,
           "rating": 83.0,
+          "jockey": "艾道拿",
+          "trainer": "告東尼",
+          "recent_runs": "10/6/8/8/5/7",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -745,6 +1189,11 @@
           "draw": 3,
           "weight_lbs": 122.0,
           "rating": 82.0,
+          "jockey": "潘明輝",
+          "trainer": "游達榮",
+          "recent_runs": "10",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -753,6 +1202,11 @@
           "draw": 1,
           "weight_lbs": 121.0,
           "rating": 81.0,
+          "jockey": "袁幸堯",
+          "trainer": "廖康銘",
+          "recent_runs": "11/8/5/1/1/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -761,6 +1215,11 @@
           "draw": 11,
           "weight_lbs": 120.0,
           "rating": 80.0,
+          "jockey": "楊明綸",
+          "trainer": "蔡約翰",
+          "recent_runs": "7/5/9/11/1/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         }
       ]
@@ -769,6 +1228,8 @@
       "race_no": 8,
       "distance": "1200",
       "course": "沙田",
+      "class_name": "第三班",
+      "track_feature": "全天候跑道",
       "runners": [
         {
           "no": 1,
@@ -776,6 +1237,11 @@
           "draw": 6,
           "weight_lbs": 135.0,
           "rating": 80.0,
+          "jockey": "金誠剛",
+          "trainer": "沈集成",
+          "recent_runs": "12/4/11/4/1/4",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -784,6 +1250,11 @@
           "draw": 9,
           "weight_lbs": 131.0,
           "rating": 76.0,
+          "jockey": "麥文堅",
+          "trainer": "文家良",
+          "recent_runs": "11",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -792,6 +1263,11 @@
           "draw": 5,
           "weight_lbs": 130.0,
           "rating": 75.0,
+          "jockey": "班德禮",
+          "trainer": "羅富全",
+          "recent_runs": "11/14/4/1/1/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -800,6 +1276,11 @@
           "draw": 3,
           "weight_lbs": 128.0,
           "rating": 73.0,
+          "jockey": "奧爾民",
+          "trainer": "鄭俊偉",
+          "recent_runs": "5/7/9/7/1/7",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -808,6 +1289,11 @@
           "draw": 7,
           "weight_lbs": 127.0,
           "rating": 72.0,
+          "jockey": "霍宏聲",
+          "trainer": "廖康銘",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -816,6 +1302,11 @@
           "draw": 10,
           "weight_lbs": 125.0,
           "rating": 70.0,
+          "jockey": "黃智弘",
+          "trainer": "方嘉柏",
+          "recent_runs": "1/3/11/2/2/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -824,6 +1315,11 @@
           "draw": 2,
           "weight_lbs": 123.0,
           "rating": 68.0,
+          "jockey": "袁幸堯",
+          "trainer": "姚本輝",
+          "recent_runs": "12/10/1/11/4/7",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -832,6 +1328,11 @@
           "draw": 11,
           "weight_lbs": 122.0,
           "rating": 67.0,
+          "jockey": "梁家俊",
+          "trainer": "甘敏斯",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -840,6 +1341,11 @@
           "draw": 12,
           "weight_lbs": 122.0,
           "rating": 67.0,
+          "jockey": "艾兆禮",
+          "trainer": "蔡約翰",
+          "recent_runs": "9/10/3/6/1/10",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -848,6 +1354,11 @@
           "draw": 8,
           "weight_lbs": 120.0,
           "rating": 65.0,
+          "jockey": "希威森",
+          "trainer": "桂福特",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -856,6 +1367,11 @@
           "draw": 4,
           "weight_lbs": 119.0,
           "rating": 64.0,
+          "jockey": "潘頓",
+          "trainer": "游達榮",
+          "recent_runs": "1/7/4/6/7/5",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -864,6 +1380,11 @@
           "draw": 1,
           "weight_lbs": 115.0,
           "rating": 60.0,
+          "jockey": "巴度",
+          "trainer": "徐雨石",
+          "recent_runs": "5/9/2/8/6/13",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         }
       ]
@@ -872,6 +1393,8 @@
       "race_no": 9,
       "distance": "1600",
       "course": "沙田",
+      "class_name": "第三班",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -879,6 +1402,11 @@
           "draw": 6,
           "weight_lbs": 134.0,
           "rating": 75.0,
+          "jockey": "艾兆禮",
+          "trainer": "告東尼",
+          "recent_runs": "12",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -887,6 +1415,11 @@
           "draw": 12,
           "weight_lbs": 133.0,
           "rating": 74.0,
+          "jockey": "霍宏聲",
+          "trainer": "廖康銘",
+          "recent_runs": "6",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -895,6 +1428,11 @@
           "draw": 13,
           "weight_lbs": 133.0,
           "rating": 74.0,
+          "jockey": "何澤堯",
+          "trainer": "葉楚航",
+          "recent_runs": "7/13/10/9/5/1",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -903,6 +1441,11 @@
           "draw": 5,
           "weight_lbs": 129.0,
           "rating": 70.0,
+          "jockey": "奧爾民",
+          "trainer": "徐雨石",
+          "recent_runs": "10",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -911,6 +1454,11 @@
           "draw": 10,
           "weight_lbs": 127.0,
           "rating": 68.0,
+          "jockey": "麥文堅",
+          "trainer": "方嘉柏",
+          "recent_runs": "11/6/4/12/13/1",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -919,6 +1467,11 @@
           "draw": 1,
           "weight_lbs": 126.0,
           "rating": 67.0,
+          "jockey": "潘頓",
+          "trainer": "蔡約翰",
+          "recent_runs": "5/9/4/7/7/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -927,6 +1480,11 @@
           "draw": 7,
           "weight_lbs": 125.0,
           "rating": 66.0,
+          "jockey": "巴度",
+          "trainer": "桂福特",
+          "recent_runs": "12",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -935,6 +1493,11 @@
           "draw": 9,
           "weight_lbs": 125.0,
           "rating": 66.0,
+          "jockey": "巫顯東",
+          "trainer": "姚本輝",
+          "recent_runs": "1/14/7/14/12/13",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -943,6 +1506,11 @@
           "draw": 8,
           "weight_lbs": 124.0,
           "rating": 65.0,
+          "jockey": "希威森",
+          "trainer": "呂健威",
+          "recent_runs": "6/1/7/2/12/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -951,6 +1519,11 @@
           "draw": 11,
           "weight_lbs": 123.0,
           "rating": 64.0,
+          "jockey": "楊明綸",
+          "trainer": "伍鵬志",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -959,6 +1532,11 @@
           "draw": 2,
           "weight_lbs": 123.0,
           "rating": 64.0,
+          "jockey": "梁家俊",
+          "trainer": "巫偉傑",
+          "recent_runs": "10",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -967,6 +1545,11 @@
           "draw": 4,
           "weight_lbs": 121.0,
           "rating": 62.0,
+          "jockey": "班德禮",
+          "trainer": "大衛希斯",
+          "recent_runs": "11/7/7/13/6/7",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -975,6 +1558,11 @@
           "draw": 3,
           "weight_lbs": 121.0,
           "rating": 62.0,
+          "jockey": "袁幸堯",
+          "trainer": "沈集成",
+          "recent_runs": "11/9/7/3/11",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -983,6 +1571,11 @@
           "draw": 14,
           "weight_lbs": 120.0,
           "rating": 61.0,
+          "jockey": "潘明輝",
+          "trainer": "羅富全",
+          "recent_runs": "4/7/2/9/6/8",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         }
       ]
@@ -991,6 +1584,8 @@
       "race_no": 10,
       "distance": "1400",
       "course": "沙田",
+      "class_name": "第三班",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -998,6 +1593,11 @@
           "draw": 3,
           "weight_lbs": 133.0,
           "rating": 74.0,
+          "jockey": "何澤堯",
+          "trainer": "文家良",
+          "recent_runs": "3/6/9/9/3/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1006,6 +1606,11 @@
           "draw": 14,
           "weight_lbs": 131.0,
           "rating": 72.0,
+          "jockey": "麥文堅",
+          "trainer": "蔡約翰",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1014,6 +1619,11 @@
           "draw": 12,
           "weight_lbs": 129.0,
           "rating": 70.0,
+          "jockey": "梁家俊",
+          "trainer": "巫偉傑",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1022,6 +1632,11 @@
           "draw": 4,
           "weight_lbs": 128.0,
           "rating": 69.0,
+          "jockey": "艾道拿",
+          "trainer": "大衛希斯",
+          "recent_runs": "3/7/7/6/13/8",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1030,6 +1645,11 @@
           "draw": 13,
           "weight_lbs": 128.0,
           "rating": 69.0,
+          "jockey": "艾兆禮",
+          "trainer": "伍鵬志",
+          "recent_runs": "7/1/1/11/2/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1038,6 +1658,11 @@
           "draw": 10,
           "weight_lbs": 127.0,
           "rating": 68.0,
+          "jockey": "潘頓",
+          "trainer": "呂健威",
+          "recent_runs": "2/3/2/1/1/4",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1046,6 +1671,11 @@
           "draw": 6,
           "weight_lbs": 127.0,
           "rating": 68.0,
+          "jockey": "霍宏聲",
+          "trainer": "游達榮",
+          "recent_runs": "8/11/4/3/6/5",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1054,6 +1684,11 @@
           "draw": 1,
           "weight_lbs": 126.0,
           "rating": 67.0,
+          "jockey": "袁幸堯",
+          "trainer": "姚本輝",
+          "recent_runs": "9/8/11/12/10/1",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1062,6 +1697,11 @@
           "draw": 7,
           "weight_lbs": 125.0,
           "rating": 66.0,
+          "jockey": "潘明輝",
+          "trainer": "羅富全",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1070,6 +1710,11 @@
           "draw": 11,
           "weight_lbs": 124.0,
           "rating": 65.0,
+          "jockey": "黃寶妮",
+          "trainer": "告東尼",
+          "recent_runs": "11",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1078,6 +1723,11 @@
           "draw": 5,
           "weight_lbs": 122.0,
           "rating": 63.0,
+          "jockey": "楊明綸",
+          "trainer": "甘敏斯",
+          "recent_runs": "11/12",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1086,6 +1736,11 @@
           "draw": 9,
           "weight_lbs": 121.0,
           "rating": 62.0,
+          "jockey": "金誠剛",
+          "trainer": "桂福特",
+          "recent_runs": "4/5/12",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1094,6 +1749,11 @@
           "draw": 8,
           "weight_lbs": 120.0,
           "rating": 61.0,
+          "jockey": "希威森",
+          "trainer": "方嘉柏",
+          "recent_runs": "1/7/10/3/1/7",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1102,6 +1762,11 @@
           "draw": 2,
           "weight_lbs": 120.0,
           "rating": 61.0,
+          "jockey": "巫顯東",
+          "trainer": "沈集成",
+          "recent_runs": "10/12/3/3/1/1",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         }
       ]
@@ -1110,6 +1775,8 @@
       "race_no": 11,
       "distance": "1200",
       "course": "沙田",
+      "class_name": "第三班",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -1117,6 +1784,11 @@
           "draw": 1,
           "weight_lbs": 133.0,
           "rating": 76.0,
+          "jockey": "麥文堅",
+          "trainer": "巫偉傑",
+          "recent_runs": "2/1/1/8/1",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1125,6 +1797,11 @@
           "draw": 11,
           "weight_lbs": 133.0,
           "rating": 76.0,
+          "jockey": "梁家俊",
+          "trainer": "羅富全",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1133,6 +1810,11 @@
           "draw": 7,
           "weight_lbs": 122.0,
           "rating": 65.0,
+          "jockey": "潘頓",
+          "trainer": "賀賢",
+          "recent_runs": "6",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1141,6 +1823,11 @@
           "draw": 10,
           "weight_lbs": 128.0,
           "rating": 71.0,
+          "jockey": "霍宏聲",
+          "trainer": "呂健威",
+          "recent_runs": "1",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1149,6 +1836,11 @@
           "draw": 5,
           "weight_lbs": 123.0,
           "rating": 66.0,
+          "jockey": "班德禮",
+          "trainer": "蘇偉賢",
+          "recent_runs": "12/9/8/1/2/1",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1157,6 +1849,11 @@
           "draw": 12,
           "weight_lbs": 123.0,
           "rating": 66.0,
+          "jockey": "潘明輝",
+          "trainer": "蔡約翰",
+          "recent_runs": "6/10/11/1/3/5",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1165,6 +1862,11 @@
           "draw": 6,
           "weight_lbs": 122.0,
           "rating": 65.0,
+          "jockey": "希威森",
+          "trainer": "沈集成",
+          "recent_runs": "5/1/3/6/2/8",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1173,6 +1875,11 @@
           "draw": 9,
           "weight_lbs": 121.0,
           "rating": 64.0,
+          "jockey": "何澤堯",
+          "trainer": "桂福特",
+          "recent_runs": "3/9/3",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1181,6 +1888,11 @@
           "draw": 3,
           "weight_lbs": 121.0,
           "rating": 64.0,
+          "jockey": "黃寶妮",
+          "trainer": "韋達",
+          "recent_runs": "11",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1189,6 +1901,11 @@
           "draw": 4,
           "weight_lbs": 121.0,
           "rating": 64.0,
+          "jockey": "楊明綸",
+          "trainer": "徐雨石",
+          "recent_runs": "-",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1197,6 +1914,11 @@
           "draw": 2,
           "weight_lbs": 120.0,
           "rating": 63.0,
+          "jockey": "巴度",
+          "trainer": "黎昭昇",
+          "recent_runs": "5/7/10/4/10/9",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         },
         {
@@ -1205,6 +1927,11 @@
           "draw": 8,
           "weight_lbs": 118.0,
           "rating": 61.0,
+          "jockey": "艾兆禮",
+          "trainer": "游達榮",
+          "recent_runs": "1/2",
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": 10.0
         }
       ]
