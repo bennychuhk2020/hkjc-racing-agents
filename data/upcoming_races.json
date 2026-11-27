@@ -1,8 +1,8 @@
 {
-  "race_date": "2026-11-27",
-  "source_url": "https://racing.hkjc.com/zh-hk/local/information/racecard?RaceNo=1",
-  "fetched_at_hkt": "2026-11-27T15:41:40.488222+08:00",
-  "graphql_response_count": 737,
+  "race_date": "2026/11/29",
+  "course_code": "ST",
+  "source_url": "https://racing.hkjc.com/zh-hk/local/information/racecard?raceDate=2026/11/29&Racecourse=ST&RaceNo=1",
+  "fetched_at_hkt": "2026-11-27T15:48:10.795388+08:00",
   "races": [
     {
       "race_no": 1,
@@ -10,401 +10,321 @@
       "course": "沙田",
       "runners": [
         {
-          "no": 6,
-          "name": "最佳時間",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "烙號",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "J394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
           "no": 1,
-          "name": "K402",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "name": "馬上盈",
+          "draw": 9,
+          "weight_lbs": 135.0,
+          "rating": 40.0,
           "win_odds": 10.0
         },
         {
-          "no": 8,
-          "name": "H392",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "no": 2,
+          "name": "文武全能",
+          "draw": 11,
+          "weight_lbs": 135.0,
+          "rating": 40.0,
           "win_odds": 10.0
         },
         {
-          "no": 9,
-          "name": "K215",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "K480",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "K394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "L270",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "J218",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "L085",
-          "draw": 7,
-          "weight_lbs": -7.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 10,
-          "name": "K101",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "L163",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "K028",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 11,
-          "name": "J395",
-          "draw": 7,
-          "weight_lbs": -2.0,
-          "rating": 60.0,
+          "no": 3,
+          "name": "君達得",
+          "draw": 1,
+          "weight_lbs": 133.0,
+          "rating": 38.0,
           "win_odds": 10.0
         },
         {
           "no": 4,
-          "name": "J319",
+          "name": "星光快驅",
+          "draw": 6,
+          "weight_lbs": 133.0,
+          "rating": 38.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 5,
+          "name": "豐功偉績",
+          "draw": 12,
+          "weight_lbs": 132.0,
+          "rating": 37.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 6,
+          "name": "猶有心得",
+          "draw": 14,
+          "weight_lbs": 131.0,
+          "rating": 36.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 7,
+          "name": "勤德皆備",
+          "draw": 10,
+          "weight_lbs": 131.0,
+          "rating": 36.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 8,
+          "name": "添喜運",
+          "draw": 3,
+          "weight_lbs": 131.0,
+          "rating": 36.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 9,
+          "name": "駿美一生",
+          "draw": 2,
+          "weight_lbs": 129.0,
+          "rating": 34.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 10,
+          "name": "觀萬物",
           "draw": 7,
+          "weight_lbs": 129.0,
+          "rating": 34.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 11,
+          "name": "萬事勝利",
+          "draw": 4,
           "weight_lbs": 125.0,
-          "rating": 60.0,
+          "rating": 30.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 12,
+          "name": "東方魅影",
+          "draw": 5,
+          "weight_lbs": 118.0,
+          "rating": 23.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 13,
+          "name": "至高心得",
+          "draw": 13,
+          "weight_lbs": 116.0,
+          "rating": 21.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 14,
+          "name": "輕鬆大少",
+          "draw": 8,
+          "weight_lbs": 115.0,
+          "rating": 20.0,
           "win_odds": 10.0
         }
       ]
     },
     {
       "race_no": 2,
-      "distance": "1400",
+      "distance": "1200",
       "course": "沙田",
       "runners": [
         {
-          "no": 6,
-          "name": "最佳時間",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "烙號",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "J394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
           "no": 1,
-          "name": "K402",
-          "draw": 7,
-          "weight_lbs": 125.0,
+          "name": "可靠大師",
+          "draw": 5,
+          "weight_lbs": 135.0,
           "rating": 60.0,
           "win_odds": 10.0
         },
         {
-          "no": 8,
-          "name": "H392",
-          "draw": 7,
-          "weight_lbs": 125.0,
+          "no": 2,
+          "name": "文明戰士",
+          "draw": 4,
+          "weight_lbs": 135.0,
           "rating": 60.0,
           "win_odds": 10.0
         },
         {
-          "no": 9,
-          "name": "K215",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "K480",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "K394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "L270",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "J218",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "L085",
-          "draw": 7,
-          "weight_lbs": -7.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 10,
-          "name": "K101",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "L163",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "K028",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 11,
-          "name": "J395",
-          "draw": 7,
-          "weight_lbs": -2.0,
-          "rating": 60.0,
+          "no": 3,
+          "name": "日馳千里",
+          "draw": 1,
+          "weight_lbs": 134.0,
+          "rating": 59.0,
           "win_odds": 10.0
         },
         {
           "no": 4,
-          "name": "J319",
-          "draw": 7,
+          "name": "飛龍在天",
+          "draw": 3,
+          "weight_lbs": 133.0,
+          "rating": 58.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 5,
+          "name": "光年程祥",
+          "draw": 2,
+          "weight_lbs": 131.0,
+          "rating": 56.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 6,
+          "name": "鋁神",
+          "draw": 11,
+          "weight_lbs": 129.0,
+          "rating": 54.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 7,
+          "name": "電子好好",
+          "draw": 8,
+          "weight_lbs": 127.0,
+          "rating": 52.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 8,
+          "name": "金玉良言",
+          "draw": 10,
+          "weight_lbs": 127.0,
+          "rating": 52.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 9,
+          "name": "寶成智好",
+          "draw": 6,
           "weight_lbs": 125.0,
-          "rating": 60.0,
+          "rating": 50.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 10,
+          "name": "好力",
+          "draw": 7,
+          "weight_lbs": 120.0,
+          "rating": 45.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 11,
+          "name": "巨靈神",
+          "draw": 9,
+          "weight_lbs": 118.0,
+          "rating": 43.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 12,
+          "name": "神箭",
+          "draw": 12,
+          "weight_lbs": 118.0,
+          "rating": 43.0,
           "win_odds": 10.0
         }
       ]
     },
     {
       "race_no": 3,
-      "distance": "1400",
+      "distance": "1200",
       "course": "沙田",
       "runners": [
         {
-          "no": 6,
-          "name": "最佳時間",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "烙號",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "J394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
           "no": 1,
-          "name": "K402",
-          "draw": 7,
-          "weight_lbs": 125.0,
+          "name": "千杯不醉",
+          "draw": 6,
+          "weight_lbs": 134.0,
           "rating": 60.0,
           "win_odds": 10.0
         },
         {
-          "no": 8,
-          "name": "H392",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "no": 2,
+          "name": "戀愛最火",
+          "draw": 3,
+          "weight_lbs": 133.0,
+          "rating": 59.0,
           "win_odds": 10.0
         },
         {
-          "no": 9,
-          "name": "K215",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "K480",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "K394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "L270",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "J218",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "L085",
-          "draw": 7,
-          "weight_lbs": -7.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 10,
-          "name": "K101",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "L163",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "K028",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 11,
-          "name": "J395",
-          "draw": 7,
-          "weight_lbs": -2.0,
-          "rating": 60.0,
+          "no": 3,
+          "name": "星火燎原",
+          "draw": 10,
+          "weight_lbs": 132.0,
+          "rating": 58.0,
           "win_odds": 10.0
         },
         {
           "no": 4,
-          "name": "J319",
+          "name": "彪形勇將",
+          "draw": 1,
+          "weight_lbs": 131.0,
+          "rating": 57.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 5,
+          "name": "勝於藍",
+          "draw": 4,
+          "weight_lbs": 128.0,
+          "rating": 54.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 6,
+          "name": "哥得寶",
           "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "weight_lbs": 126.0,
+          "rating": 52.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 7,
+          "name": "合夥智能",
+          "draw": 12,
+          "weight_lbs": 126.0,
+          "rating": 52.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 8,
+          "name": "雙星報喜",
+          "draw": 5,
+          "weight_lbs": 126.0,
+          "rating": 52.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 9,
+          "name": "魅力飛昇",
+          "draw": 8,
+          "weight_lbs": 126.0,
+          "rating": 52.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 10,
+          "name": "焰風雲",
+          "draw": 2,
+          "weight_lbs": 126.0,
+          "rating": 52.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 11,
+          "name": "閃電奇駿",
+          "draw": 11,
+          "weight_lbs": 126.0,
+          "rating": 52.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 12,
+          "name": "溫暖旋風",
+          "draw": 9,
+          "weight_lbs": 126.0,
+          "rating": 52.0,
           "win_odds": 10.0
         }
       ]
@@ -415,670 +335,534 @@
       "course": "沙田",
       "runners": [
         {
-          "no": 6,
-          "name": "最佳時間",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "烙號",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "J394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
           "no": 1,
-          "name": "K402",
-          "draw": 7,
-          "weight_lbs": 125.0,
+          "name": "建測羣英",
+          "draw": 13,
+          "weight_lbs": 135.0,
           "rating": 60.0,
           "win_odds": 10.0
         },
         {
-          "no": 8,
-          "name": "H392",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "no": 2,
+          "name": "幸運多彩",
+          "draw": 1,
+          "weight_lbs": 132.0,
+          "rating": 57.0,
           "win_odds": 10.0
         },
         {
-          "no": 9,
-          "name": "K215",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "K480",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "K394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "L270",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "J218",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "L085",
-          "draw": 7,
-          "weight_lbs": -7.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 10,
-          "name": "K101",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "L163",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "K028",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 11,
-          "name": "J395",
-          "draw": 7,
-          "weight_lbs": -2.0,
-          "rating": 60.0,
+          "no": 3,
+          "name": "本領多好",
+          "draw": 14,
+          "weight_lbs": 130.0,
+          "rating": 55.0,
           "win_odds": 10.0
         },
         {
           "no": 4,
-          "name": "J319",
+          "name": "砂漿麒星",
+          "draw": 8,
+          "weight_lbs": 129.0,
+          "rating": 54.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 5,
+          "name": "華麗再贏",
+          "draw": 12,
+          "weight_lbs": 128.0,
+          "rating": 53.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 6,
+          "name": "十分愛",
+          "draw": 5,
+          "weight_lbs": 128.0,
+          "rating": 53.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 7,
+          "name": "樂滿名駒",
+          "draw": 4,
+          "weight_lbs": 127.0,
+          "rating": 52.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 8,
+          "name": "牽旺富星",
+          "draw": 11,
+          "weight_lbs": 127.0,
+          "rating": 52.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 9,
+          "name": "高才",
+          "draw": 6,
+          "weight_lbs": 127.0,
+          "rating": 52.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 10,
+          "name": "加州熱浪",
+          "draw": 9,
+          "weight_lbs": 126.0,
+          "rating": 51.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 11,
+          "name": "飛馬精英",
+          "draw": 3,
+          "weight_lbs": 126.0,
+          "rating": 51.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 12,
+          "name": "戀愛狂",
+          "draw": 2,
+          "weight_lbs": 123.0,
+          "rating": 48.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 13,
+          "name": "金運齊來",
+          "draw": 10,
+          "weight_lbs": 119.0,
+          "rating": 44.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 14,
+          "name": "電子騰飛",
           "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "weight_lbs": 116.0,
+          "rating": 41.0,
           "win_odds": 10.0
         }
       ]
     },
     {
       "race_no": 5,
-      "distance": "1400",
+      "distance": "1000",
       "course": "沙田",
       "runners": [
         {
-          "no": 6,
-          "name": "最佳時間",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "烙號",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "J394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
           "no": 1,
-          "name": "K402",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "name": "星際快車",
+          "draw": 9,
+          "weight_lbs": 135.0,
+          "rating": 100.0,
           "win_odds": 10.0
         },
         {
-          "no": 8,
-          "name": "H392",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "no": 2,
+          "name": "美麗第一",
+          "draw": 4,
+          "weight_lbs": 132.0,
+          "rating": 97.0,
           "win_odds": 10.0
         },
         {
-          "no": 9,
-          "name": "K215",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "K480",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "K394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "L270",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "J218",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "L085",
-          "draw": 7,
-          "weight_lbs": -7.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 10,
-          "name": "K101",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "L163",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "K028",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 11,
-          "name": "J395",
-          "draw": 7,
-          "weight_lbs": -2.0,
-          "rating": 60.0,
+          "no": 3,
+          "name": "扶搖勢勁",
+          "draw": 2,
+          "weight_lbs": 129.0,
+          "rating": 94.0,
           "win_odds": 10.0
         },
         {
           "no": 4,
-          "name": "J319",
+          "name": "玩笑",
+          "draw": 8,
+          "weight_lbs": 126.0,
+          "rating": 91.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 5,
+          "name": "輝煌精英",
+          "draw": 5,
+          "weight_lbs": 120.0,
+          "rating": 85.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 6,
+          "name": "友愛心得",
+          "draw": 10,
+          "weight_lbs": 120.0,
+          "rating": 85.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 7,
+          "name": "八駿巨昇",
+          "draw": 6,
+          "weight_lbs": 119.0,
+          "rating": 84.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 8,
+          "name": "馬力",
+          "draw": 3,
+          "weight_lbs": 118.0,
+          "rating": 83.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 9,
+          "name": "寶進",
+          "draw": 1,
+          "weight_lbs": 118.0,
+          "rating": 83.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 10,
+          "name": "好好戀愛",
           "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "weight_lbs": 115.0,
+          "rating": 80.0,
           "win_odds": 10.0
         }
       ]
     },
     {
       "race_no": 6,
-      "distance": "1400",
+      "distance": "1600",
       "course": "沙田",
       "runners": [
         {
-          "no": 6,
-          "name": "最佳時間",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "烙號",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "J394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
           "no": 1,
-          "name": "K402",
-          "draw": 7,
-          "weight_lbs": 125.0,
+          "name": "逍遙騎士",
+          "draw": 1,
+          "weight_lbs": 135.0,
           "rating": 60.0,
           "win_odds": 10.0
         },
         {
-          "no": 8,
-          "name": "H392",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "no": 2,
+          "name": "三寶進財",
+          "draw": 10,
+          "weight_lbs": 133.0,
+          "rating": 58.0,
           "win_odds": 10.0
         },
         {
-          "no": 9,
-          "name": "K215",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "K480",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "K394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "L270",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "J218",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "L085",
-          "draw": 7,
-          "weight_lbs": -7.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 10,
-          "name": "K101",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "L163",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "K028",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 11,
-          "name": "J395",
-          "draw": 7,
-          "weight_lbs": -2.0,
-          "rating": 60.0,
+          "no": 3,
+          "name": "潮州高球",
+          "draw": 5,
+          "weight_lbs": 129.0,
+          "rating": 54.0,
           "win_odds": 10.0
         },
         {
           "no": 4,
-          "name": "J319",
-          "draw": 7,
+          "name": "活力精神",
+          "draw": 9,
+          "weight_lbs": 128.0,
+          "rating": 53.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 5,
+          "name": "開心滿滿",
+          "draw": 8,
+          "weight_lbs": 127.0,
+          "rating": 52.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 6,
+          "name": "澄心知遇",
+          "draw": 3,
           "weight_lbs": 125.0,
-          "rating": 60.0,
+          "rating": 50.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 7,
+          "name": "數據派",
+          "draw": 4,
+          "weight_lbs": 125.0,
+          "rating": 50.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 8,
+          "name": "安康盛勢",
+          "draw": 13,
+          "weight_lbs": 124.0,
+          "rating": 49.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 9,
+          "name": "爆出美麗",
+          "draw": 6,
+          "weight_lbs": 123.0,
+          "rating": 48.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 10,
+          "name": "金鑽精靈",
+          "draw": 14,
+          "weight_lbs": 123.0,
+          "rating": 48.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 11,
+          "name": "鬥志",
+          "draw": 11,
+          "weight_lbs": 122.0,
+          "rating": 47.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 12,
+          "name": "騰達勇士",
+          "draw": 7,
+          "weight_lbs": 122.0,
+          "rating": 47.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 13,
+          "name": "機緣燦爛",
+          "draw": 2,
+          "weight_lbs": 117.0,
+          "rating": 42.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 14,
+          "name": "開心三多",
+          "draw": 12,
+          "weight_lbs": 116.0,
+          "rating": 41.0,
           "win_odds": 10.0
         }
       ]
     },
     {
       "race_no": 7,
-      "distance": "1400",
+      "distance": "1600",
       "course": "沙田",
       "runners": [
         {
-          "no": 6,
-          "name": "最佳時間",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "烙號",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "J394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
           "no": 1,
-          "name": "K402",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "name": "韋金主",
+          "draw": 6,
+          "weight_lbs": 135.0,
+          "rating": 95.0,
           "win_odds": 10.0
         },
         {
-          "no": 8,
-          "name": "H392",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "no": 2,
+          "name": "超輕鬆",
+          "draw": 12,
+          "weight_lbs": 134.0,
+          "rating": 94.0,
           "win_odds": 10.0
         },
         {
-          "no": 9,
-          "name": "K215",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "K480",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "K394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "L270",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "J218",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "L085",
-          "draw": 7,
-          "weight_lbs": -7.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 10,
-          "name": "K101",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "L163",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "K028",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 11,
-          "name": "J395",
-          "draw": 7,
-          "weight_lbs": -2.0,
-          "rating": 60.0,
+          "no": 3,
+          "name": "風再起時",
+          "draw": 5,
+          "weight_lbs": 131.0,
+          "rating": 91.0,
           "win_odds": 10.0
         },
         {
           "no": 4,
-          "name": "J319",
-          "draw": 7,
+          "name": "櫻花酒杯",
+          "draw": 10,
+          "weight_lbs": 127.0,
+          "rating": 87.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 5,
+          "name": "包裝戰仕",
+          "draw": 2,
+          "weight_lbs": 127.0,
+          "rating": 87.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 6,
+          "name": "一起美麗",
+          "draw": 4,
           "weight_lbs": 125.0,
-          "rating": 60.0,
+          "rating": 85.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 7,
+          "name": "加州動員",
+          "draw": 8,
+          "weight_lbs": 124.0,
+          "rating": 84.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 8,
+          "name": "加利斯",
+          "draw": 7,
+          "weight_lbs": 123.0,
+          "rating": 83.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 9,
+          "name": "千帆駒",
+          "draw": 9,
+          "weight_lbs": 123.0,
+          "rating": 83.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 10,
+          "name": "桃花開",
+          "draw": 13,
+          "weight_lbs": 123.0,
+          "rating": 83.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 11,
+          "name": "顏色之星",
+          "draw": 3,
+          "weight_lbs": 122.0,
+          "rating": 82.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 12,
+          "name": "穿甲金鷹",
+          "draw": 1,
+          "weight_lbs": 121.0,
+          "rating": 81.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 13,
+          "name": "安都",
+          "draw": 11,
+          "weight_lbs": 120.0,
+          "rating": 80.0,
           "win_odds": 10.0
         }
       ]
     },
     {
       "race_no": 8,
-      "distance": "1400",
+      "distance": "1200",
       "course": "沙田",
       "runners": [
         {
-          "no": 6,
-          "name": "最佳時間",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "烙號",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "J394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
           "no": 1,
-          "name": "K402",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "name": "熾烈神駒",
+          "draw": 6,
+          "weight_lbs": 135.0,
+          "rating": 80.0,
           "win_odds": 10.0
         },
         {
-          "no": 8,
-          "name": "H392",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "no": 2,
+          "name": "偵探之神",
+          "draw": 9,
+          "weight_lbs": 131.0,
+          "rating": 76.0,
           "win_odds": 10.0
         },
         {
-          "no": 9,
-          "name": "K215",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "K480",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "K394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "L270",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "J218",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "L085",
-          "draw": 7,
-          "weight_lbs": -7.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 10,
-          "name": "K101",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "L163",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "K028",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 11,
-          "name": "J395",
-          "draw": 7,
-          "weight_lbs": -2.0,
-          "rating": 60.0,
+          "no": 3,
+          "name": "醒目高球",
+          "draw": 5,
+          "weight_lbs": 130.0,
+          "rating": 75.0,
           "win_odds": 10.0
         },
         {
           "no": 4,
-          "name": "J319",
+          "name": "團結勇士",
+          "draw": 3,
+          "weight_lbs": 128.0,
+          "rating": 73.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 5,
+          "name": "雪毽神駒",
           "draw": 7,
+          "weight_lbs": 127.0,
+          "rating": 72.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 6,
+          "name": "葳莉非凡",
+          "draw": 10,
           "weight_lbs": 125.0,
+          "rating": 70.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 7,
+          "name": "高士威勁",
+          "draw": 2,
+          "weight_lbs": 123.0,
+          "rating": 68.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 8,
+          "name": "正本善心",
+          "draw": 11,
+          "weight_lbs": 122.0,
+          "rating": 67.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 9,
+          "name": "德心知遇",
+          "draw": 12,
+          "weight_lbs": 122.0,
+          "rating": 67.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 10,
+          "name": "比特風雲",
+          "draw": 8,
+          "weight_lbs": 120.0,
+          "rating": 65.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 11,
+          "name": "怡傲錢莊",
+          "draw": 4,
+          "weight_lbs": 119.0,
+          "rating": 64.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 12,
+          "name": "丞匡掠影",
+          "draw": 1,
+          "weight_lbs": 115.0,
           "rating": 60.0,
           "win_odds": 10.0
         }
@@ -1086,135 +870,119 @@
     },
     {
       "race_no": 9,
-      "distance": "1400",
+      "distance": "1600",
       "course": "沙田",
       "runners": [
         {
-          "no": 6,
-          "name": "最佳時間",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "烙號",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "J394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
           "no": 1,
-          "name": "K402",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "name": "美麗飛馳",
+          "draw": 6,
+          "weight_lbs": 134.0,
+          "rating": 75.0,
           "win_odds": 10.0
         },
         {
-          "no": 8,
-          "name": "H392",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "no": 2,
+          "name": "展雄駿",
+          "draw": 12,
+          "weight_lbs": 133.0,
+          "rating": 74.0,
           "win_odds": 10.0
         },
         {
-          "no": 9,
-          "name": "K215",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "K480",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "K394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "L270",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "J218",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "L085",
-          "draw": 7,
-          "weight_lbs": -7.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 10,
-          "name": "K101",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "L163",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "K028",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 11,
-          "name": "J395",
-          "draw": 7,
-          "weight_lbs": -2.0,
-          "rating": 60.0,
+          "no": 3,
+          "name": "榮駿大道",
+          "draw": 13,
+          "weight_lbs": 133.0,
+          "rating": 74.0,
           "win_odds": 10.0
         },
         {
           "no": 4,
-          "name": "J319",
+          "name": "黃金蟬聯",
+          "draw": 5,
+          "weight_lbs": 129.0,
+          "rating": 70.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 5,
+          "name": "昭易搵",
+          "draw": 10,
+          "weight_lbs": 127.0,
+          "rating": 68.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 6,
+          "name": "一世美麗",
+          "draw": 1,
+          "weight_lbs": 126.0,
+          "rating": 67.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 7,
+          "name": "嵐鑽",
           "draw": 7,
           "weight_lbs": 125.0,
-          "rating": 60.0,
+          "rating": 66.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 8,
+          "name": "自然動力",
+          "draw": 9,
+          "weight_lbs": 125.0,
+          "rating": 66.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 9,
+          "name": "勁進駒",
+          "draw": 8,
+          "weight_lbs": 124.0,
+          "rating": 65.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 10,
+          "name": "長勝猛將",
+          "draw": 11,
+          "weight_lbs": 123.0,
+          "rating": 64.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 11,
+          "name": "錶之無敵",
+          "draw": 2,
+          "weight_lbs": 123.0,
+          "rating": 64.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 12,
+          "name": "火焰閃爍",
+          "draw": 4,
+          "weight_lbs": 121.0,
+          "rating": 62.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 13,
+          "name": "勁無限",
+          "draw": 3,
+          "weight_lbs": 121.0,
+          "rating": 62.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 14,
+          "name": "香港仔",
+          "draw": 14,
+          "weight_lbs": 120.0,
+          "rating": 61.0,
           "win_odds": 10.0
         }
       ]
@@ -1225,266 +993,218 @@
       "course": "沙田",
       "runners": [
         {
-          "no": 6,
-          "name": "最佳時間",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "烙號",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "J394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
           "no": 1,
-          "name": "K402",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "name": "開心指數",
+          "draw": 3,
+          "weight_lbs": 133.0,
+          "rating": 74.0,
           "win_odds": 10.0
         },
         {
-          "no": 8,
-          "name": "H392",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "no": 2,
+          "name": "安璽",
+          "draw": 14,
+          "weight_lbs": 131.0,
+          "rating": 72.0,
           "win_odds": 10.0
         },
         {
-          "no": 9,
-          "name": "K215",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "K480",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "K394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "L270",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "J218",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "L085",
-          "draw": 7,
-          "weight_lbs": -7.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 10,
-          "name": "K101",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "L163",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "K028",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 11,
-          "name": "J395",
-          "draw": 7,
-          "weight_lbs": -2.0,
-          "rating": 60.0,
+          "no": 3,
+          "name": "精英波",
+          "draw": 12,
+          "weight_lbs": 129.0,
+          "rating": 70.0,
           "win_odds": 10.0
         },
         {
           "no": 4,
-          "name": "J319",
+          "name": "天星",
+          "draw": 4,
+          "weight_lbs": 128.0,
+          "rating": 69.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 5,
+          "name": "步風影",
+          "draw": 13,
+          "weight_lbs": 128.0,
+          "rating": 69.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 6,
+          "name": "巴閉精",
+          "draw": 10,
+          "weight_lbs": 127.0,
+          "rating": 68.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 7,
+          "name": "競駿皇者",
+          "draw": 6,
+          "weight_lbs": 127.0,
+          "rating": 68.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 8,
+          "name": "重情重義",
+          "draw": 1,
+          "weight_lbs": 126.0,
+          "rating": 67.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 9,
+          "name": "踏雪飛馳",
           "draw": 7,
           "weight_lbs": 125.0,
-          "rating": 60.0,
+          "rating": 66.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 10,
+          "name": "名駿極兔",
+          "draw": 11,
+          "weight_lbs": 124.0,
+          "rating": 65.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 11,
+          "name": "勝本善",
+          "draw": 5,
+          "weight_lbs": 122.0,
+          "rating": 63.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 12,
+          "name": "發發發",
+          "draw": 9,
+          "weight_lbs": 121.0,
+          "rating": 62.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 13,
+          "name": "風采人生",
+          "draw": 8,
+          "weight_lbs": 120.0,
+          "rating": 61.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 14,
+          "name": "包裝天王",
+          "draw": 2,
+          "weight_lbs": 120.0,
+          "rating": 61.0,
           "win_odds": 10.0
         }
       ]
     },
     {
       "race_no": 11,
-      "distance": "1400",
+      "distance": "1200",
       "course": "沙田",
       "runners": [
         {
-          "no": 6,
-          "name": "最佳時間",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "烙號",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 6,
-          "name": "J394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
           "no": 1,
-          "name": "K402",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "name": "超和平",
+          "draw": 1,
+          "weight_lbs": 133.0,
+          "rating": 76.0,
           "win_odds": 10.0
         },
         {
-          "no": 8,
-          "name": "H392",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "no": 2,
+          "name": "重新出發",
+          "draw": 11,
+          "weight_lbs": 133.0,
+          "rating": 76.0,
           "win_odds": 10.0
         },
         {
-          "no": 9,
-          "name": "K215",
+          "no": 3,
+          "name": "賀長勝",
           "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "K480",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "K394",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "L270",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 9,
-          "name": "J218",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "L085",
-          "draw": 7,
-          "weight_lbs": -7.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 10,
-          "name": "K101",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 5,
-          "name": "L163",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 7,
-          "name": "K028",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
-          "win_odds": 10.0
-        },
-        {
-          "no": 11,
-          "name": "J395",
-          "draw": 7,
-          "weight_lbs": -2.0,
-          "rating": 60.0,
+          "weight_lbs": 122.0,
+          "rating": 65.0,
           "win_odds": 10.0
         },
         {
           "no": 4,
-          "name": "J319",
-          "draw": 7,
-          "weight_lbs": 125.0,
-          "rating": 60.0,
+          "name": "競駿戰神",
+          "draw": 10,
+          "weight_lbs": 128.0,
+          "rating": 71.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 5,
+          "name": "精英高球",
+          "draw": 5,
+          "weight_lbs": 123.0,
+          "rating": 66.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 6,
+          "name": "辣得準",
+          "draw": 12,
+          "weight_lbs": 123.0,
+          "rating": 66.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 7,
+          "name": "逍遙人生",
+          "draw": 6,
+          "weight_lbs": 122.0,
+          "rating": 65.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 8,
+          "name": "從化之星",
+          "draw": 9,
+          "weight_lbs": 121.0,
+          "rating": 64.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 9,
+          "name": "花花至承",
+          "draw": 3,
+          "weight_lbs": 121.0,
+          "rating": 64.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 10,
+          "name": "心曠神兒",
+          "draw": 4,
+          "weight_lbs": 121.0,
+          "rating": 64.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 11,
+          "name": "國千金",
+          "draw": 2,
+          "weight_lbs": 120.0,
+          "rating": 63.0,
+          "win_odds": 10.0
+        },
+        {
+          "no": 12,
+          "name": "祥勝鷹駒",
+          "draw": 8,
+          "weight_lbs": 118.0,
+          "rating": 61.0,
           "win_odds": 10.0
         }
       ]
