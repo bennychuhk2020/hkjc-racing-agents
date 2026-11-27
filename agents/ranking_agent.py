@@ -105,17 +105,17 @@ def calc_jt_score(jockey_val: str, trainer_val: str) -> float:
   return score
 
 
-def calc_body_weight(body_weight: Any) -> tuple[str, str, float]:
-  """回傳 (排位體重顯示字串, 體重狀態, 體重分數)。"""
+def calc_body_weight(body_weight: Any, bw_display: str) -> tuple[str, str, float]:
   try:
     bw = int(float(body_weight))
     if bw <= 0:
       return "N/A", "待公佈", 65.0
+    disp = bw_display if bw_display and bw_display != "N/A" else str(bw)
     if bw < 1020:
-      return str(bw), "體型偏瘦", 55.0
+      return disp, "體型偏瘦", 55.0
     if bw > 1220:
-      return str(bw), "身材魁梧", 75.0
-    return str(bw), "黃金標準", 80.0
+      return disp, "身材魁梧", 75.0
+    return disp, "黃金標準", 80.0
   except (ValueError, TypeError):
     return "N/A", "待公佈", 65.0
 
@@ -145,12 +145,15 @@ def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
     horse_name = str(r.get("name", "未知"))
     draw_val = r.get("draw", "N/A")
     weight_val = r.get("weight_lbs", "N/A")
+    weight_disp = str(r.get("weight_display") or weight_val)
     rating_val = r.get("rating", "N/A")
+    rating_disp = str(r.get("rating_display") or rating_val)
     jockey_val = str(r.get("jockey", "N/A"))
     trainer_val = str(r.get("trainer", "N/A"))
     recent_runs = str(r.get("recent_runs", "N/A"))
     running_style = str(r.get("running_style", "前置機動"))
     raw_bw = r.get("body_weight", "N/A")
+    raw_bw_disp = str(r.get("bw_display", "N/A"))
 
     raw_odds = r.get("win_odds")
     odds_val: float | None = None
@@ -168,7 +171,7 @@ def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
     style_score = calc_style_score(running_style, track_feature)
     form_score = calc_form_score(recent_runs, rating_val)
     jt_score = calc_jt_score(jockey_val, trainer_val)
-    bw_display, weight_health, bw_score = calc_body_weight(raw_bw)
+    bw_display, weight_health, bw_score = calc_body_weight(raw_bw, raw_bw_disp)
 
     cpi = round(
         (form_score * 0.30)
@@ -180,6 +183,9 @@ def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
     )
     value_status = evaluate_value(cpi, odds_val)
 
+    # 清理評語中的換行或直線避免破壞 Markdown 表格
+    clean_comment = str(r.get("comment", "N/A")).replace("|", "／").replace("\n", " ").strip()
+
     analyzed.append({
         "馬號": horse_no,
         "馬名": horse_name,
@@ -188,12 +194,23 @@ def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
         "值博率評估": value_status,
         "跑法": running_style,
         "檔位": draw_val,
-        "負磅": weight_val,
-        "現時評分": rating_val,
+        "負磅": weight_disp,
+        "現時評分": rating_disp,
         "排位體重": bw_display,
         "體重狀態": weight_health,
         "騎師": jockey_val,
         "練馬師": trainer_val,
+        "6次近績": recent_runs,
+        "年齡/性別": str(r.get("age_sex", "N/A")),
+        "最佳時間": str(r.get("best_time", "--")),
+        "配備": str(r.get("gear", "--")),
+        "王牌": str(r.get("trump_card", "未使用")),
+        "優先出賽權": str(r.get("priority_entry", "一般")),
+        "練馬師次序": str(r.get("trainer_pref", "--")),
+        "歷季出賽": str(r.get("season_stats", "N/A")),
+        "距上次出賽": str(r.get("days_since_last", "N/A")),
+        "晨操試閘": str(r.get("trackwork_summary", "N/A")),
+        "賽前評語": clean_comment,
     })
 
   analyzed.sort(key=lambda x: x["綜合馬力指數(CPI)"], reverse=True)
@@ -224,6 +241,14 @@ def run_analysis() -> None:
       f"**比賽日期：** {race_date} ｜ **更新時間 (HKT)：** `{fetched_at}` ｜ **已完成場次：** 第 1 至 {len(all_analyzed)} 場\n",
   ]
 
+  headers = [
+      "馬號", "馬名", "綜合馬力指數(CPI)", "獨贏賠率", "值博率評估",
+      "跑法", "檔位", "負磅", "現時評分", "排位體重", "體重狀態",
+      "騎師", "練馬師", "6次近績", "年齡/性別", "最佳時間",
+      "配備", "王牌", "優先出賽權", "練馬師次序", "歷季出賽",
+      "距上次出賽", "晨操試閘", "賽前評語"
+  ]
+
   for r in all_analyzed:
     dist_txt = (
         f"{r['distance']}米" if str(r["distance"]).isdigit() else r["distance"]
@@ -233,18 +258,36 @@ def run_analysis() -> None:
         f"**賽事元數據：** 馬場 `{r['course']}` ｜ 場次 `第{r['race_no']}場` ｜ "
         f"班次 `{r['class_name']}` ｜ 途程 `{dist_txt}` ｜ 跑道特色 `{r['track_feature']}`\n"
     )
-    md_lines.append(
-        "| 馬號 | 馬名 | 綜合馬力指數(CPI) | 獨贏賠率 | 值博率評估 | 跑法 | 檔位 | 負磅 | 現時評分 | 排位體重 | 體重狀態 | 騎師 | 練馬師 |"
-    )
-    md_lines.append(
-        "| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- | :--- |"
-    )
+    md_lines.append("| " + " | ".join(headers) + " |")
+    md_lines.append("| " + " | ".join([":---:"] * len(headers)) + " |")
     for h in r["runners"]:
-      md_lines.append(
-          f"| {h['馬號']} | **{h['馬名']}** | **{h['綜合馬力指數(CPI)']}** | "
-          f"{h['獨贏賠率']} | {h['值博率評估']} | {h['跑法']} | {h['檔位']} | {h['負磅']} | "
-          f"{h['現時評分']} | {h['排位體重']} | {h['體重狀態']} | {h['騎師']} | {h['練馬師']} |"
-      )
+      row_vals = [
+          str(h["馬號"]),
+          f"**{h['馬名']}**",
+          f"**{h['綜合馬力指數(CPI)']}**",
+          str(h["獨贏賠率"]),
+          str(h["值博率評估"]),
+          str(h["跑法"]),
+          str(h["檔位"]),
+          str(h["負磅"]),
+          str(h["現時評分"]),
+          str(h["排位體重"]),
+          str(h["體重狀態"]),
+          str(h["騎師"]),
+          str(h["練馬師"]),
+          str(h["6次近績"]),
+          str(h["年齡/性別"]),
+          str(h["最佳時間"]),
+          str(h["配備"]),
+          str(h["王牌"]),
+          str(h["優先出賽權"]),
+          str(h["練馬師次序"]),
+          str(h["歷季出賽"]),
+          str(h["距上次出賽"]),
+          str(h["晨操試閘"]),
+          str(h["賽前評語"]),
+      ]
+      md_lines.append("| " + " | ".join(row_vals) + " |")
     md_lines.append("\n---\n")
 
   OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
