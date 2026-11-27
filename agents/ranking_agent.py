@@ -1,13 +1,17 @@
 from __future__ import annotations
 
+import html
 import json
 import re
 from pathlib import Path
 from typing import Any
 
+from weasyprint import HTML
+
 DATA_PATH = Path("data/upcoming_races.json")
 OUT_JSON = Path("output/predictions.json")
 OUT_MD = Path("output/report.md")
+OUT_PDF = Path("output/report.pdf")
 
 TOP_JOCKEYS = frozenset({"潘頓", "布文", "田泰安", "鍾易禮", "艾兆禮", "巴度", "何澤堯"})
 TOP_TRAINERS = frozenset({"伍鵬志", "呂健威", "告東尼", "蔡約翰", "方嘉柏", "沈集成", "羅富全"})
@@ -189,7 +193,6 @@ def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
         "騎師": jockey_val,
         "練馬師": trainer_val,
         "6次近績": recent_runs,
-        # 暫時保留未輸出欄位（年齡/性別、最佳時間、配備、王牌、優先出賽權、練馬師次序、歷季出賽、距上次出賽、晨操試閘、賽前評語）
     })
 
   analyzed.sort(key=lambda x: x["綜合指數(HRI)"], reverse=True)
@@ -201,6 +204,179 @@ def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
       "track_feature": track_feature,
       "runners": analyzed,
   }
+
+
+def build_pdf_report(
+    race_date: str,
+    fetched_at: str,
+    all_analyzed: list[dict[str, Any]],
+    headers: list[str],
+    output_pdf: Path,
+) -> None:
+  """Render a clean landscape A4 PDF report with Traditional Chinese CJK fonts."""
+  race_sections: list[str] = []
+
+  for r in all_analyzed:
+    dist_txt = (
+        f"{r['distance']}米" if str(r["distance"]).isdigit() else str(r["distance"])
+    )
+    th_html = "".join(f"<th>{html.escape(h)}</th>" for h in headers)
+
+    rows_html: list[str] = []
+    for idx, h in enumerate(r["runners"]):
+      row_cls = "top-pick" if idx < 3 else ""
+      cells = [
+          f"<td>{html.escape(str(h['馬號']))}</td>",
+          f"<td class='horse-name'>{html.escape(str(h['馬名']))}</td>",
+          f"<td class='hri-score'>{html.escape(str(h['綜合指數(HRI)']))}</td>",
+          f"<td>{html.escape(str(h['獨贏賠率']))}</td>",
+          f"<td>{html.escape(str(h['值博率評估']))}</td>",
+          f"<td>{html.escape(str(h['跑法']))}</td>",
+          f"<td>{html.escape(str(h['檔位']))}</td>",
+          f"<td>{html.escape(str(h['負磅']))}</td>",
+          f"<td>{html.escape(str(h['現時評分']))}</td>",
+          f"<td>{html.escape(str(h['排位體重']))}</td>",
+          f"<td>{html.escape(str(h['體重狀態']))}</td>",
+          f"<td>{html.escape(str(h['騎師']))}</td>",
+          f"<td>{html.escape(str(h['練馬師']))}</td>",
+          f"<td>{html.escape(str(h['6次近績']))}</td>",
+      ]
+      rows_html.append(f"<tr class='{row_cls}'>{''.join(cells)}</tr>")
+
+    race_sections.append(f"""
+    <section class="race-block">
+      <div class="race-header">
+        <span class="race-title">※ 第 {html.escape(str(r['race_no']))} 場</span>
+        <span class="meta-pill">馬場：<b>{html.escape(str(r['course']))}</b></span>
+        <span class="meta-pill">班次：<b>{html.escape(str(r['class_name']))}</b></span>
+        <span class="meta-pill">途程：<b>{html.escape(dist_txt)}</b></span>
+        <span class="meta-pill">跑道特色：<b>{html.escape(str(r['track_feature']))}</b></span>
+      </div>
+      <table>
+        <thead><tr>{th_html}</tr></thead>
+        <tbody>{''.join(rows_html)}</tbody>
+      </table>
+    </section>
+    """)
+
+  full_html = f"""<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8" />
+<style>
+  @page {{
+    size: A4 landscape;
+    margin: 10mm 10mm 12mm 10mm;
+    @bottom-right {{
+      content: "第 " counter(page) " / " counter(pages) " 頁";
+      font-family: "Noto Sans CJK HK", "Noto Sans CJK TC", sans-serif;
+      font-size: 8pt;
+      color: #64748b;
+    }}
+  }}
+  body {{
+    font-family: "Noto Sans CJK HK", "Noto Sans CJK TC", "Microsoft JhengHei", sans-serif;
+    color: #0f172a;
+    margin: 0;
+    padding: 0;
+    font-size: 8.5pt;
+  }}
+  .doc-banner {{
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: #ffffff;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }}
+  .doc-banner h1 {{
+    margin: 0 0 4px 0;
+    font-size: 14pt;
+    letter-spacing: 0.5px;
+  }}
+  .doc-banner .sub {{
+    font-size: 8.5pt;
+    color: #cbd5e1;
+  }}
+  .race-block {{
+    margin-bottom: 14px;
+    page-break-inside: avoid;
+  }}
+  .race-header {{
+    background-color: #f1f5f9;
+    border-left: 4px solid #1d4ed8;
+    padding: 6px 10px;
+    margin-bottom: 5px;
+    border-radius: 0 4px 4px 0;
+  }}
+  .race-title {{
+    font-size: 10.5pt;
+    font-weight: bold;
+    color: #1e3a8a;
+    margin-right: 12px;
+  }}
+  .meta-pill {{
+    display: inline-block;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 1px 7px;
+    margin-right: 6px;
+    font-size: 8pt;
+    color: #334155;
+  }}
+  table {{
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }}
+  th {{
+    background-color: #1e293b;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 5px 3px;
+    text-align: center;
+    border: 1px solid #1e293b;
+    font-size: 7.8pt;
+    word-wrap: break-word;
+  }}
+  td {{
+    padding: 4px 3px;
+    text-align: center;
+    border: 1px solid #cbd5e1;
+    font-size: 8pt;
+    word-wrap: break-word;
+  }}
+  tbody tr:nth-child(even) {{
+    background-color: #f8fafc;
+  }}
+  tbody tr.top-pick {{
+    background-color: #eff6ff;
+  }}
+  td.horse-name {{
+    font-weight: 700;
+    color: #0f172a;
+  }}
+  td.hri-score {{
+    font-weight: 700;
+    color: #b91c1c;
+    font-size: 8.5pt;
+  }}
+</style>
+</head>
+<body>
+  <div class="doc-banner">
+    <h1>HKJC 多代理 (Multi-Agent) 賽事預測系統 — 綜合指數 (HRI) 戰報</h1>
+    <div class="sub">
+      比賽日期：<b>{html.escape(race_date)}</b> ｜ 已完成場次：第 1 至 {len(all_analyzed)} 場 ｜ 更新時間 (HKT)：{html.escape(fetched_at)}
+    </div>
+  </div>
+  {''.join(race_sections)}
+</body>
+</html>
+"""
+
+  output_pdf.parent.mkdir(parents=True, exist_ok=True)
+  HTML(string=full_html).write_pdf(str(output_pdf))
 
 
 def run_analysis() -> None:
@@ -220,7 +396,6 @@ def run_analysis() -> None:
       f"**比賽日期：** {race_date} ｜ **更新時間 (HKT)：** `{fetched_at}` ｜ **已完成場次：** 第 1 至 {len(all_analyzed)} 場\n",
   ]
 
-  # 暫時移除欄位：年齡/性別、最佳時間、配備、王牌、優先出賽權、練馬師次序、歷季出賽、距上次出賽、晨操試閘、賽前評語
   headers = [
       "馬號", "馬名", "綜合指數(HRI)", "獨贏賠率", "值博率評估",
       "跑法", "檔位", "負磅", "現時評分", "排位體重", "體重狀態",
@@ -274,7 +449,9 @@ def run_analysis() -> None:
 
   OUT_MD.parent.mkdir(parents=True, exist_ok=True)
   OUT_MD.write_text("\n".join(md_lines), encoding="utf-8")
-  print(f"Generated report for {len(all_analyzed)} races.")
+
+  build_pdf_report(race_date, fetched_at, all_analyzed, headers, OUT_PDF)
+  print(f"Generated Markdown, JSON, and PDF report ({OUT_PDF}) for {len(all_analyzed)} races.")
 
 
 if __name__ == "__main__":
