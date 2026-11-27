@@ -1,86 +1,229 @@
+from __future__ import annotations
+
 import json
+import re
 from pathlib import Path
+from typing import Any
 
 DATA_PATH = Path("data/upcoming_races.json")
-CONFIG_PATH = Path("config/profiles.json")
 OUT_JSON = Path("output/predictions.json")
 OUT_MD = Path("output/report.md")
 
-
-def score_horse(horse: dict, weights: dict) -> float:
-  rating = float(horse.get("rating", 60))
-  carried_wt = float(horse.get("weight_lbs", 125))
-  draw = int(horse.get("draw", 7))
-  odds = float(horse.get("win_odds", 10.0))
-
-  # Implied win probability from win odds (1 / odds)
-  implied_prob = (1.0 / odds) if odds > 0 else 0.0
-  # Penalty for outside draws beyond 5
-  draw_diff = max(0, draw - 5)
-
-  score = (
-      rating * weights["rating"]
-      + (carried_wt - 115) * weights["weight_carried"]
-      + draw_diff * weights["draw_penalty"]
-      + implied_prob * weights["win_odds_implied_prob"]
-  )
-  return round(score, 2)
+TOP_JOCKEYS = ["潘頓", "布文", "田泰安", "鍾易禮", "艾兆禮", "巴度", "何澤堯"]
+TOP_TRAINERS = ["伍鵬志", "呂健威", "告東尼", "蔡約翰", "方嘉柏", "沈集成"]
 
 
-def run_analysis():
+def calc_draw_score(draw_val: Any, track_feature: str) -> float:
+  try:
+    d_num = int(float(draw_val))
+  except (ValueError, TypeError):
+    return 50.0
+
+  is_tight_track = any(k in track_feature for k in ("C+3", "C", "B+2"))
+  is_a_track = ("A" in track_feature) and ("+" not in track_feature)
+
+  if is_tight_track:
+    if d_num <= 3:
+      return 90.0
+    if d_num <= 7:
+      return 70.0
+    return 35.0
+  if is_a_track:
+    if d_num <= 2:
+      return 65.0
+    if 3 <= d_num <= 8:
+      return 88.0
+    if 9 <= d_num <= 11:
+      return 75.0
+    return 50.0
+  if d_num <= 4:
+    return 80.0
+  if d_num <= 9:
+    return 70.0
+  return 50.0
+
+
+def calc_style_score(running_style: str, track_feature: str) -> float:
+  is_tight_track = any(k in track_feature for k in ("C+3", "C", "B+2"))
+  is_a_track = ("A" in track_feature) and ("+" not in track_feature)
+
+  if is_tight_track and running_style in {"領放", "前置", "前置機動"}:
+    return 88.0
+  if is_a_track and running_style in {"中游順走", "後上", "前置機動"}:
+    return 85.0
+  return 75.0
+
+
+def calc_form_score(recent_runs: str, rating_val: Any) -> float:
+  if recent_runs and recent_runs != "N/A":
+    runs = re.findall(r"\b\d+\b", recent_runs.replace("/", " "))
+    if runs:
+      weights = [6, 5, 4, 3, 2, 1]
+      weighted_sum = 0.0
+      total_weight = 0
+      for idx, pos_str in enumerate(runs[:6]):
+        pos = int(pos_str)
+        w = weights[idx]
+        if pos == 1:
+          p_score = 100
+        elif pos == 2:
+          p_score = 85
+        elif pos == 3:
+          p_score = 75
+        elif pos <= 5:
+          p_score = 55
+        else:
+          p_score = 25
+        weighted_sum += p_score * w
+        total_weight += w
+      if total_weight > 0:
+        return round(weighted_sum / total_weight, 1)
+
+  # 排位階段若未有近績字串，改以現時評分作溫和基準分（40-85）
+  try:
+    rtg = float(rating_val)
+    return round(max(40.0, min(85.0, 45.0 + (rtg - 40.0) * 0.6)), 1)
+  except (ValueError, TypeError):
+    return 55.0
+
+
+def calc_jt_score(jockey_val: str, trainer_val: str) -> float:
+  score = 60.0
+  if any(tj in jockey_val for tj in TOP_JOCKEYS):
+    score += 20.0
+  if any(tt in trainer_val for tt in TOP_TRAINERS):
+    score += 15.0
+  return score
+
+
+def calc_body_weight(body_weight: Any) -> tuple[str, float]:
+  try:
+    bw = int(float(body_weight))
+    if bw <= 0:
+      return "穩定", 65.0
+    if bw < 1020:
+      return "體型偏瘦", 55.0
+    if bw > 1220:
+      return "身材魁梧", 75.0
+    return "黃金標準", 80.0
+  except (ValueError, TypeError):
+    return "穩定", 65.0
+
+
+def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
+  race_no = race.get("race_no", 0)
+  distance = str(race.get("distance", "N/A"))
+  course = str(race.get("course", "沙田"))
+  class_name = str(race.get("class_name", "N/A"))
+  track_feature = str(race.get("track_feature", "標準賽道"))
+
+  analyzed: list[dict[str, Any]] = []
+  for idx, r in enumerate(race.get("runners", [])):
+    horse_no = r.get("no", idx + 1)
+    horse_name = str(r.get("name", "未知"))
+    draw_val = r.get("draw", "N/A")
+    weight_val = r.get("weight_lbs", "N/A")
+    rating_val = r.get("rating", "N/A")
+    jockey_val = str(r.get("jockey", "N/A"))
+    trainer_val = str(r.get("trainer", "N/A"))
+    recent_runs = str(r.get("recent_runs", "N/A"))
+    running_style = str(r.get("running_style", "前置機動"))
+    body_weight = r.get("body_weight", "N/A")
+
+    raw_odds = r.get("win_odds")
+    has_odds = raw_odds not in (None, "", "N/A") and float(raw_odds) != 10.0
+    odds_display = f"{float(raw_odds):.1f}" if has_odds else "N/A"
+
+    draw_score = calc_draw_score(draw_val, track_feature)
+    style_score = calc_style_score(running_style, track_feature)
+    form_score = calc_form_score(recent_runs, rating_val)
+    jt_score = calc_jt_score(jockey_val, trainer_val)
+    weight_health, bw_score = calc_body_weight(body_weight)
+
+    cpi = round(
+        (form_score * 0.30)
+        + (draw_score * 0.25)
+        + (style_score * 0.20)
+        + (jt_score * 0.15)
+        + (bw_score * 0.10),
+        1,
+    )
+
+    analyzed.append({
+        "馬號": horse_no,
+        "馬名": horse_name,
+        "綜合馬力指數(CPI)": cpi,
+        "獨贏賠率": odds_display,
+        "跑法": running_style,
+        "檔位": draw_val,
+        "負磅": weight_val,
+        "現時評分": rating_val,
+        "排位體重": body_weight if body_weight not in (None, "") else "N/A",
+        "體重狀態": weight_health,
+        "騎師": jockey_val,
+        "練馬師": trainer_val,
+        "近績指數": form_score,
+        "檔位形勢分": draw_score,
+        "跑法適性分": style_score,
+    })
+
+  analyzed.sort(key=lambda x: x["綜合馬力指數(CPI)"], reverse=True)
+  return {
+      "race_no": race_no,
+      "course": course,
+      "class_name": class_name,
+      "distance": distance,
+      "track_feature": track_feature,
+      "runners": analyzed,
+  }
+
+
+def run_analysis() -> None:
   if not DATA_PATH.exists():
     print("No race data found.")
     return
 
-  races = json.loads(DATA_PATH.read_text(encoding="utf-8"))
-  profiles = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+  raw = json.loads(DATA_PATH.read_text(encoding="utf-8"))
+  race_date = raw.get("race_date", "N/A")
+  races = raw.get("races", [])
 
-  all_results = {}
-  md_lines = [f"# HKJC 賽馬優先級分析報告 ({races.get('race_date', 'N/A')})\n"]
+  all_analyzed = [analyze_race(race) for race in races]
 
-  for race in races.get("races", []):
-    race_no = race["race_no"]
+  md_lines = [
+      "# HKJC 多代理 (Multi-Agent) 賽事預測系統",
+      f"**比賽日期：** {race_date} ｜ **已完成場次：** 第 1 至 {len(all_analyzed)} 場\n",
+  ]
+
+  for r in all_analyzed:
+    dist_txt = f"{r['distance']}米" if str(r["distance"]).isdigit() else r["distance"]
+    md_lines.append(f"## ※第{r['race_no']}場")
     md_lines.append(
-        f"## 第 {race_no} 場 ({race.get('distance', '')}m - {race.get('course', '')})"
+        f"**賽事元數據：** 馬場 `{r['course']}` ｜ 場次 `第{r['race_no']}場` ｜ "
+        f"班次 `{r['class_name']}` ｜ 途程 `{dist_txt}` ｜ 跑道特色 `{r['track_feature']}`\n"
     )
-
-    race_output = {}
-    for profile_name, cfg in profiles.items():
-      weights = cfg["weights"]
-      ranked = []
-      for h in race.get("runners", []):
-        s = score_horse(h, weights)
-        ranked.append({
-            "no": h["no"],
-            "name": h["name"],
-            "draw": h["draw"],
-            "weight_lbs": h["weight_lbs"],
-            "win_odds": h["win_odds"],
-            "score": s,
-        })
-      ranked.sort(key=lambda x: x["score"], reverse=True)
-      for idx, item in enumerate(ranked):
-        item["priority"] = (
-            "P1 (核心)" if idx < 3 else ("P2 (次選)" if idx < 5 else "P3 (觀察)")
-        )
-      race_output[profile_name] = ranked
-
-      md_lines.append(f"\n**策略：{profile_name}** — {cfg['description']}")
-      for top in ranked[:4]:
-        md_lines.append(
-            f"- `{top['priority']}` **{top['no']}號 {top['name']}** | 分數:"
-            f" {top['score']} | 檔位: {top['draw']} | 負磅: {top['weight_lbs']} |"
-            f" 賠率: {top['win_odds']}"
-        )
-    all_results[f"race_{race_no}"] = race_output
+    md_lines.append(
+        "| 馬號 | 馬名 | 綜合馬力指數(CPI) | 獨贏賠率 | 跑法 | 檔位 | 負磅 | 現時評分 | 排位體重 | 體重狀態 | 騎師 |"
+    )
+    md_lines.append(
+        "| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |"
+    )
+    for h in r["runners"]:
+      md_lines.append(
+          f"| {h['馬號']} | **{h['馬名']}** | **{h['綜合馬力指數(CPI)']}** | "
+          f"{h['獨贏賠率']} | {h['跑法']} | {h['檔位']} | {h['負磅']} | "
+          f"{h['現時評分']} | {h['排位體重']} | {h['體重狀態']} | {h['騎師']} |"
+      )
     md_lines.append("\n---\n")
 
   OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
   OUT_JSON.write_text(
-      json.dumps(all_results, ensure_ascii=False, indent=2), encoding="utf-8"
+      json.dumps({"race_date": race_date, "races": all_analyzed}, ensure_ascii=False, indent=2),
+      encoding="utf-8",
   )
+
+  OUT_MD.parent.mkdir(parents=True, exist_ok=True)
   OUT_MD.write_text("\n".join(md_lines), encoding="utf-8")
-  print("Analysis complete.")
+  print(f"Generated report for {len(all_analyzed)} races.")
 
 
 if __name__ == "__main__":
