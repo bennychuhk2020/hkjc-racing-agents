@@ -69,7 +69,6 @@ def clean_person_name(raw_text: str, default: str = "N/A") -> str:
 def infer_running_style(
     recent_runs: str, draw: int, distance_str: str
 ) -> str:
-  """根據近績走勢、檔位與途程推算跑法類型。"""
   runs = [int(x) for x in re.findall(r"\b\d+\b", recent_runs.replace("/", " "))]
   dist = safe_int(distance_str, 1400)
 
@@ -85,7 +84,6 @@ def infer_running_style(
       return "居中順走"
     return "後上"
 
-  # 若無近績字串，按檔位與途程作合理戰術推算
   if draw <= 2 and dist <= 1200:
     return "領放"
   if draw <= 6:
@@ -175,17 +173,22 @@ def extract_race_meta(body_text: str, default_course: str) -> dict[str, str]:
 def parse_runners_from_dom(
     page, default_course: str
 ) -> tuple[list[dict[str, Any]], dict[str, str], dict[str, Any]]:
+  """解析排位表主表 + 各馬匹連結 + 賽前評語表格。"""
   eval_result = page.evaluate("""
     () => {
       const title = document.title || "";
       const bodyText = document.body ? document.body.innerText : "";
       const tables = Array.from(document.querySelectorAll("table"));
       const extractedTables = tables.map((tbl, idx) => {
-        const rows = Array.from(tbl.querySelectorAll("tr")).map(tr =>
-          Array.from(tr.querySelectorAll("th, td")).map(cell =>
-            cell.innerText.replace(/\\s+/g, " ").trim()
-          )
-        );
+        const rows = Array.from(tbl.querySelectorAll("tr")).map(tr => {
+          const cells = Array.from(tr.querySelectorAll("th, td"));
+          const texts = cells.map(cell => cell.innerText.replace(/\\s+/g, " ").trim());
+          const links = cells.map(cell => {
+            const a = cell.querySelector("a[href*='Horse'], a[href*='horse']");
+            return a ? a.href : "";
+          });
+          return { texts, links };
+        });
         return { index: idx, rowCount: rows.length, rows };
       });
       return {
@@ -200,6 +203,29 @@ def parse_runners_from_dom(
   runners: list[dict[str, Any]] = []
   meta = extract_race_meta(eval_result.get("bodySnippet", ""), default_course)
 
+  # 1. 提取排位表「評語」區塊（通常為另一張包含「馬號 / 馬名 / 評語」嘅表格）
+  comments_by_no: dict[int, str] = {}
+  comments_by_name: dict[str, str] = {}
+  for tbl in eval_result.get("tables", []):
+    rows = tbl.get("rows", [])
+    if len(rows) < 4:
+      continue
+    header_texts = rows[0]["texts"]
+    joined_h = " ".join(header_texts)
+    if "評語" in joined_h and ("馬名" in joined_h or "馬號" in joined_h or "編號" in joined_h):
+      c_idx = next((i for i, h in enumerate(header_texts) if "評語" in h), -1)
+      n_idx = next((i for i, h in enumerate(header_texts) if "馬名" in h), -1)
+      no_idx = next((i for i, h in enumerate(header_texts) if any(k in h for k in ("馬號", "編號", "馬匹編號"))), -1)
+      for r in rows[1:]:
+        txts = r["texts"]
+        if c_idx != -1 and len(txts) > c_idx and txts[c_idx]:
+          cmt = txts[c_idx].strip()
+          if no_idx != -1 and len(txts) > no_idx and re.fullmatch(r"\d{1,2}", txts[no_idx].strip()):
+            comments_by_no[int(txts[no_idx].strip())] = cmt
+          if n_idx != -1 and len(txts) > n_idx and txts[n_idx].strip():
+            comments_by_name[txts[n_idx].strip()] = cmt
+
+  # 2. 提取排位主表
   for tbl in eval_result.get("tables", []):
     rows = tbl.get("rows", [])
     if len(rows) < 5:
@@ -208,7 +234,8 @@ def parse_runners_from_dom(
     header_idx = -1
     col_map: dict[str, int] = {}
 
-    for r_idx, row in enumerate(rows[:4]):
+    for r_idx, row_obj in enumerate(rows[:4]):
+      row = row_obj["texts"]
       joined = " ".join(row)
       if ("馬名" in joined) and ("檔位" in joined) and ("負磅" in joined):
         header_idx = r_idx
@@ -220,25 +247,43 @@ def parse_runners_from_dom(
             col_map["name"] = c_idx
           elif clean_col in {"負磅", "實際負磅"}:
             col_map["weight"] = c_idx
+          elif "負磅" in clean_col and ("加減" in clean_col or "+/-" in clean_col):
+            col_map["weight_diff"] = c_idx
           elif clean_col == "檔位":
             col_map["draw"] = c_idx
           elif clean_col == "評分":
             col_map["rating"] = c_idx
+          elif "評分" in clean_col and ("加減" in clean_col or "+/-" in clean_col):
+            col_map["rating_diff"] = c_idx
           elif "排位體重" in clean_col or clean_col == "體重":
             col_map["body_weight"] = c_idx
+          elif "體重" in clean_col and ("加減" in clean_col or "+/-" in clean_col):
+            col_map["bw_diff"] = c_idx
           elif clean_col == "騎師":
             col_map["jockey"] = c_idx
           elif clean_col == "練馬師":
             col_map["trainer"] = c_idx
           elif "近績" in clean_col or "往績" in clean_col:
             col_map["recent_runs"] = c_idx
+          elif "最佳時間" in clean_col:
+            col_map["best_time"] = c_idx
+          elif "配備" in clean_col:
+            col_map["gear"] = c_idx
+          elif "王牌" in clean_col:
+            col_map["trump_card"] = c_idx
+          elif "優先" in clean_col and "次序" not in clean_col:
+            col_map["priority_entry"] = c_idx
+          elif "次序" in clean_col or "報名" in clean_col:
+            col_map["trainer_pref"] = c_idx
         break
 
     if header_idx == -1 or "no" not in col_map or "name" not in col_map:
       continue
 
     seen_nos: set[int] = set()
-    for row in rows[header_idx + 1 :]:
+    for row_obj in rows[header_idx + 1 :]:
+      row = row_obj["texts"]
+      links = row_obj["links"]
       if len(row) <= max(col_map.values()):
         continue
 
@@ -253,6 +298,8 @@ def parse_runners_from_dom(
       if not horse_name or re.fullmatch(r"[A-Za-z]\d{3}", horse_name):
         continue
 
+      horse_url = links[col_map["name"]] if len(links) > col_map["name"] else ""
+
       weight_lbs = (
           safe_float(row[col_map["weight"]], 125.0)
           if "weight" in col_map
@@ -260,6 +307,17 @@ def parse_runners_from_dom(
       )
       if weight_lbs is None or not (100.0 <= weight_lbs <= 140.0):
         weight_lbs = 125.0
+
+      weight_diff = (
+          row[col_map["weight_diff"]].strip()
+          if "weight_diff" in col_map
+          else ""
+      )
+      weight_display = (
+          f"{int(weight_lbs)} ({weight_diff})"
+          if weight_diff and weight_diff not in {"-", "--", "0"}
+          else f"{int(weight_lbs)}"
+      )
 
       draw = safe_int(row[col_map["draw"]], 7) if "draw" in col_map else 7
       if not (1 <= draw <= 16):
@@ -273,12 +331,35 @@ def parse_runners_from_dom(
       if rating is None or not (10.0 <= rating <= 150.0):
         rating = 60.0
 
-      # 解析排位體重（HKJC 馬匹體重合理範圍 850 - 1400 磅）
+      rating_diff = (
+          row[col_map["rating_diff"]].strip()
+          if "rating_diff" in col_map
+          else ""
+      )
+      rating_display = (
+          f"{int(rating)} ({rating_diff})"
+          if rating_diff and rating_diff not in {"-", "--", "0"}
+          else f"{int(rating)}"
+      )
+
+      # 排位體重與上次賽後加減
       body_weight: int | str = "N/A"
+      bw_display = "N/A"
       if "body_weight" in col_map:
-        bw_val = safe_float(row[col_map["body_weight"]], None)
+        raw_bw_cell = row[col_map["body_weight"]].strip()
+        bw_val = safe_float(raw_bw_cell, None)
         if bw_val is not None and 850 <= bw_val <= 1400:
           body_weight = int(round(bw_val))
+          bw_diff = (
+              row[col_map["bw_diff"]].strip()
+              if "bw_diff" in col_map
+              else ""
+          )
+          bw_display = (
+              f"{body_weight} ({bw_diff})"
+              if bw_diff and bw_diff not in {"-", "--"}
+              else (raw_bw_cell if "(" in raw_bw_cell else str(body_weight))
+          )
 
       jockey = (
           clean_person_name(row[col_map["jockey"]], "N/A")
@@ -295,6 +376,44 @@ def parse_runners_from_dom(
           if "recent_runs" in col_map
           else "N/A"
       )
+      best_time = (
+          row[col_map["best_time"]].strip() or "--"
+          if "best_time" in col_map
+          else "--"
+      )
+      gear = (
+          row[col_map["gear"]].strip() or "--"
+          if "gear" in col_map
+          else "--"
+      )
+      trump_raw = (
+          row[col_map["trump_card"]].strip()
+          if "trump_card" in col_map
+          else ""
+      )
+      trump_card = "王牌" if trump_raw and trump_raw not in {"-", "--"} else "未使用"
+
+      priority_raw = (
+          row[col_map["priority_entry"]].strip()
+          if "priority_entry" in col_map
+          else ""
+      )
+      priority_entry = (
+          "獲得" if priority_raw and priority_raw not in {"-", "--"} else "一般"
+      )
+
+      trainer_pref = (
+          row[col_map["trainer_pref"]].strip() or "--"
+          if "trainer_pref" in col_map
+          else "--"
+      )
+
+      comment = (
+          comments_by_no.get(horse_no)
+          or comments_by_name.get(horse_name)
+          or "N/A"
+      )
+
       running_style = infer_running_style(
           recent_runs, draw, meta.get("distance", "1400")
       )
@@ -303,14 +422,28 @@ def parse_runners_from_dom(
       runners.append({
           "no": horse_no,
           "name": horse_name,
+          "horse_url": horse_url,
           "draw": draw,
           "weight_lbs": weight_lbs,
+          "weight_display": weight_display,
           "rating": rating,
+          "rating_display": rating_display,
           "jockey": jockey,
           "trainer": trainer,
           "recent_runs": recent_runs,
           "running_style": running_style,
           "body_weight": body_weight,
+          "bw_display": bw_display,
+          "best_time": best_time,
+          "gear": gear,
+          "trump_card": trump_card,
+          "priority_entry": priority_entry,
+          "trainer_pref": trainer_pref,
+          "comment": comment,
+          "age_sex": "N/A",
+          "season_stats": "N/A",
+          "days_since_last": "N/A",
+          "trackwork_summary": "N/A",
           "win_odds": None,
       })
 
@@ -320,8 +453,58 @@ def parse_runners_from_dom(
   return runners, meta, eval_result
 
 
+def enrich_horse_profile(page, horse_url: str) -> dict[str, str]:
+  """進入個別馬匹資料頁，提取年齡/性別、歷季出賽、距離上次出賽及晨操試閘摘要。"""
+  if not horse_url:
+    return {}
+  try:
+    page.goto(horse_url, wait_until="domcontentloaded", timeout=30000)
+    page.wait_for_timeout(1200)
+    text = page.evaluate(
+        "() => document.body ? document.body.innerText : ''"
+    )
+    clean_txt = re.sub(r"[ \t]+", " ", text)
+
+    out: dict[str, str] = {}
+
+    m_age = re.search(r"年齡\s*/\s*性別\s*[:：]?\s*([^\n]+)", clean_txt)
+    if m_age:
+      out["age_sex"] = m_age.group(1).strip()
+
+    m_stats = re.search(
+        r"冠-亞-季-總出賽次數\s*[:：]?\s*([0-9\-]+)", clean_txt
+    )
+    if m_stats:
+      out["season_stats"] = m_stats.group(1).strip()
+
+    # 計算距離上次出賽日數（由最近一場往績日期推算）
+    m_last_date = re.search(r"\b(\d{2})/(\d{2})/(\d{2,4})\b", clean_txt)
+    if m_last_date:
+      d_s, m_s, y_s = m_last_date.groups()
+      yr = int(y_s) + 2000 if len(y_s) == 2 else int(y_s)
+      try:
+        last_dt = datetime(yr, int(m_s), int(d_s), tzinfo=HKT)
+        diff_days = (datetime.now(HKT) - last_dt).days
+        if 0 <= diff_days <= 730:
+          out["days_since_last"] = f"{diff_days}日"
+      except ValueError:
+        pass
+
+    # 提取晨操／試閘次數統計
+    tw_parts = []
+    for label in ("試閘", "快操", "踱步", "游水"):
+      cnt = len(re.findall(label, clean_txt))
+      if cnt > 0:
+        tw_parts.append(f"{label}:{cnt}")
+    if tw_parts:
+      out["trackwork_summary"] = " ".join(tw_parts)
+
+    return out
+  except Exception:
+    return {}
+
+
 def extract_odds_from_json_tree(node: Any, odds_map: dict[int, float]) -> None:
-  """僅由明確嘅 GraphQL 賠率欄位提取獨贏賠率（避免誤抓場次編號）。"""
   if isinstance(node, dict):
     no_val = None
     for k in ("runnerNo", "horseNo", "clothNo"):
@@ -358,7 +541,6 @@ def extract_odds_from_json_tree(node: Any, odds_map: dict[int, float]) -> None:
 def fetch_win_odds_for_race(
     page, race_date: str, course: str, race_no: int, runner_names: dict[int, str]
 ) -> tuple[dict[int, float], dict[str, Any]]:
-  """抓取 bet.hkjc.com 實時獨贏賠率（嚴格要求帶小數點賠率 >= 1.1，防止未開盤誤抓場次號碼）。"""
   date_hyphen = race_date.replace("/", "-")
   odds_url = f"{BET_WP_BASE_URL}/{date_hyphen}/{course}/{race_no}"
   odds_map: dict[int, float] = {}
@@ -380,7 +562,6 @@ def fetch_win_odds_for_race(
     page.goto(odds_url, wait_until="domcontentloaded", timeout=45000)
     page.wait_for_timeout(4500)
 
-    # 僅在頁面真係有小數點賠率（例如 2.4、15.0）時先由 DOM 補充提取
     if len(odds_map) < len(runner_names):
       dom_rows = page.evaluate("""
         () => {
@@ -392,7 +573,6 @@ def fetch_win_odds_for_race(
         for h_no, h_name in runner_names.items():
           if h_no in odds_map or not h_name or h_name not in row_txt:
             continue
-          # 必須匹配帶小數點嘅賠率（如 3.2、18.5），過濾純整數場次號
           after_name = row_txt.split(h_name, 1)[1]
           m = re.search(r"\b(\d{1,3}\.\d{1,2})\b", after_name)
           if m:
@@ -404,7 +584,6 @@ def fetch_win_odds_for_race(
   finally:
     page.remove_listener("response", on_resp)
 
-  # 若整場只有 1-2 隻勉強匹配，多數屬於未開盤雜訊，直接清空保持 N/A
   if len(odds_map) < 3:
     odds_map.clear()
 
@@ -423,6 +602,7 @@ def fetch_hkjc_race_data() -> dict[str, Any]:
   debug_summary: list[dict[str, Any]] = []
   odds_diagnostics: list[dict[str, Any]] = []
   max_races_to_check = int(os.getenv("HKJC_MAX_RACES", "11"))
+  fetch_horse_profiles = os.getenv("HKJC_FETCH_HORSE_DETAILS", "true").lower() == "true"
 
   with sync_playwright() as p:
     browser = p.chromium.launch(
@@ -505,6 +685,15 @@ def fetch_hkjc_race_data() -> dict[str, Any]:
         })
         print(f"Race {race_no}: extracted {len(runners)} runners.")
 
+      # 補抓個別馬匹資料頁（年齡/性別、歷季冠亞季、距上次出賽、晨操試閘）
+      if fetch_horse_profiles and races:
+        print("Enriching horse profile details (age/sex, stats, trackwork)...")
+        for race_obj in races:
+          for r in race_obj["runners"]:
+            extra = enrich_horse_profile(page, r.get("horse_url", ""))
+            r.update(extra)
+
+      # 逐場抓取實時獨贏賠率
       if race_date and races:
         print("Fetching live win odds from bet.hkjc.com...")
         for race_obj in races:
