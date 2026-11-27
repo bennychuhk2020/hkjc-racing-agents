@@ -1,1 +1,3236 @@
-{}
+{
+  "race_1": {
+    "balanced_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 115.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 112.75,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      }
+    ],
+    "value_hunter_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 143.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 140.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      }
+    ]
+  },
+  "race_2": {
+    "balanced_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 115.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 112.75,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      }
+    ],
+    "value_hunter_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 143.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 140.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      }
+    ]
+  },
+  "race_3": {
+    "balanced_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 115.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 112.75,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      }
+    ],
+    "value_hunter_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 143.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 140.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      }
+    ]
+  },
+  "race_4": {
+    "balanced_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 115.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 112.75,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      }
+    ],
+    "value_hunter_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 143.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 140.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      }
+    ]
+  },
+  "race_5": {
+    "balanced_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 115.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 112.75,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      }
+    ],
+    "value_hunter_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 143.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 140.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      }
+    ]
+  },
+  "race_6": {
+    "balanced_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 115.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 112.75,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      }
+    ],
+    "value_hunter_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 143.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 140.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      }
+    ]
+  },
+  "race_7": {
+    "balanced_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 115.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 112.75,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      }
+    ],
+    "value_hunter_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 143.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 140.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      }
+    ]
+  },
+  "race_8": {
+    "balanced_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 115.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 112.75,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      }
+    ],
+    "value_hunter_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 143.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 140.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      }
+    ]
+  },
+  "race_9": {
+    "balanced_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 115.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 112.75,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      }
+    ],
+    "value_hunter_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 143.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 140.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      }
+    ]
+  },
+  "race_10": {
+    "balanced_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 115.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 112.75,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      }
+    ],
+    "value_hunter_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 143.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 140.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      }
+    ]
+  },
+  "race_11": {
+    "balanced_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 115.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 112.75,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 55.6,
+        "priority": "P3 (觀察)"
+      }
+    ],
+    "value_hunter_profile": [
+      {
+        "no": 7,
+        "name": "L085",
+        "draw": 7,
+        "weight_lbs": -7.0,
+        "win_odds": 10.0,
+        "score": 143.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 11,
+        "name": "J395",
+        "draw": 7,
+        "weight_lbs": -2.0,
+        "win_odds": 10.0,
+        "score": 140.0,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "最佳時間",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P1 (核心)"
+      },
+      {
+        "no": 6,
+        "name": "烙號",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 6,
+        "name": "J394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P2 (次選)"
+      },
+      {
+        "no": 1,
+        "name": "K402",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 8,
+        "name": "H392",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K215",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "K480",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "K394",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "L270",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 9,
+        "name": "J218",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 10,
+        "name": "K101",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 5,
+        "name": "L163",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 7,
+        "name": "K028",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      },
+      {
+        "no": 4,
+        "name": "J319",
+        "draw": 7,
+        "weight_lbs": 125.0,
+        "win_odds": 10.0,
+        "score": 63.8,
+        "priority": "P3 (觀察)"
+      }
+    ]
+  }
+}

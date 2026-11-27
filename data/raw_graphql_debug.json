@@ -1,1 +1,289 @@
-[]
+{
+  "page_diagnostics": [
+    {
+      "race_no": 1,
+      "title": "排位表 - 賽馬資訊 - 香港賽馬會",
+      "final_url": "https://racing.hkjc.com/zh-hk/local/information/racecard?RaceNo=1",
+      "body_snippet": "首頁 English  \n登入 / 登記常見問題\n賽馬\n足智彩\n六合彩\n\n馬場活動\n\n賽馬資訊\n\n足球資訊\n\n馬會會員\n\n慈善及社區貢獻\n\n馬會知多少\n\n賽事資料(本地) | 賽事資料(越洋轉播) | 賽馬新聞 | 主要賽事 | 視聽播放區 | 國際賽馬 | 香港國際馬匹拍賣會 | 從化馬場 | 投注指南 | 賽馬知多些 | RESTART\n 報名表\n 排位表\n 即時賠率\n 練馬師分場表\n 騎師分場表\n 參考資料\n 統計資料\n 賽果\n 賽事報告\n 騎練資料\n 馬匹資料\n 試閘結果\n 賽期表\n11月28日 - S1 澳洲 / S2 南非11月29日 - 沙田 / S3 日本\n沙田:\t\t\t\t\t\t\t\t\t\t\t\t\nS3 日本:\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\n晨操片段\n速勢能量\n即時賠率\n貼士指數\n\n天氣及\n\n新\n\n跑道狀況\n\n第 1 場 - 其士鋁工程讓賽\n2026年11月29日, 星期日, 沙田, 12:45\n草地, \"C\" 賽道, 1400米\n獎金: $875,000, 評分: 40-0, 第五班\n \n設 定 我 的 排 位 表 - 設 定 你 的 個 人 化 排 位 資 料\n按此開啟 \n我 的 排 位 表\n\n馬匹編號\t6次近績\t綵衣\t馬名\t負磅\t騎師\t檔位\t練馬師\t評分\t評分+/-\t排位體重\t優先參賽次序\t配備\n1\t6/7/10/9/6/2\t\t馬上盈\t135\t霍宏聲\t9",
+      "table_count": 9,
+      "sample_tables": [
+        {
+          "index": 0,
+          "rowCount": 2,
+          "rows": [
+            [
+              "沙田:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            [
+              "S3 日本:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ]
+        },
+        {
+          "index": 1,
+          "rowCount": 1,
+          "rows": [
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          ]
+        },
+        {
+          "index": 2,
+          "rowCount": 12,
+          "rows": [
+            [
+              "預設 重新整理",
+              "預設",
+              "重新整理",
+              ""
+            ],
+            [
+              "預設",
+              "重新整理",
+              ""
+            ],
+            [
+              "馬匹",
+              "馬匹編號",
+              "馬名",
+              "烙號",
+              "檔位"
+            ],
+            [
+              "",
+              "馬主",
+              "馬齡",
+              "性別",
+              "評分"
+            ],
+            [
+              "",
+              "評分+/-",
+              "負磅",
+              "排位體重",
+              "排位體重+/-"
+            ],
+            [
+              "",
+              "今季獎金",
+              "綵衣",
+              "配備",
+              "進口類別"
+            ],
+            [
+              "",
+              "父系",
+              "母系",
+              "分齡讓磅",
+              "優先參賽次序"
+            ],
+            [
+              "",
+              "上賽距今日數",
+              "",
+              "",
+              ""
+            ],
+            [],
+            [
+              "騎師",
+              "騎師",
+              "可能超磅",
+              "",
+              ""
+            ],
+            [
+              "練馬師",
+              "練馬師",
+              "",
+              "",
+              ""
+            ],
+            [
+              "統計資料",
+              "6次近績",
+              "最佳時間",
+              "",
+              ""
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "api_responses": [
+    {
+      "url": "https://api.ipdata.co/?api-key=ac5f659c94717be9e87ee36deff50b57f29b1f12dff205e7c4fbbfd8",
+      "payload": {
+        "ip": "172.177.209.208",
+        "is_eu": false,
+        "city": "Boydton",
+        "region": "Virginia",
+        "region_code": "VA",
+        "region_type": "state",
+        "country_name": "United States",
+        "country_code": "US",
+        "continent_name": "North America",
+        "continent_code": "NA",
+        "latitude": 36.667640686035156,
+        "longitude": -78.38749694824219,
+        "postal": "23917",
+        "calling_code": "1",
+        "flag": "https://ipdata.co/flags/us.png",
+        "emoji_flag": "🇺🇸",
+        "emoji_unicode": "U+1F1FA U+1F1F8",
+        "asn": {
+          "asn": "AS8075",
+          "name": "Microsoft Corporation",
+          "domain": "microsoft.com",
+          "route": "172.160.0.0/11",
+          "type": "hosting"
+        },
+        "company": {
+          "name": "Microsoft Corporation",
+          "domain": "microsoft.com",
+          "network": "172.160.0.0/11",
+          "type": "hosting"
+        },
+        "languages": [
+          {
+            "name": "English",
+            "native": "English",
+            "code": "en"
+          }
+        ],
+        "currency": {
+          "name": "US Dollar",
+          "code": "USD",
+          "symbol": "$",
+          "native": "$",
+          "plural": "US dollars"
+        },
+        "time_zone": {
+          "name": "America/New_York",
+          "abbr": "EST",
+          "offset": "-0500",
+          "is_dst": false,
+          "current_time": "2026-11-27T07:40:39-05:00"
+        },
+        "threat": {
+          "is_tor": false,
+          "is_vpn": true,
+          "is_icloud_relay": false,
+          "is_proxy": false,
+          "is_datacenter": true,
+          "is_anonymous": true,
+          "is_known_attacker": false,
+          "is_known_abuser": false,
+          "is_threat": false,
+          "is_bogon": false,
+          "blocklists": [
+            {
+              "days_seen": 56,
+              "first_seen": "2026-10-01",
+              "last_seen": "2026-11-26",
+              "name": "ipdata",
+              "site": "https://ipdata.co",
+              "type": "vpn"
+            }
+          ],
+          "scores": {
+            "vpn_score": 99,
+            "proxy_score": 0,
+            "threat_score": 100,
+            "trust_score": 34
+          }
+        }
+      }
+    },
+    {
+      "url": "https://browser-intake-datadoghq.com/api/v2/rum?ddsource=browser&ddtags=sdk_version%3A5.35.1%2Capi%3Axhr%2Cenv%3APROD%2Cservice%3Aweb_jcrw_prod&dd-api-key=pubf73c8b81bec2450487133e975f4692f5&dd-evp-origin-version=5.35.1&dd-evp-origin=browser&dd-request-id=542503f3-873f-4e47-8231-07bae11b7c0c&batch_time=1795765240129",
+      "payload": {
+        "request_id": "542503f3-873f-4e47-8231-07bae11b7c0c"
+      }
+    },
+    {
+      "url": "https://browser-intake-datadoghq.com/api/v2/rum?ddsource=browser&ddtags=sdk_version%3A5.35.1%2Capi%3Afetch%2Cenv%3APROD%2Cservice%3Aweb_jcrw_prod&dd-api-key=pubf73c8b81bec2450487133e975f4692f5&dd-evp-origin-version=5.35.1&dd-evp-origin=browser&dd-request-id=453c2af1-6c71-4e15-b1e0-0f98dfbbfb45&batch_time=1795765240125",
+      "payload": {
+        "request_id": "453c2af1-6c71-4e15-b1e0-0f98dfbbfb45"
+      }
+    },
+    {
+      "url": "https://browser-intake-datadoghq.com/api/v2/rum?ddsource=browser&ddtags=sdk_version%3A5.35.1%2Capi%3Afetch%2Cenv%3APROD%2Cservice%3Aweb_jcrw_prod&dd-api-key=pubf73c8b81bec2450487133e975f4692f5&dd-evp-origin-version=5.35.1&dd-evp-origin=browser&dd-request-id=707dd574-643a-4fce-ba8b-28ff55344086&batch_time=1795765240108",
+      "payload": {
+        "request_id": "707dd574-643a-4fce-ba8b-28ff55344086"
+      }
+    },
+    {
+      "url": "https://browser-intake-datadoghq.com/api/v2/rum?ddsource=browser&ddtags=sdk_version%3A5.35.1%2Capi%3Axhr%2Cenv%3APROD%2Cservice%3Aweb_jcrw_prod&dd-api-key=pubf73c8b81bec2450487133e975f4692f5&dd-evp-origin-version=5.35.1&dd-evp-origin=browser&dd-request-id=37d63fb5-3e63-4fd7-b919-7ecfa8f5a090&batch_time=1795765240224",
+      "payload": {
+        "request_id": "37d63fb5-3e63-4fd7-b919-7ecfa8f5a090"
+      }
+    },
+    {
+      "url": "https://browser-intake-datadoghq.com/api/v2/rum?ddsource=browser&ddtags=sdk_version%3A5.35.1%2Capi%3Axhr%2Cenv%3APROD%2Cservice%3Aweb_jcrw_prod&dd-api-key=pubf73c8b81bec2450487133e975f4692f5&dd-evp-origin-version=5.35.1&dd-evp-origin=browser&dd-request-id=89a9cf4f-4485-471a-b9e2-4a1deed8810b&batch_time=1795765240233",
+      "payload": {
+        "request_id": "89a9cf4f-4485-471a-b9e2-4a1deed8810b"
+      }
+    },
+    {
+      "url": "https://browser-intake-datadoghq.com/api/v2/rum?ddsource=browser&ddtags=sdk_version%3A5.35.1%2Capi%3Axhr%2Cenv%3APROD%2Cservice%3Aweb_jcrw_prod&dd-api-key=pubf73c8b81bec2450487133e975f4692f5&dd-evp-origin-version=5.35.1&dd-evp-origin=browser&dd-request-id=22b6ef45-4c47-4c6e-b617-479ddc1cbe36&batch_time=1795765240215",
+      "payload": {
+        "request_id": "22b6ef45-4c47-4c6e-b617-479ddc1cbe36"
+      }
+    },
+    {
+      "url": "https://browser-intake-datadoghq.com/api/v2/rum?ddsource=browser&ddtags=sdk_version%3A5.35.1%2Capi%3Afetch%2Cenv%3APROD%2Cservice%3Aweb_jcrw_prod&dd-api-key=pubf73c8b81bec2450487133e975f4692f5&dd-evp-origin-version=5.35.1&dd-evp-origin=browser&dd-request-id=141e2238-1307-4c56-bc6b-30f543f535d9&batch_time=1795765240111",
+      "payload": {
+        "request_id": "141e2238-1307-4c56-bc6b-30f543f535d9"
+      }
+    },
+    {
+      "url": "https://browser-intake-datadoghq.com/api/v2/rum?ddsource=browser&ddtags=sdk_version%3A5.35.1%2Capi%3Afetch%2Cenv%3APROD%2Cservice%3Aweb_jcrw_prod&dd-api-key=pubf73c8b81bec2450487133e975f4692f5&dd-evp-origin-version=5.35.1&dd-evp-origin=browser&dd-request-id=5e343e0e-97af-4e39-9dc1-5a3d5430da5a&batch_time=1795765240105",
+      "payload": {
+        "request_id": "5e343e0e-97af-4e39-9dc1-5a3d5430da5a"
+      }
+    },
+    {
+      "url": "https://browser-intake-datadoghq.com/api/v2/rum?ddsource=browser&ddtags=sdk_version%3A5.35.1%2Capi%3Afetch%2Cenv%3APROD%2Cservice%3Aweb_jcrw_prod&dd-api-key=pubf73c8b81bec2450487133e975f4692f5&dd-evp-origin-version=5.35.1&dd-evp-origin=browser&dd-request-id=141c72a8-2e52-4cdc-9264-9ab63797b319&batch_time=1795765240297",
+      "payload": {
+        "request_id": "141c72a8-2e52-4cdc-9264-9ab63797b319"
+      }
+    }
+  ]
+}
