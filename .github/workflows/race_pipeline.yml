@@ -1,0 +1,41 @@
+name: HKJC Multi-Agent Pipeline
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 0,3'
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies and Playwright Chromium
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: Run Agent 1 (Fetch HKJC Data)
+        run: python agents/fetch_agent.py
+
+      - name: Run Agent 2 (Multi-Parameter Priority Ranking)
+        run: python agents/ranking_agent.py
+
+      - name: Commit and Push Results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "HKJC-Agent-Bot"
+          git add data/ output/
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto-update race data & priority report"
+          git push
