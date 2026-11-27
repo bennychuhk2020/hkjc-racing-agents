@@ -19,12 +19,11 @@ DEFAULT_RACECARD_URL = (
 )
 
 
-def build_target_url(race_no: int | None = None) -> str:
-  """組裝 HKJC 排位表網址，支援指定賽日、場地與場次。"""
+def build_target_url(
+    race_date: str = "", course: str = "", race_no: int | None = None
+) -> str:
+  """組裝完整 HKJC 排位表網址（必須同時帶 raceDate、Racecourse 先會正確切換場次）。"""
   base_url = os.getenv("HKJC_TARGET_URL", DEFAULT_RACECARD_URL).strip()
-  race_date = os.getenv("HKJC_RACE_DATE", "").strip()  # 格式: 2026/11/29
-  course = os.getenv("HKJC_RACE_COURSE", "").strip().upper()  # ST 或 HV
-
   params = []
   if race_date:
     params.append(f"raceDate={race_date}")
@@ -35,7 +34,6 @@ def build_target_url(race_no: int | None = None) -> str:
 
   if not params:
     return base_url
-
   sep = "&" if "?" in base_url else "?"
   return f"{base_url}{sep}{'&'.join(params)}"
 
@@ -59,8 +57,46 @@ def safe_int(value: Any, default: int) -> int:
   return int(round(safe_float(value, float(default))))
 
 
-def parse_runners_from_dom(page) -> tuple[str, dict[str, Any]]:
-  """直接從 HKJC 排位表網頁 DOM 表格提取馬匹資料。"""
+def detect_meeting_params(page) -> tuple[str, str]:
+  """由第 1 場載入後嘅網址或頁面文字，偵測最新賽日 (YYYY/MM/DD) 同場地 (ST/HV)。"""
+  info = page.evaluate("""
+    () => ({
+      url: window.location.href,
+      text: document.body ? document.body.innerText.slice(0, 1500) : ""
+    })
+    """)
+  url = info.get("url", "")
+  text = info.get("text", "")
+
+  race_date = os.getenv("HKJC_RACE_DATE", "").strip()
+  course = os.getenv("HKJC_RACE_COURSE", "").strip().upper()
+
+  if not race_date:
+    m_url_date = re.search(r"raceDate=(\d{4}/\d{2}/\d{2})", url, re.I)
+    if m_url_date:
+      race_date = m_url_date.group(1)
+    else:
+      m_txt_date = re.search(r"(\d{4})年(\d{1,2})月(\d{1,2})日", text)
+      if m_txt_date:
+        y, m, d = m_txt_date.groups()
+        race_date = f"{y}/{int(m):02d}/{int(d):02d}"
+      else:
+        m_slash = re.search(r"(\d{2})/(\d{2})/(\d{4})", text)
+        if m_slash:
+          d, m, y = m_slash.groups()
+          race_date = f"{y}/{m}/{d}"
+
+  if course not in {"ST", "HV"}:
+    if "Racecourse=HV" in url or "跑馬地" in text[:400]:
+      course = "HV"
+    else:
+      course = "ST"
+
+  return race_date, course
+
+
+def parse_runners_from_dom(page) -> tuple[list[dict[str, Any]], dict[str, Any], dict[str, Any]]:
+  """精準解析 HKJC 排位表主表格（排除烙號誤判及評分增減誤判）。"""
   eval_result = page.evaluate("""
     () => {
       const title = document.title || "";
@@ -77,7 +113,7 @@ def parse_runners_from_dom(page) -> tuple[str, dict[str, Any]]:
       return {
         title,
         url: window.location.href,
-        bodySnippet: bodyText.slice(0, 600),
+        bodySnippet: bodyText.slice(0, 800),
         tables: extractedTables
       };
     }
@@ -86,82 +122,97 @@ def parse_runners_from_dom(page) -> tuple[str, dict[str, Any]]:
   runners: list[dict[str, Any]] = []
   meta = {"distance": "", "course": ""}
 
-  # 嘗試從頁面文字提取途程（例如 1200米 / 1650米）
   body_snippet = eval_result.get("bodySnippet", "")
   dist_match = re.search(r"(\d{4})\s*米", body_snippet)
   if dist_match:
     meta["distance"] = dist_match.group(1)
-  if "沙田" in body_snippet:
-    meta["course"] = "沙田"
-  elif "跑馬地" in body_snippet:
+  if "跑馬地" in body_snippet[:300]:
     meta["course"] = "跑馬地"
+  elif "沙田" in body_snippet[:300]:
+    meta["course"] = "沙田"
 
-  # 尋找包含「馬匹編號 / 馬名 / 負磅 / 檔位 / 評分」嘅排位表
   for tbl in eval_result.get("tables", []):
     rows = tbl.get("rows", [])
-    if len(rows) < 4:
+    if len(rows) < 5:
       continue
 
     header_idx = -1
     col_map: dict[str, int] = {}
 
-    for r_idx, row in enumerate(rows[:5]):
+    for r_idx, row in enumerate(rows[:4]):
       joined = " ".join(row)
-      if ("馬名" in joined or "Horse" in joined) and (
-          "負磅" in joined or "檔位" in joined or "評分" in joined or "Wt" in joined
-      ):
+      # 必須同時包含「馬匹編號/編號」、「馬名」同「負磅/檔位」先係真正排位主表
+      if ("馬名" in joined) and ("檔位" in joined) and ("負磅" in joined):
         header_idx = r_idx
         for c_idx, col_name in enumerate(row):
-          if any(k in col_name for k in ("馬匹編號", "編號", "No")):
+          clean_col = col_name.replace(" ", "")
+          if clean_col in {"馬匹編號", "編號", "馬號"}:
             col_map["no"] = c_idx
-          elif any(k in col_name for k in ("馬名", "Horse")):
+          elif clean_col == "馬名":
             col_map["name"] = c_idx
-          elif any(k in col_name for k in ("負磅", "實際負磅", "Wt")):
+          elif clean_col in {"負磅", "實際負磅"}:
             col_map["weight"] = c_idx
-          elif any(k in col_name for k in ("檔位", "Draw")):
+          elif clean_col == "檔位":
             col_map["draw"] = c_idx
-          elif any(k in col_name for k in ("評分", "Rating", "Rtg")):
+          elif clean_col == "評分":
             col_map["rating"] = c_idx
-          elif any(k in col_name for k in ("獨贏", "賠率", "Win")):
+          elif "獨贏" in clean_col or "賠率" in clean_col:
             col_map["odds"] = c_idx
         break
 
-    if header_idx == -1 or "name" not in col_map:
+    if header_idx == -1 or "no" not in col_map or "name" not in col_map:
       continue
 
+    seen_nos: set[int] = set()
     for row in rows[header_idx + 1 :]:
-      if len(row) <= col_map["name"]:
+      if len(row) <= max(col_map.values()):
         continue
-      raw_no = row[col_map["no"]] if "no" in col_map and len(row) > col_map["no"] else ""
-      horse_no = safe_int(raw_no, -1)
-      if not (1 <= horse_no <= 16):
+
+      raw_no = row[col_map["no"]].strip()
+      # 嚴格要求編號係純數字（1-16），避免抓到空白或合併列
+      if not re.fullmatch(r"\d{1,2}", raw_no):
+        continue
+      horse_no = int(raw_no)
+      if not (1 <= horse_no <= 16) or horse_no in seen_nos:
         continue
 
       horse_name = row[col_map["name"]].strip()
-      if not horse_name:
+      # 過濾掉烙號（例如 J394、L085）
+      if not horse_name or re.fullmatch(r"[A-Za-z]\d{3}", horse_name):
         continue
 
       weight_lbs = (
           safe_float(row[col_map["weight"]], 125.0)
-          if "weight" in col_map and len(row) > col_map["weight"]
+          if "weight" in col_map
           else 125.0
       )
+      # 香港賽馬負磅合理範圍 103 - 135 磅，若超出表示抓錯欄，用預設值
+      if not (100.0 <= weight_lbs <= 140.0):
+        weight_lbs = 125.0
+
       draw = (
           safe_int(row[col_map["draw"]], 7)
-          if "draw" in col_map and len(row) > col_map["draw"]
+          if "draw" in col_map
           else 7
       )
+      if not (1 <= draw <= 16):
+        draw = 7
+
       rating = (
           safe_float(row[col_map["rating"]], 60.0)
-          if "rating" in col_map and len(row) > col_map["rating"]
+          if "rating" in col_map
           else 60.0
       )
+      if not (10.0 <= rating <= 150.0):
+        rating = 60.0
+
       win_odds = (
           safe_float(row[col_map["odds"]], 10.0)
-          if "odds" in col_map and len(row) > col_map["odds"]
+          if "odds" in col_map
           else 10.0
       )
 
+      seen_nos.add(horse_no)
       runners.append({
           "no": horse_no,
           "name": horse_name,
@@ -178,12 +229,9 @@ def parse_runners_from_dom(page) -> tuple[str, dict[str, Any]]:
 
 
 def fetch_hkjc_race_data() -> dict[str, Any]:
-  """抓取 HKJC 排位表（支援多場次自動遍歷及除錯資訊輸出）。"""
-  captured_api: list[dict[str, Any]] = []
-  debug_pages: list[dict[str, Any]] = []
+  """先載入預設最新排位表取得賽日與場地，再逐場抓取第 1 場至最後一場。"""
   races: list[dict[str, Any]] = []
-  detected_date = datetime.now(HKT).strftime("%Y-%m-%d")
-
+  debug_summary: list[dict[str, Any]] = []
   max_races_to_check = int(os.getenv("HKJC_MAX_RACES", "11"))
 
   with sync_playwright() as p:
@@ -211,54 +259,58 @@ def fetch_hkjc_race_data() -> dict[str, Any]:
 
     page.route("**/*", route_handler)
 
-    def handle_response(response: Response) -> None:
-      url_l = response.url.lower()
-      if any(k in url_l for k in ("graphql", "racecard", "odds", "api")):
-        ct = (response.headers.get("content-type") or "").lower()
-        if "json" in ct:
-          try:
-            captured_api.append({
-                "url": response.url,
-                "payload": response.json(),
-            })
-          except Exception:
-            pass
-
-    page.on("response", handle_response)
-
     try:
+      # 第一步：載入預設排位頁面，自動識別下一賽日日期同場地 (ST/HV)
+      initial_url = build_target_url(
+          race_date=os.getenv("HKJC_RACE_DATE", "").strip(),
+          course=os.getenv("HKJC_RACE_COURSE", "").strip().upper(),
+          race_no=1,
+      )
+      print(f"Loading initial page: {initial_url}")
+      page.goto(initial_url, wait_until="domcontentloaded", timeout=60000)
+      page.wait_for_timeout(3500)
+
+      race_date, course = detect_meeting_params(page)
+      print(f"Detected meeting -> race_date={race_date}, course={course}")
+
       for race_no in range(1, max_races_to_check + 1):
-        target_url = build_target_url(race_no=race_no)
-        print(f"Fetching Race {race_no}: {target_url}")
-        page.goto(target_url, wait_until="domcontentloaded", timeout=60000)
-        page.wait_for_timeout(3500)
+        target_url = build_target_url(
+            race_date=race_date, course=course, race_no=race_no
+        )
+        if race_no > 1:
+          print(f"Fetching Race {race_no}: {target_url}")
+          page.goto(target_url, wait_until="domcontentloaded", timeout=60000)
+          page.wait_for_timeout(3000)
 
         runners, meta, eval_info = parse_runners_from_dom(page)
 
-        if race_no == 1:
-          debug_pages.append({
+        if race_no in {1, 2}:
+          # 記錄第1、2場主表表頭方便核對
+          matching_headers = []
+          for t in eval_info.get("tables", []):
+            if t.get("rows") and any("馬名" in " ".join(r) for r in t["rows"][:3]):
+              matching_headers.append(t["rows"][:3])
+          debug_summary.append({
               "race_no": race_no,
-              "title": eval_info.get("title"),
-              "final_url": eval_info.get("url"),
-              "body_snippet": eval_info.get("bodySnippet"),
-              "table_count": len(eval_info.get("tables", [])),
-              "sample_tables": eval_info.get("tables", [])[:3],
+              "url": eval_info.get("url"),
+              "distance": meta.get("distance"),
+              "runner_count": len(runners),
+              "table_headers": matching_headers,
           })
-          date_match = re.search(
-              r"(\d{2}/\d{2}/\d{4}|\d{4}/\d{2}/\d{2})",
-              eval_info.get("bodySnippet", ""),
-          )
-          if date_match:
-            detected_date = date_match.group(1)
 
         if not runners:
           print(f"No runners found for Race {race_no}, stopping loop.")
           break
 
+        # 防止網頁重導向回第 1 場造成重複抓取
+        if races and runners[0]["name"] == races[0]["runners"][0]["name"] and len(runners) == len(races[0]["runners"]):
+          print(f"Race {race_no} returned identical runners to Race 1, stopping.")
+          break
+
         races.append({
             "race_no": race_no,
             "distance": meta.get("distance", ""),
-            "course": meta.get("course", ""),
+            "course": meta.get("course", "") or ("跑馬地" if course == "HV" else "沙田"),
             "runners": runners,
         })
         print(f"Race {race_no}: extracted {len(runners)} runners.")
@@ -267,22 +319,15 @@ def fetch_hkjc_race_data() -> dict[str, Any]:
 
   RAW_DEBUG_PATH.parent.mkdir(parents=True, exist_ok=True)
   RAW_DEBUG_PATH.write_text(
-      json.dumps(
-          {
-              "page_diagnostics": debug_pages,
-              "api_responses": captured_api[:10],
-          },
-          ensure_ascii=False,
-          indent=2,
-      ),
+      json.dumps(debug_summary, ensure_ascii=False, indent=2),
       encoding="utf-8",
   )
 
   result = {
-      "race_date": detected_date,
-      "source_url": build_target_url(race_no=1),
+      "race_date": race_date or datetime.now(HKT).strftime("%Y-%m-%d"),
+      "course_code": course,
+      "source_url": build_target_url(race_date=race_date, course=course, race_no=1),
       "fetched_at_hkt": datetime.now(HKT).isoformat(),
-      "graphql_response_count": len(captured_api),
       "races": races,
   }
 
