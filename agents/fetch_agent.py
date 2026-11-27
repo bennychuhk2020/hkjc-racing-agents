@@ -7,7 +7,7 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, Response
 
 RAW_DEBUG_PATH = Path("data/raw_graphql_debug.json")
 OUTPUT_DATA_PATH = Path("data/upcoming_races.json")
@@ -17,12 +17,13 @@ HKT = timezone(timedelta(hours=8))
 DEFAULT_RACECARD_URL = (
     "https://racing.hkjc.com/zh-hk/local/information/racecard"
 )
+BET_WP_BASE_URL = "https://bet.hkjc.com/ch/racing/wp"
 
 
 def build_target_url(
     race_date: str = "", course: str = "", race_no: int | None = None
 ) -> str:
-  """組裝完整 HKJC 排位表網址（同時帶 raceDate、Racecourse、RaceNo）。"""
+  """組裝完整 HKJC 排位表網址。"""
   base_url = os.getenv("HKJC_TARGET_URL", DEFAULT_RACECARD_URL).strip()
   params = []
   if race_date:
@@ -38,7 +39,7 @@ def build_target_url(
   return f"{base_url}{sep}{'&'.join(params)}"
 
 
-def safe_float(value: Any, default: float) -> float:
+def safe_float(value: Any, default: float | None = None) -> float | None:
   if value is None:
     return default
   if isinstance(value, (int, float)):
@@ -54,21 +55,20 @@ def safe_float(value: Any, default: float) -> float:
 
 
 def safe_int(value: Any, default: int) -> int:
-  return int(round(safe_float(value, float(default))))
+  val = safe_float(value, float(default))
+  return int(round(val if val is not None else float(default)))
 
 
 def clean_person_name(raw_text: str, default: str = "N/A") -> str:
-  """清理騎師／練馬師文字（例如去除括號內讓磅數字或多餘空白）。"""
   cleaned = re.sub(r"\s+", " ", str(raw_text or "")).strip()
   if not cleaned or cleaned in {"-", "--", "N/A"}:
     return default
-  # 保留中文人名或英文名，移除純括號負磅標註如 (2) 或 (-5)
   cleaned_no_paren = re.sub(r"\s*\([+-]?\d+\)\s*$", "", cleaned).strip()
   return cleaned_no_paren or cleaned
 
 
 def detect_meeting_params(page) -> tuple[str, str]:
-  """由第 1 場載入後嘅網址或頁面文字，偵測最新賽日 (YYYY/MM/DD) 同場地 (ST/HV)。"""
+  """由第 1 場載入後偵測最新賽日 (YYYY/MM/DD) 同場地 (ST/HV)。"""
   info = page.evaluate("""
     () => ({
       url: window.location.href,
@@ -125,7 +125,6 @@ def extract_race_meta(body_text: str, default_course: str) -> dict[str, str]:
   elif "沙田" in snippet[:350]:
     meta["course"] = "沙田"
 
-  # 班次辨識（例如 第五班、第四班、第三班、第二班、第一班、表列賽、分級賽）
   class_match = re.search(
       r"(第[一二三四五六]班|公開賽|表列賽|三級賽|二級賽|一級賽)",
       snippet,
@@ -133,7 +132,6 @@ def extract_race_meta(body_text: str, default_course: str) -> dict[str, str]:
   if class_match:
     meta["class_name"] = class_match.group(1)
 
-  # 跑道特色辨識（例如 "C+3" 賽道、"C" 賽道、"B+2" 賽道、全天候跑道、草地）
   track_match = re.search(
       r'["“]?(A\+3|B\+2|C\+3|A|B|C)["”]?\s*賽道',
       snippet,
@@ -151,7 +149,7 @@ def extract_race_meta(body_text: str, default_course: str) -> dict[str, str]:
 def parse_runners_from_dom(
     page, default_course: str
 ) -> tuple[list[dict[str, Any]], dict[str, str], dict[str, Any]]:
-  """精準解析 HKJC 排位表主表格（馬號、馬名、檔位、負磅、評分、騎師、練馬師、近績）。"""
+  """解析 HKJC 排位表主表格。"""
   eval_result = page.evaluate("""
     () => {
       const title = document.title || "";
@@ -207,8 +205,6 @@ def parse_runners_from_dom(
             col_map["trainer"] = c_idx
           elif "近績" in clean_col or "往績" in clean_col:
             col_map["recent_runs"] = c_idx
-          elif "獨贏" in clean_col or "賠率" in clean_col:
-            col_map["odds"] = c_idx
         break
 
     if header_idx == -1 or "no" not in col_map or "name" not in col_map:
@@ -235,7 +231,7 @@ def parse_runners_from_dom(
           if "weight" in col_map
           else 125.0
       )
-      if not (100.0 <= weight_lbs <= 140.0):
+      if weight_lbs is None or not (100.0 <= weight_lbs <= 140.0):
         weight_lbs = 125.0
 
       draw = safe_int(row[col_map["draw"]], 7) if "draw" in col_map else 7
@@ -247,7 +243,7 @@ def parse_runners_from_dom(
           if "rating" in col_map
           else 60.0
       )
-      if not (10.0 <= rating <= 150.0):
+      if rating is None or not (10.0 <= rating <= 150.0):
         rating = 60.0
 
       jockey = (
@@ -265,11 +261,6 @@ def parse_runners_from_dom(
           if "recent_runs" in col_map
           else "N/A"
       )
-      win_odds = (
-          safe_float(row[col_map["odds"]], 10.0)
-          if "odds" in col_map
-          else 10.0
-      )
 
       seen_nos.add(horse_no)
       runners.append({
@@ -283,7 +274,7 @@ def parse_runners_from_dom(
           "recent_runs": recent_runs,
           "running_style": "前置機動",
           "body_weight": "N/A",
-          "win_odds": win_odds,
+          "win_odds": None,
       })
 
     if len(runners) >= 4:
@@ -292,10 +283,108 @@ def parse_runners_from_dom(
   return runners, meta, eval_result
 
 
+def extract_odds_from_json_tree(node: Any, odds_map: dict[int, float]) -> None:
+  """遞歸搜尋 GraphQL JSON 中嘅馬號與獨贏賠率配對。"""
+  if isinstance(node, dict):
+    # 常見 HKJC GraphQL 欄位組合: runnerNo / horseNo + winOdds / oddsValue
+    no_val = None
+    for k in ("runnerNo", "horseNo", "no", "clothNo"):
+      if k in node and node[k] is not None:
+        cand = safe_int(node[k], -1)
+        if 1 <= cand <= 16:
+          no_val = cand
+          break
+
+    if no_val is not None:
+      for ok in ("winOdds", "oddsValue", "odds", "currentOdds"):
+        if ok in node and node[ok] not in (None, "", "-", "---"):
+          raw_o = node[ok]
+          if isinstance(raw_o, dict):
+            for sub_k in ("oddsValue", "value", "winOdds"):
+              if sub_k in raw_o:
+                o_float = safe_float(raw_o[sub_k], None)
+                if o_float is not None and 1.0 <= o_float <= 999.0:
+                  odds_map[no_val] = o_float
+                  break
+          else:
+            o_float = safe_float(raw_o, None)
+            if o_float is not None and 1.0 <= o_float <= 999.0:
+              odds_map[no_val] = o_float
+              break
+
+    for v in node.values():
+      extract_odds_from_json_tree(v, odds_map)
+  elif isinstance(node, list):
+    for item in node:
+      extract_odds_from_json_tree(item, odds_map)
+
+
+def fetch_win_odds_for_race(
+    page, race_date: str, course: str, race_no: int, runner_names: dict[int, str]
+) -> tuple[dict[int, float], dict[str, Any]]:
+  """從 bet.hkjc.com 抓取單場實時獨贏賠率（攔截 GraphQL + DOM 雙重提取）。"""
+  date_hyphen = race_date.replace("/", "-")
+  odds_url = f"{BET_WP_BASE_URL}/{date_hyphen}/{course}/{race_no}"
+  odds_map: dict[int, float] = {}
+  graphql_hits: list[dict[str, Any]] = []
+
+  def on_resp(resp: Response) -> None:
+    if "graphql" not in resp.url.lower():
+      return
+    try:
+      payload = resp.json()
+      if isinstance(payload, dict):
+        graphql_hits.append(payload)
+        extract_odds_from_json_tree(payload, odds_map)
+    except Exception:
+      pass
+
+  page.on("response", on_resp)
+  try:
+    page.goto(odds_url, wait_until="domcontentloaded", timeout=45000)
+    page.wait_for_timeout(4500)
+
+    # 若 GraphQL 樹未抓齊，再由渲染後嘅 DOM 表格／文字行匹配「馬號 + 馬名 + 獨贏賠率」
+    if len(odds_map) < len(runner_names):
+      dom_rows = page.evaluate("""
+        () => {
+          const lines = (document.body ? document.body.innerText : "").split("\\n");
+          return lines.map(l => l.trim()).filter(Boolean);
+        }
+        """)
+      joined_lines = "\n".join(dom_rows)
+      for h_no, h_name in runner_names.items():
+        if h_no in odds_map or not h_name:
+          continue
+        # 尋找包含馬名附近嘅合理賠率數字（1.0 至 500.0，帶小數點或整數）
+        pattern = re.compile(
+            rf"{re.escape(h_name)}[^\d\n]{{0,40}}?(\d{{1,3}}(?:\.\d)?)"
+        )
+        m = pattern.search(joined_lines)
+        if m:
+          val = safe_float(m.group(1), None)
+          if val is not None and 1.0 <= val <= 500.0:
+            odds_map[h_no] = val
+  except Exception as exc:
+    print(f"Race {race_no} odds fetch warning: {exc}")
+  finally:
+    page.remove_listener("response", on_resp)
+
+  diag = {
+      "race_no": race_no,
+      "odds_url": odds_url,
+      "graphql_count": len(graphql_hits),
+      "matched_odds_count": len(odds_map),
+      "sample_odds": dict(list(odds_map.items())[:5]),
+  }
+  return odds_map, diag
+
+
 def fetch_hkjc_race_data() -> dict[str, Any]:
-  """先載入預設最新排位表取得賽日與場地，再逐場抓取第 1 場至最後一場。"""
+  """先抓排位表基本資料，再逐場補抓實時獨贏賠率。"""
   races: list[dict[str, Any]] = []
   debug_summary: list[dict[str, Any]] = []
+  odds_diagnostics: list[dict[str, Any]] = []
   max_races_to_check = int(os.getenv("HKJC_MAX_RACES", "11"))
 
   with sync_playwright() as p:
@@ -329,7 +418,7 @@ def fetch_hkjc_race_data() -> dict[str, Any]:
           course=os.getenv("HKJC_RACE_COURSE", "").strip().upper(),
           race_no=1,
       )
-      print(f"Loading initial page: {initial_url}")
+      print(f"Loading initial racecard: {initial_url}")
       page.goto(initial_url, wait_until="domcontentloaded", timeout=60000)
       page.wait_for_timeout(3500)
 
@@ -341,25 +430,18 @@ def fetch_hkjc_race_data() -> dict[str, Any]:
             race_date=race_date, course=course, race_no=race_no
         )
         if race_no > 1:
-          print(f"Fetching Race {race_no}: {target_url}")
+          print(f"Fetching Race {race_no} card: {target_url}")
           page.goto(target_url, wait_until="domcontentloaded", timeout=60000)
-          page.wait_for_timeout(3000)
+          page.wait_for_timeout(2500)
 
         runners, meta, eval_info = parse_runners_from_dom(page, course)
 
         if race_no in {1, 2}:
-          matching_headers = []
-          for t in eval_info.get("tables", []):
-            if t.get("rows") and any(
-                "馬名" in " ".join(r) for r in t["rows"][:3]
-            ):
-              matching_headers.append(t["rows"][:3])
           debug_summary.append({
               "race_no": race_no,
               "url": eval_info.get("url"),
               "meta": meta,
               "runner_count": len(runners),
-              "table_headers": matching_headers,
           })
 
         if not runners:
@@ -384,16 +466,37 @@ def fetch_hkjc_race_data() -> dict[str, Any]:
             "track_feature": meta.get("track_feature", "標準賽道"),
             "runners": runners,
         })
-        print(
-            f"Race {race_no}: extracted {len(runners)} runners "
-            f"({meta.get('class_name')}, {meta.get('track_feature')})."
-        )
+        print(f"Race {race_no}: extracted {len(runners)} runners.")
+
+      # 第二階段：逐場抓取 bet.hkjc.com 實時獨贏賠率
+      if race_date and races:
+        print("Fetching live win odds from bet.hkjc.com...")
+        for race_obj in races:
+          r_no = race_obj["race_no"]
+          runner_names = {r["no"]: r["name"] for r in race_obj["runners"]}
+          odds_map, o_diag = fetch_win_odds_for_race(
+              page, race_date, course, r_no, runner_names
+          )
+          odds_diagnostics.append(o_diag)
+          for r in race_obj["runners"]:
+            if r["no"] in odds_map:
+              r["win_odds"] = odds_map[r["no"]]
+          print(
+              f"Race {r_no} odds: matched {len(odds_map)}/{len(runner_names)} runners."
+          )
     finally:
       browser.close()
 
   RAW_DEBUG_PATH.parent.mkdir(parents=True, exist_ok=True)
   RAW_DEBUG_PATH.write_text(
-      json.dumps(debug_summary, ensure_ascii=False, indent=2),
+      json.dumps(
+          {
+              "racecard_summary": debug_summary,
+              "odds_diagnostics": odds_diagnostics,
+          },
+          ensure_ascii=False,
+          indent=2,
+      ),
       encoding="utf-8",
   )
 
