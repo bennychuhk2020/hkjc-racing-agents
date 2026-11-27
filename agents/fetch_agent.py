@@ -23,7 +23,6 @@ BET_WP_BASE_URL = "https://bet.hkjc.com/ch/racing/wp"
 def build_target_url(
     race_date: str = "", course: str = "", race_no: int | None = None
 ) -> str:
-  """組裝完整 HKJC 排位表網址。"""
   base_url = os.getenv("HKJC_TARGET_URL", DEFAULT_RACECARD_URL).strip()
   params = []
   if race_date:
@@ -67,8 +66,36 @@ def clean_person_name(raw_text: str, default: str = "N/A") -> str:
   return cleaned_no_paren or cleaned
 
 
+def infer_running_style(
+    recent_runs: str, draw: int, distance_str: str
+) -> str:
+  """根據近績走勢、檔位與途程推算跑法類型。"""
+  runs = [int(x) for x in re.findall(r"\b\d+\b", recent_runs.replace("/", " "))]
+  dist = safe_int(distance_str, 1400)
+
+  if runs:
+    recent_3 = runs[:3]
+    avg_pos = sum(recent_3) / len(recent_3)
+    best_pos = min(recent_3)
+    if best_pos == 1 and draw <= 4 and dist <= 1400:
+      return "領放"
+    if avg_pos <= 4.0:
+      return "前置機動"
+    if avg_pos <= 7.5:
+      return "居中順走"
+    return "後上"
+
+  # 若無近績字串，按檔位與途程作合理戰術推算
+  if draw <= 2 and dist <= 1200:
+    return "領放"
+  if draw <= 6:
+    return "前置機動"
+  if draw <= 10:
+    return "居中順走"
+  return "後上"
+
+
 def detect_meeting_params(page) -> tuple[str, str]:
-  """由第 1 場載入後偵測最新賽日 (YYYY/MM/DD) 同場地 (ST/HV)。"""
   info = page.evaluate("""
     () => ({
       url: window.location.href,
@@ -106,7 +133,6 @@ def detect_meeting_params(page) -> tuple[str, str]:
 
 
 def extract_race_meta(body_text: str, default_course: str) -> dict[str, str]:
-  """從頁面文字提取班次、途程及跑道特色。"""
   snippet = re.sub(r"\s+", " ", body_text or "")[:1200]
 
   meta: dict[str, str] = {
@@ -149,7 +175,6 @@ def extract_race_meta(body_text: str, default_course: str) -> dict[str, str]:
 def parse_runners_from_dom(
     page, default_course: str
 ) -> tuple[list[dict[str, Any]], dict[str, str], dict[str, Any]]:
-  """解析 HKJC 排位表主表格。"""
   eval_result = page.evaluate("""
     () => {
       const title = document.title || "";
@@ -199,6 +224,8 @@ def parse_runners_from_dom(
             col_map["draw"] = c_idx
           elif clean_col == "評分":
             col_map["rating"] = c_idx
+          elif "排位體重" in clean_col or clean_col == "體重":
+            col_map["body_weight"] = c_idx
           elif clean_col == "騎師":
             col_map["jockey"] = c_idx
           elif clean_col == "練馬師":
@@ -246,6 +273,13 @@ def parse_runners_from_dom(
       if rating is None or not (10.0 <= rating <= 150.0):
         rating = 60.0
 
+      # 解析排位體重（HKJC 馬匹體重合理範圍 850 - 1400 磅）
+      body_weight: int | str = "N/A"
+      if "body_weight" in col_map:
+        bw_val = safe_float(row[col_map["body_weight"]], None)
+        if bw_val is not None and 850 <= bw_val <= 1400:
+          body_weight = int(round(bw_val))
+
       jockey = (
           clean_person_name(row[col_map["jockey"]], "N/A")
           if "jockey" in col_map
@@ -261,6 +295,9 @@ def parse_runners_from_dom(
           if "recent_runs" in col_map
           else "N/A"
       )
+      running_style = infer_running_style(
+          recent_runs, draw, meta.get("distance", "1400")
+      )
 
       seen_nos.add(horse_no)
       runners.append({
@@ -272,8 +309,8 @@ def parse_runners_from_dom(
           "jockey": jockey,
           "trainer": trainer,
           "recent_runs": recent_runs,
-          "running_style": "前置機動",
-          "body_weight": "N/A",
+          "running_style": running_style,
+          "body_weight": body_weight,
           "win_odds": None,
       })
 
@@ -284,11 +321,10 @@ def parse_runners_from_dom(
 
 
 def extract_odds_from_json_tree(node: Any, odds_map: dict[int, float]) -> None:
-  """遞歸搜尋 GraphQL JSON 中嘅馬號與獨贏賠率配對。"""
+  """僅由明確嘅 GraphQL 賠率欄位提取獨贏賠率（避免誤抓場次編號）。"""
   if isinstance(node, dict):
-    # 常見 HKJC GraphQL 欄位組合: runnerNo / horseNo + winOdds / oddsValue
     no_val = None
-    for k in ("runnerNo", "horseNo", "no", "clothNo"):
+    for k in ("runnerNo", "horseNo", "clothNo"):
       if k in node and node[k] is not None:
         cand = safe_int(node[k], -1)
         if 1 <= cand <= 16:
@@ -296,19 +332,19 @@ def extract_odds_from_json_tree(node: Any, odds_map: dict[int, float]) -> None:
           break
 
     if no_val is not None:
-      for ok in ("winOdds", "oddsValue", "odds", "currentOdds"):
+      for ok in ("winOdds", "currentOdds"):
         if ok in node and node[ok] not in (None, "", "-", "---"):
           raw_o = node[ok]
           if isinstance(raw_o, dict):
             for sub_k in ("oddsValue", "value", "winOdds"):
               if sub_k in raw_o:
                 o_float = safe_float(raw_o[sub_k], None)
-                if o_float is not None and 1.0 <= o_float <= 999.0:
+                if o_float is not None and 1.1 <= o_float <= 999.0:
                   odds_map[no_val] = o_float
                   break
           else:
             o_float = safe_float(raw_o, None)
-            if o_float is not None and 1.0 <= o_float <= 999.0:
+            if o_float is not None and 1.1 <= o_float <= 999.0:
               odds_map[no_val] = o_float
               break
 
@@ -322,7 +358,7 @@ def extract_odds_from_json_tree(node: Any, odds_map: dict[int, float]) -> None:
 def fetch_win_odds_for_race(
     page, race_date: str, course: str, race_no: int, runner_names: dict[int, str]
 ) -> tuple[dict[int, float], dict[str, Any]]:
-  """從 bet.hkjc.com 抓取單場實時獨贏賠率（攔截 GraphQL + DOM 雙重提取）。"""
+  """抓取 bet.hkjc.com 實時獨贏賠率（嚴格要求帶小數點賠率 >= 1.1，防止未開盤誤抓場次號碼）。"""
   date_hyphen = race_date.replace("/", "-")
   odds_url = f"{BET_WP_BASE_URL}/{date_hyphen}/{course}/{race_no}"
   odds_map: dict[int, float] = {}
@@ -344,31 +380,33 @@ def fetch_win_odds_for_race(
     page.goto(odds_url, wait_until="domcontentloaded", timeout=45000)
     page.wait_for_timeout(4500)
 
-    # 若 GraphQL 樹未抓齊，再由渲染後嘅 DOM 表格／文字行匹配「馬號 + 馬名 + 獨贏賠率」
+    # 僅在頁面真係有小數點賠率（例如 2.4、15.0）時先由 DOM 補充提取
     if len(odds_map) < len(runner_names):
       dom_rows = page.evaluate("""
         () => {
-          const lines = (document.body ? document.body.innerText : "").split("\\n");
-          return lines.map(l => l.trim()).filter(Boolean);
+          const rows = Array.from(document.querySelectorAll("tr, [role='row']"));
+          return rows.map(r => r.innerText.replace(/\\s+/g, " ").trim()).filter(Boolean);
         }
         """)
-      joined_lines = "\n".join(dom_rows)
-      for h_no, h_name in runner_names.items():
-        if h_no in odds_map or not h_name:
-          continue
-        # 尋找包含馬名附近嘅合理賠率數字（1.0 至 500.0，帶小數點或整數）
-        pattern = re.compile(
-            rf"{re.escape(h_name)}[^\d\n]{{0,40}}?(\d{{1,3}}(?:\.\d)?)"
-        )
-        m = pattern.search(joined_lines)
-        if m:
-          val = safe_float(m.group(1), None)
-          if val is not None and 1.0 <= val <= 500.0:
-            odds_map[h_no] = val
+      for row_txt in dom_rows:
+        for h_no, h_name in runner_names.items():
+          if h_no in odds_map or not h_name or h_name not in row_txt:
+            continue
+          # 必須匹配帶小數點嘅賠率（如 3.2、18.5），過濾純整數場次號
+          after_name = row_txt.split(h_name, 1)[1]
+          m = re.search(r"\b(\d{1,3}\.\d{1,2})\b", after_name)
+          if m:
+            val = safe_float(m.group(1), None)
+            if val is not None and 1.1 <= val <= 500.0:
+              odds_map[h_no] = val
   except Exception as exc:
     print(f"Race {race_no} odds fetch warning: {exc}")
   finally:
     page.remove_listener("response", on_resp)
+
+  # 若整場只有 1-2 隻勉強匹配，多數屬於未開盤雜訊，直接清空保持 N/A
+  if len(odds_map) < 3:
+    odds_map.clear()
 
   diag = {
       "race_no": race_no,
@@ -381,7 +419,6 @@ def fetch_win_odds_for_race(
 
 
 def fetch_hkjc_race_data() -> dict[str, Any]:
-  """先抓排位表基本資料，再逐場補抓實時獨贏賠率。"""
   races: list[dict[str, Any]] = []
   debug_summary: list[dict[str, Any]] = []
   odds_diagnostics: list[dict[str, Any]] = []
@@ -468,7 +505,6 @@ def fetch_hkjc_race_data() -> dict[str, Any]:
         })
         print(f"Race {race_no}: extracted {len(runners)} runners.")
 
-      # 第二階段：逐場抓取 bet.hkjc.com 實時獨贏賠率
       if race_date and races:
         print("Fetching live win odds from bet.hkjc.com...")
         for race_obj in races:
