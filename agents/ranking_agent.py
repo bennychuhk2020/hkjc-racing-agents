@@ -9,8 +9,11 @@ DATA_PATH = Path("data/upcoming_races.json")
 OUT_JSON = Path("output/predictions.json")
 OUT_MD = Path("output/report.md")
 
-TOP_JOCKEYS = ["潘頓", "布文", "田泰安", "鍾易禮", "艾兆禮", "巴度", "何澤堯"]
-TOP_TRAINERS = ["伍鵬志", "呂健威", "告東尼", "蔡約翰", "方嘉柏", "沈集成", "羅富全"]
+TOP_JOCKEYS = frozenset({"潘頓", "布文", "田泰安", "鍾易禮", "艾兆禮", "巴度", "何澤堯"})
+TOP_TRAINERS = frozenset({"伍鵬志", "呂健威", "告東尼", "蔡約翰", "方嘉柏", "沈集成", "羅富全"})
+
+POS_SCORE_MAP = {1: 100.0, 2: 85.0, 3: 75.0, 4: 55.0, 5: 55.0}
+RUN_WEIGHTS = (6, 5, 4, 3, 2, 1)
 
 
 def calc_draw_score(draw_val: Any, track_feature: str) -> float:
@@ -68,22 +71,10 @@ def calc_form_score(recent_runs: str, rating_val: Any) -> float:
   if recent_runs and recent_runs != "N/A":
     runs = re.findall(r"\b\d+\b", recent_runs.replace("/", " "))
     if runs:
-      weights = [6, 5, 4, 3, 2, 1]
       weighted_sum = 0.0
       total_weight = 0
-      for idx, pos_str in enumerate(runs[:6]):
-        pos = int(pos_str)
-        w = weights[idx]
-        if pos == 1:
-          p_score = 100
-        elif pos == 2:
-          p_score = 85
-        elif pos == 3:
-          p_score = 75
-        elif pos <= 5:
-          p_score = 55
-        else:
-          p_score = 25
+      for pos_str, w in zip(runs[:6], RUN_WEIGHTS):
+        p_score = POS_SCORE_MAP.get(int(pos_str), 25.0)
         weighted_sum += p_score * w
         total_weight += w
       if total_weight > 0:
@@ -98,9 +89,9 @@ def calc_form_score(recent_runs: str, rating_val: Any) -> float:
 
 def calc_jt_score(jockey_val: str, trainer_val: str) -> float:
   score = 60.0
-  if any(tj in jockey_val for tj in TOP_JOCKEYS):
+  if jockey_val in TOP_JOCKEYS or any(tj in jockey_val for tj in TOP_JOCKEYS):
     score += 20.0
-  if any(tt in trainer_val for tt in TOP_TRAINERS):
+  if trainer_val in TOP_TRAINERS or any(tt in trainer_val for tt in TOP_TRAINERS):
     score += 15.0
   return score
 
@@ -120,14 +111,14 @@ def calc_body_weight(body_weight: Any, bw_display: str) -> tuple[str, str, float
     return "N/A", "待公佈", 65.0
 
 
-def evaluate_value(cpi: float, odds_val: float | None) -> str:
+def evaluate_value(hri: float, odds_val: float | None) -> str:
   if odds_val is None or odds_val <= 1.0:
     return "⏳ 待開盤"
-  if cpi >= 70.0 and odds_val >= 8.0:
+  if hri >= 70.0 and odds_val >= 8.0:
     return "💎 超值冷門"
-  if cpi >= 74.0 and odds_val < 3.0:
+  if hri >= 74.0 and odds_val < 3.0:
     return "🔥 順熱熱門"
-  if cpi < 55.0 and odds_val < 4.0:
+  if hri < 55.0 and odds_val < 4.0:
     return "⚠️ 賠率過熱"
   return "⚖️ 賠率合理"
 
@@ -173,7 +164,7 @@ def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
     jt_score = calc_jt_score(jockey_val, trainer_val)
     bw_display, weight_health, bw_score = calc_body_weight(raw_bw, raw_bw_disp)
 
-    cpi = round(
+    hri = round(
         (form_score * 0.30)
         + (draw_score * 0.25)
         + (style_score * 0.20)
@@ -181,15 +172,12 @@ def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
         + (bw_score * 0.10),
         1,
     )
-    value_status = evaluate_value(cpi, odds_val)
-
-    # 清理評語中的換行或直線避免破壞 Markdown 表格
-    clean_comment = str(r.get("comment", "N/A")).replace("|", "／").replace("\n", " ").strip()
+    value_status = evaluate_value(hri, odds_val)
 
     analyzed.append({
         "馬號": horse_no,
         "馬名": horse_name,
-        "綜合馬力指數(CPI)": cpi,
+        "綜合指數(HRI)": hri,
         "獨贏賠率": odds_display,
         "值博率評估": value_status,
         "跑法": running_style,
@@ -201,19 +189,10 @@ def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
         "騎師": jockey_val,
         "練馬師": trainer_val,
         "6次近績": recent_runs,
-        "年齡/性別": str(r.get("age_sex", "N/A")),
-        "最佳時間": str(r.get("best_time", "--")),
-        "配備": str(r.get("gear", "--")),
-        "王牌": str(r.get("trump_card", "未使用")),
-        "優先出賽權": str(r.get("priority_entry", "一般")),
-        "練馬師次序": str(r.get("trainer_pref", "--")),
-        "歷季出賽": str(r.get("season_stats", "N/A")),
-        "距上次出賽": str(r.get("days_since_last", "N/A")),
-        "晨操試閘": str(r.get("trackwork_summary", "N/A")),
-        "賽前評語": clean_comment,
+        # 暫時保留未輸出欄位（年齡/性別、最佳時間、配備、王牌、優先出賽權、練馬師次序、歷季出賽、距上次出賽、晨操試閘、賽前評語）
     })
 
-  analyzed.sort(key=lambda x: x["綜合馬力指數(CPI)"], reverse=True)
+  analyzed.sort(key=lambda x: x["綜合指數(HRI)"], reverse=True)
   return {
       "race_no": race_no,
       "course": course,
@@ -241,12 +220,11 @@ def run_analysis() -> None:
       f"**比賽日期：** {race_date} ｜ **更新時間 (HKT)：** `{fetched_at}` ｜ **已完成場次：** 第 1 至 {len(all_analyzed)} 場\n",
   ]
 
+  # 暫時移除欄位：年齡/性別、最佳時間、配備、王牌、優先出賽權、練馬師次序、歷季出賽、距上次出賽、晨操試閘、賽前評語
   headers = [
-      "馬號", "馬名", "綜合馬力指數(CPI)", "獨贏賠率", "值博率評估",
+      "馬號", "馬名", "綜合指數(HRI)", "獨贏賠率", "值博率評估",
       "跑法", "檔位", "負磅", "現時評分", "排位體重", "體重狀態",
-      "騎師", "練馬師", "6次近績", "年齡/性別", "最佳時間",
-      "配備", "王牌", "優先出賽權", "練馬師次序", "歷季出賽",
-      "距上次出賽", "晨操試閘", "賽前評語"
+      "騎師", "練馬師", "6次近績"
   ]
 
   for r in all_analyzed:
@@ -264,7 +242,7 @@ def run_analysis() -> None:
       row_vals = [
           str(h["馬號"]),
           f"**{h['馬名']}**",
-          f"**{h['綜合馬力指數(CPI)']}**",
+          f"**{h['綜合指數(HRI)']}**",
           str(h["獨贏賠率"]),
           str(h["值博率評估"]),
           str(h["跑法"]),
@@ -276,16 +254,6 @@ def run_analysis() -> None:
           str(h["騎師"]),
           str(h["練馬師"]),
           str(h["6次近績"]),
-          str(h["年齡/性別"]),
-          str(h["最佳時間"]),
-          str(h["配備"]),
-          str(h["王牌"]),
-          str(h["優先出賽權"]),
-          str(h["練馬師次序"]),
-          str(h["歷季出賽"]),
-          str(h["距上次出賽"]),
-          str(h["晨操試閘"]),
-          str(h["賽前評語"]),
       ]
       md_lines.append("| " + " | ".join(row_vals) + " |")
     md_lines.append("\n---\n")
