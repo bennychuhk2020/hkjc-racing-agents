@@ -1,0 +1,20 @@
+{
+  "balanced_profile": {
+    "description": "Balanced weights across rating, weight carried, draw, and implied win probability",
+    "weights": {
+      "rating": 1.0,
+      "weight_carried": -0.45,
+      "draw_penalty": -1.2,
+      "win_odds_implied_prob": 25.0
+    }
+  },
+  "value_hunter_profile": {
+    "description": "Value-focused weights lowering favorite odds weight and emphasizing draw and light weight",
+    "weights": {
+      "rating": 1.2,
+      "weight_carried": -0.6,
+      "draw_penalty": -1.5,
+      "win_odds_implied_prob": 8.0
+    }
+  }
+}
