@@ -1,3 +1,8 @@
+- name: Install system fonts & WeasyPrint dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk libpango-1.0-0 libpangocairo-1.0-0
+
 name: HKJC Multi-Agent Pipeline
 
 on:
