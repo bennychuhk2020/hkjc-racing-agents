@@ -7,7 +7,7 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
 
-from playwright.sync_api import sync_playwright, Response
+from playwright.sync_api import sync_playwright
 
 RAW_DEBUG_PATH = Path("data/raw_graphql_debug.json")
 OUTPUT_DATA_PATH = Path("data/upcoming_races.json")
@@ -22,7 +22,7 @@ DEFAULT_RACECARD_URL = (
 def build_target_url(
     race_date: str = "", course: str = "", race_no: int | None = None
 ) -> str:
-  """組裝完整 HKJC 排位表網址（必須同時帶 raceDate、Racecourse 先會正確切換場次）。"""
+  """組裝完整 HKJC 排位表網址（同時帶 raceDate、Racecourse、RaceNo）。"""
   base_url = os.getenv("HKJC_TARGET_URL", DEFAULT_RACECARD_URL).strip()
   params = []
   if race_date:
@@ -55,6 +55,16 @@ def safe_float(value: Any, default: float) -> float:
 
 def safe_int(value: Any, default: int) -> int:
   return int(round(safe_float(value, float(default))))
+
+
+def clean_person_name(raw_text: str, default: str = "N/A") -> str:
+  """清理騎師／練馬師文字（例如去除括號內讓磅數字或多餘空白）。"""
+  cleaned = re.sub(r"\s+", " ", str(raw_text or "")).strip()
+  if not cleaned or cleaned in {"-", "--", "N/A"}:
+    return default
+  # 保留中文人名或英文名，移除純括號負磅標註如 (2) 或 (-5)
+  cleaned_no_paren = re.sub(r"\s*\([+-]?\d+\)\s*$", "", cleaned).strip()
+  return cleaned_no_paren or cleaned
 
 
 def detect_meeting_params(page) -> tuple[str, str]:
@@ -95,8 +105,53 @@ def detect_meeting_params(page) -> tuple[str, str]:
   return race_date, course
 
 
-def parse_runners_from_dom(page) -> tuple[list[dict[str, Any]], dict[str, Any], dict[str, Any]]:
-  """精準解析 HKJC 排位表主表格（排除烙號誤判及評分增減誤判）。"""
+def extract_race_meta(body_text: str, default_course: str) -> dict[str, str]:
+  """從頁面文字提取班次、途程及跑道特色。"""
+  snippet = re.sub(r"\s+", " ", body_text or "")[:1200]
+
+  meta: dict[str, str] = {
+      "distance": "",
+      "course": "跑馬地" if default_course == "HV" else "沙田",
+      "class_name": "N/A",
+      "track_feature": "標準賽道",
+  }
+
+  dist_match = re.search(r"(\d{3,4})\s*米", snippet)
+  if dist_match:
+    meta["distance"] = dist_match.group(1)
+
+  if "跑馬地" in snippet[:350]:
+    meta["course"] = "跑馬地"
+  elif "沙田" in snippet[:350]:
+    meta["course"] = "沙田"
+
+  # 班次辨識（例如 第五班、第四班、第三班、第二班、第一班、表列賽、分級賽）
+  class_match = re.search(
+      r"(第[一二三四五六]班|公開賽|表列賽|三級賽|二級賽|一級賽)",
+      snippet,
+  )
+  if class_match:
+    meta["class_name"] = class_match.group(1)
+
+  # 跑道特色辨識（例如 "C+3" 賽道、"C" 賽道、"B+2" 賽道、全天候跑道、草地）
+  track_match = re.search(
+      r'["“]?(A\+3|B\+2|C\+3|A|B|C)["”]?\s*賽道',
+      snippet,
+  )
+  if track_match:
+    meta["track_feature"] = f'"{track_match.group(1)}" 賽道'
+  elif "全天候" in snippet or "泥地" in snippet:
+    meta["track_feature"] = "全天候跑道"
+  elif "草地" in snippet:
+    meta["track_feature"] = "草地跑道"
+
+  return meta
+
+
+def parse_runners_from_dom(
+    page, default_course: str
+) -> tuple[list[dict[str, Any]], dict[str, str], dict[str, Any]]:
+  """精準解析 HKJC 排位表主表格（馬號、馬名、檔位、負磅、評分、騎師、練馬師、近績）。"""
   eval_result = page.evaluate("""
     () => {
       const title = document.title || "";
@@ -113,23 +168,14 @@ def parse_runners_from_dom(page) -> tuple[list[dict[str, Any]], dict[str, Any], 
       return {
         title,
         url: window.location.href,
-        bodySnippet: bodyText.slice(0, 800),
+        bodySnippet: bodyText.slice(0, 1400),
         tables: extractedTables
       };
     }
     """)
 
   runners: list[dict[str, Any]] = []
-  meta = {"distance": "", "course": ""}
-
-  body_snippet = eval_result.get("bodySnippet", "")
-  dist_match = re.search(r"(\d{4})\s*米", body_snippet)
-  if dist_match:
-    meta["distance"] = dist_match.group(1)
-  if "跑馬地" in body_snippet[:300]:
-    meta["course"] = "跑馬地"
-  elif "沙田" in body_snippet[:300]:
-    meta["course"] = "沙田"
+  meta = extract_race_meta(eval_result.get("bodySnippet", ""), default_course)
 
   for tbl in eval_result.get("tables", []):
     rows = tbl.get("rows", [])
@@ -141,7 +187,6 @@ def parse_runners_from_dom(page) -> tuple[list[dict[str, Any]], dict[str, Any], 
 
     for r_idx, row in enumerate(rows[:4]):
       joined = " ".join(row)
-      # 必須同時包含「馬匹編號/編號」、「馬名」同「負磅/檔位」先係真正排位主表
       if ("馬名" in joined) and ("檔位" in joined) and ("負磅" in joined):
         header_idx = r_idx
         for c_idx, col_name in enumerate(row):
@@ -156,6 +201,12 @@ def parse_runners_from_dom(page) -> tuple[list[dict[str, Any]], dict[str, Any], 
             col_map["draw"] = c_idx
           elif clean_col == "評分":
             col_map["rating"] = c_idx
+          elif clean_col == "騎師":
+            col_map["jockey"] = c_idx
+          elif clean_col == "練馬師":
+            col_map["trainer"] = c_idx
+          elif "近績" in clean_col or "往績" in clean_col:
+            col_map["recent_runs"] = c_idx
           elif "獨贏" in clean_col or "賠率" in clean_col:
             col_map["odds"] = c_idx
         break
@@ -169,7 +220,6 @@ def parse_runners_from_dom(page) -> tuple[list[dict[str, Any]], dict[str, Any], 
         continue
 
       raw_no = row[col_map["no"]].strip()
-      # 嚴格要求編號係純數字（1-16），避免抓到空白或合併列
       if not re.fullmatch(r"\d{1,2}", raw_no):
         continue
       horse_no = int(raw_no)
@@ -177,7 +227,6 @@ def parse_runners_from_dom(page) -> tuple[list[dict[str, Any]], dict[str, Any], 
         continue
 
       horse_name = row[col_map["name"]].strip()
-      # 過濾掉烙號（例如 J394、L085）
       if not horse_name or re.fullmatch(r"[A-Za-z]\d{3}", horse_name):
         continue
 
@@ -186,15 +235,10 @@ def parse_runners_from_dom(page) -> tuple[list[dict[str, Any]], dict[str, Any], 
           if "weight" in col_map
           else 125.0
       )
-      # 香港賽馬負磅合理範圍 103 - 135 磅，若超出表示抓錯欄，用預設值
       if not (100.0 <= weight_lbs <= 140.0):
         weight_lbs = 125.0
 
-      draw = (
-          safe_int(row[col_map["draw"]], 7)
-          if "draw" in col_map
-          else 7
-      )
+      draw = safe_int(row[col_map["draw"]], 7) if "draw" in col_map else 7
       if not (1 <= draw <= 16):
         draw = 7
 
@@ -206,6 +250,21 @@ def parse_runners_from_dom(page) -> tuple[list[dict[str, Any]], dict[str, Any], 
       if not (10.0 <= rating <= 150.0):
         rating = 60.0
 
+      jockey = (
+          clean_person_name(row[col_map["jockey"]], "N/A")
+          if "jockey" in col_map
+          else "N/A"
+      )
+      trainer = (
+          clean_person_name(row[col_map["trainer"]], "N/A")
+          if "trainer" in col_map
+          else "N/A"
+      )
+      recent_runs = (
+          row[col_map["recent_runs"]].strip() or "N/A"
+          if "recent_runs" in col_map
+          else "N/A"
+      )
       win_odds = (
           safe_float(row[col_map["odds"]], 10.0)
           if "odds" in col_map
@@ -219,6 +278,11 @@ def parse_runners_from_dom(page) -> tuple[list[dict[str, Any]], dict[str, Any], 
           "draw": draw,
           "weight_lbs": weight_lbs,
           "rating": rating,
+          "jockey": jockey,
+          "trainer": trainer,
+          "recent_runs": recent_runs,
+          "running_style": "前置機動",
+          "body_weight": "N/A",
           "win_odds": win_odds,
       })
 
@@ -260,7 +324,6 @@ def fetch_hkjc_race_data() -> dict[str, Any]:
     page.route("**/*", route_handler)
 
     try:
-      # 第一步：載入預設排位頁面，自動識別下一賽日日期同場地 (ST/HV)
       initial_url = build_target_url(
           race_date=os.getenv("HKJC_RACE_DATE", "").strip(),
           course=os.getenv("HKJC_RACE_COURSE", "").strip().upper(),
@@ -282,18 +345,19 @@ def fetch_hkjc_race_data() -> dict[str, Any]:
           page.goto(target_url, wait_until="domcontentloaded", timeout=60000)
           page.wait_for_timeout(3000)
 
-        runners, meta, eval_info = parse_runners_from_dom(page)
+        runners, meta, eval_info = parse_runners_from_dom(page, course)
 
         if race_no in {1, 2}:
-          # 記錄第1、2場主表表頭方便核對
           matching_headers = []
           for t in eval_info.get("tables", []):
-            if t.get("rows") and any("馬名" in " ".join(r) for r in t["rows"][:3]):
+            if t.get("rows") and any(
+                "馬名" in " ".join(r) for r in t["rows"][:3]
+            ):
               matching_headers.append(t["rows"][:3])
           debug_summary.append({
               "race_no": race_no,
               "url": eval_info.get("url"),
-              "distance": meta.get("distance"),
+              "meta": meta,
               "runner_count": len(runners),
               "table_headers": matching_headers,
           })
@@ -302,18 +366,28 @@ def fetch_hkjc_race_data() -> dict[str, Any]:
           print(f"No runners found for Race {race_no}, stopping loop.")
           break
 
-        # 防止網頁重導向回第 1 場造成重複抓取
-        if races and runners[0]["name"] == races[0]["runners"][0]["name"] and len(runners) == len(races[0]["runners"]):
-          print(f"Race {race_no} returned identical runners to Race 1, stopping.")
+        if (
+            races
+            and runners[0]["name"] == races[0]["runners"][0]["name"]
+            and len(runners) == len(races[0]["runners"])
+        ):
+          print(
+              f"Race {race_no} returned identical runners to Race 1, stopping."
+          )
           break
 
         races.append({
             "race_no": race_no,
             "distance": meta.get("distance", ""),
-            "course": meta.get("course", "") or ("跑馬地" if course == "HV" else "沙田"),
+            "course": meta.get("course", ""),
+            "class_name": meta.get("class_name", "N/A"),
+            "track_feature": meta.get("track_feature", "標準賽道"),
             "runners": runners,
         })
-        print(f"Race {race_no}: extracted {len(runners)} runners.")
+        print(
+            f"Race {race_no}: extracted {len(runners)} runners "
+            f"({meta.get('class_name')}, {meta.get('track_feature')})."
+        )
     finally:
       browser.close()
 
@@ -326,7 +400,9 @@ def fetch_hkjc_race_data() -> dict[str, Any]:
   result = {
       "race_date": race_date or datetime.now(HKT).strftime("%Y-%m-%d"),
       "course_code": course,
-      "source_url": build_target_url(race_date=race_date, course=course, race_no=1),
+      "source_url": build_target_url(
+          race_date=race_date, course=course, race_no=1
+      ),
       "fetched_at_hkt": datetime.now(HKT).isoformat(),
       "races": races,
   }
