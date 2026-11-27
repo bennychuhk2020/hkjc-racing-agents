@@ -79,7 +79,6 @@ def calc_form_score(recent_runs: str, rating_val: Any) -> float:
       if total_weight > 0:
         return round(weighted_sum / total_weight, 1)
 
-  # 排位階段若未有近績字串，改以現時評分作溫和基準分（40-85）
   try:
     rtg = float(rating_val)
     return round(max(40.0, min(85.0, 45.0 + (rtg - 40.0) * 0.6)), 1)
@@ -110,6 +109,18 @@ def calc_body_weight(body_weight: Any) -> tuple[str, float]:
     return "穩定", 65.0
 
 
+def evaluate_value(cpi: float, odds_val: float | None) -> str:
+  if odds_val is None or odds_val <= 0:
+    return "⏳ 待開盤"
+  if cpi >= 70.0 and odds_val >= 8.0:
+    return "💎 超值冷門"
+  if cpi >= 74.0 and odds_val < 3.0:
+    return "🔥 順熱熱門"
+  if cpi < 55.0 and odds_val < 4.0:
+    return "⚠️ 賠率過熱"
+  return "⚖️ 賠率合理"
+
+
 def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
   race_no = race.get("race_no", 0)
   distance = str(race.get("distance", "N/A"))
@@ -131,8 +142,16 @@ def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
     body_weight = r.get("body_weight", "N/A")
 
     raw_odds = r.get("win_odds")
-    has_odds = raw_odds not in (None, "", "N/A") and float(raw_odds) != 10.0
-    odds_display = f"{float(raw_odds):.1f}" if has_odds else "N/A"
+    odds_val: float | None = None
+    if raw_odds not in (None, "", "N/A"):
+      try:
+        parsed = float(raw_odds)
+        if parsed > 0:
+          odds_val = parsed
+      except (ValueError, TypeError):
+        odds_val = None
+
+    odds_display = f"{odds_val:.1f}" if odds_val is not None else "N/A"
 
     draw_score = calc_draw_score(draw_val, track_feature)
     style_score = calc_style_score(running_style, track_feature)
@@ -148,12 +167,14 @@ def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
         + (bw_score * 0.10),
         1,
     )
+    value_status = evaluate_value(cpi, odds_val)
 
     analyzed.append({
         "馬號": horse_no,
         "馬名": horse_name,
         "綜合馬力指數(CPI)": cpi,
         "獨贏賠率": odds_display,
+        "值博率評估": value_status,
         "跑法": running_style,
         "檔位": draw_val,
         "負磅": weight_val,
@@ -162,9 +183,6 @@ def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
         "體重狀態": weight_health,
         "騎師": jockey_val,
         "練馬師": trainer_val,
-        "近績指數": form_score,
-        "檔位形勢分": draw_score,
-        "跑法適性分": style_score,
     })
 
   analyzed.sort(key=lambda x: x["綜合馬力指數(CPI)"], reverse=True)
@@ -185,39 +203,50 @@ def run_analysis() -> None:
 
   raw = json.loads(DATA_PATH.read_text(encoding="utf-8"))
   race_date = raw.get("race_date", "N/A")
+  fetched_at = raw.get("fetched_at_hkt", "N/A")
   races = raw.get("races", [])
 
   all_analyzed = [analyze_race(race) for race in races]
 
   md_lines = [
       "# HKJC 多代理 (Multi-Agent) 賽事預測系統",
-      f"**比賽日期：** {race_date} ｜ **已完成場次：** 第 1 至 {len(all_analyzed)} 場\n",
+      f"**比賽日期：** {race_date} ｜ **更新時間 (HKT)：** `{fetched_at}` ｜ **已完成場次：** 第 1 至 {len(all_analyzed)} 場\n",
   ]
 
   for r in all_analyzed:
-    dist_txt = f"{r['distance']}米" if str(r["distance"]).isdigit() else r["distance"]
+    dist_txt = (
+        f"{r['distance']}米" if str(r["distance"]).isdigit() else r["distance"]
+    )
     md_lines.append(f"## ※第{r['race_no']}場")
     md_lines.append(
         f"**賽事元數據：** 馬場 `{r['course']}` ｜ 場次 `第{r['race_no']}場` ｜ "
         f"班次 `{r['class_name']}` ｜ 途程 `{dist_txt}` ｜ 跑道特色 `{r['track_feature']}`\n"
     )
     md_lines.append(
-        "| 馬號 | 馬名 | 綜合馬力指數(CPI) | 獨贏賠率 | 跑法 | 檔位 | 負磅 | 現時評分 | 排位體重 | 體重狀態 | 騎師 |"
+        "| 馬號 | 馬名 | 綜合馬力指數(CPI) | 獨贏賠率 | 值博率評估 | 跑法 | 檔位 | 負磅 | 現時評分 | 排位體重 | 體重狀態 | 騎師 |"
     )
     md_lines.append(
-        "| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |"
+        "| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |"
     )
     for h in r["runners"]:
       md_lines.append(
           f"| {h['馬號']} | **{h['馬名']}** | **{h['綜合馬力指數(CPI)']}** | "
-          f"{h['獨贏賠率']} | {h['跑法']} | {h['檔位']} | {h['負磅']} | "
+          f"{h['獨贏賠率']} | {h['值博率評估']} | {h['跑法']} | {h['檔位']} | {h['負磅']} | "
           f"{h['現時評分']} | {h['排位體重']} | {h['體重狀態']} | {h['騎師']} |"
       )
     md_lines.append("\n---\n")
 
   OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
   OUT_JSON.write_text(
-      json.dumps({"race_date": race_date, "races": all_analyzed}, ensure_ascii=False, indent=2),
+      json.dumps(
+          {
+              "race_date": race_date,
+              "fetched_at_hkt": fetched_at,
+              "races": all_analyzed,
+          },
+          ensure_ascii=False,
+          indent=2,
+      ),
       encoding="utf-8",
   )
 
