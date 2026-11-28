@@ -120,6 +120,17 @@ def parse_combined_horse_jt(text: str) -> tuple[str, str, str]:
   return horse_only, "N/A", "N/A"
 
 
+def estimate_overseas_rating(
+    horse_no: int, weight_lbs: float, draw: int
+) -> float:
+  """當海外賽卡未提供官方評分時，按負磅、馬號與檔位推算具區分度的參考評分。"""
+  weight_component = (weight_lbs - 120.0) * 1.15
+  cloth_component = max(0.0, (15 - horse_no) * 0.45)
+  draw_component = max(0.0, (9 - draw) * 0.25)
+  est = 78.0 + weight_component + cloth_component + draw_component
+  return round(max(55.0, min(115.0, est)), 1)
+
+
 def infer_running_style(
     recent_runs: str, draw: int | None, distance_str: str
 ) -> str:
@@ -424,25 +435,22 @@ async def parse_runners_from_dom(
       if not (1 <= draw <= 24):
         draw = 7
 
+      fallback_rating = (
+          estimate_overseas_rating(horse_no, weight_lbs, draw)
+          if simulcast_code
+          else 60.0
+      )
       rating = (
-          safe_float(row[col_map["rating"]], 80.0 if simulcast_code else 60.0)
+          safe_float(row[col_map["rating"]], fallback_rating)
           if "rating" in col_map
-          else (80.0 if simulcast_code else 60.0)
+          else fallback_rating
       )
       if rating is None or not (10.0 <= rating <= 150.0):
-        rating = 80.0 if simulcast_code else 60.0
+        rating = fallback_rating
 
-      rating_diff = (
-          row[col_map["rating_diff"]].strip()
-          if "rating_diff" in col_map
-          else ""
+      rating_display = (
+          f"{rating:.1f}" if simulcast_code and "rating" not in col_map else f"{int(round(rating))}"
       )
-      if rating_diff and rating_diff not in {"-", "--", "0"}:
-        if not rating_diff.startswith(("+", "-")) and rating_diff.isdigit():
-          rating_diff = f"+{rating_diff}"
-        rating_display = f"{int(rating)} ({rating_diff})"
-      else:
-        rating_display = f"{int(rating)}"
 
       body_weight: int | str = "N/A"
       bw_display = "N/A"
@@ -508,12 +516,25 @@ async def parse_runners_from_dom(
   return runners, meta, eval_result
 
 
+def _extract_odds_number(raw_o: Any) -> float | None:
+  if isinstance(raw_o, dict):
+    for sub_k in ("oddsValue", "value", "winOdds", "wpOdds", "odds"):
+      if sub_k in raw_o:
+        val = safe_float(raw_o[sub_k], None)
+        if val is not None and 1.1 <= val <= 999.0:
+          return val
+    return None
+  val = safe_float(raw_o, None)
+  if val is not None and 1.1 <= val <= 999.0:
+    return val
+  return None
+
+
 def extract_runners_from_bet_graphql(
     node: Any,
     collected: dict[int, dict[str, Any]],
     race_meta: dict[str, str] | None = None,
 ) -> None:
-  """從 bet.hkjc.com GraphQL 回應提取出賽馬匹、檔位、負磅、騎練、途程及獨贏賠率。"""
   if isinstance(node, dict):
     if race_meta is not None:
       dist_v = node.get("distance")
@@ -552,8 +573,8 @@ def extract_runners_from_bet_graphql(
               "draw": 7,
               "weight_lbs": 125.0,
               "weight_display": "125",
-              "rating": 85.0,
-              "rating_display": "85",
+              "rating": None,
+              "rating_display": "N/A",
               "jockey": parsed_j,
               "trainer": parsed_t,
               "recent_runs": "N/A",
@@ -607,21 +628,12 @@ def extract_runners_from_bet_graphql(
       if isinstance(t_raw, str) and t_raw.strip():
         entry["trainer"] = clean_person_name(t_raw, entry["trainer"])
 
-      for ok in ("winOdds", "currentOdds"):
+      for ok in ("winOdds", "currentOdds", "wpOdds", "odds"):
         if ok in node and node[ok] not in (None, "", "-", "---"):
-          raw_o = node[ok]
-          if isinstance(raw_o, dict):
-            for sub_k in ("oddsValue", "value", "winOdds"):
-              if sub_k in raw_o:
-                o_float = safe_float(raw_o[sub_k], None)
-                if o_float is not None and 1.1 <= o_float <= 999.0:
-                  entry["win_odds"] = o_float
-                  break
-          else:
-            o_float = safe_float(raw_o, None)
-            if o_float is not None and 1.1 <= o_float <= 999.0:
-              entry["win_odds"] = o_float
-              break
+          o_val = _extract_odds_number(node[ok])
+          if o_val is not None:
+            entry["win_odds"] = o_val
+            break
 
     for v in node.values():
       extract_runners_from_bet_graphql(v, collected, race_meta)
@@ -636,7 +648,6 @@ async def fetch_overseas_race_via_bet_page(
     s_code: str,
     r_no: int,
 ) -> tuple[dict[str, Any] | None, str]:
-  """從 bet.hkjc.com 擷取海外轉播排位、真實檔位、負磅、騎練、途程與賠率。"""
   date_hyphen = race_date.replace("/", "-")
   s_upper = s_code.upper()
   bet_url = f"{BET_WP_BASE_URL}/{date_hyphen}/{s_upper}/{r_no}"
@@ -663,7 +674,6 @@ async def fetch_overseas_race_via_bet_page(
     await page.goto(bet_url, wait_until="domcontentloaded", timeout=15000)
     await page.wait_for_timeout(1300)
 
-    # 檢查頁面是否被重定向至其他日期或組別（避免 S2/S4 誤抓成 S1）
     final_url = page.url.upper()
     if f"/{s_upper}/{r_no}" not in final_url or date_hyphen not in final_url:
       return None, f"redirected:{page.url}"
@@ -672,7 +682,6 @@ async def fetch_overseas_race_via_bet_page(
         "() => document.body ? document.body.innerText : ''"
     )
 
-    # 若 GraphQL 尚未覆蓋全部馬匹，從結構化表格補充
     rows_data = await page.evaluate("""
       () => Array.from(document.querySelectorAll("tr, [role='row']")).map(r => {
         const cells = Array.from(r.querySelectorAll("th, td, [role='cell']"));
@@ -714,7 +723,6 @@ async def fetch_overseas_race_via_bet_page(
       if not h_name or "(備)" in h_name or re.fullmatch(r"[\d.]+", h_name):
         continue
 
-      # 僅從明確獨立欄位讀取檔位與負磅，絕不誤把馬號當作檔位
       draw_val = 7
       weight_val = 125.0
       for cell in cells[2:]:
@@ -732,8 +740,8 @@ async def fetch_overseas_race_via_bet_page(
             "draw": draw_val,
             "weight_lbs": weight_val,
             "weight_display": f"{int(weight_val)}",
-            "rating": 85.0,
-            "rating_display": "85",
+            "rating": None,
+            "rating_display": "N/A",
             "jockey": h_jockey,
             "trainer": h_trainer,
             "recent_runs": "N/A",
@@ -763,6 +771,10 @@ async def fetch_overseas_race_via_bet_page(
   runners = []
   for k in sorted(collected.keys()):
     r = collected[k]
+    if r.get("rating") is None:
+      est_r = estimate_overseas_rating(r["no"], r["weight_lbs"], r["draw"])
+      r["rating"] = est_r
+      r["rating_display"] = f"{est_r:.1f}"
     r["running_style"] = infer_running_style(
         r["recent_runs"], r["draw"], meta.get("distance", "1600")
     )
@@ -792,7 +804,6 @@ async def try_fetch_single_overseas_race(
     r_no: int,
     source_mode: str | None = None,
 ) -> tuple[dict[str, Any] | None, str | None, str]:
-  """嘗試讀取單場海外排位表（優先 ASPX 排位表，自動回退至 bet.hkjc.com 實時盤口表）。"""
   modes = [source_mode] if source_mode in {"aspx", "bet"} else ["aspx", "bet"]
   last_info = ""
 
@@ -846,7 +857,6 @@ async def fetch_overseas_group_worker(
     s_code: str,
     target_race_nos: list[int] | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-  """針對單一海外轉播組別（例如 S1 / S2 / S3）自動尋找有效日期並抓取全組場次。"""
   async with sem:
     group_races: list[dict[str, Any]] = []
     diag: dict[str, Any] = {"simulcast": s_code, "found": False}
@@ -904,21 +914,12 @@ def extract_odds_from_json_tree(node: Any, odds_map: dict[int, float]) -> None:
           break
 
     if no_val is not None:
-      for ok in ("winOdds", "currentOdds"):
+      for ok in ("winOdds", "currentOdds", "wpOdds", "odds"):
         if ok in node and node[ok] not in (None, "", "-", "---"):
-          raw_o = node[ok]
-          if isinstance(raw_o, dict):
-            for sub_k in ("oddsValue", "value", "winOdds"):
-              if sub_k in raw_o:
-                o_float = safe_float(raw_o[sub_k], None)
-                if o_float is not None and 1.1 <= o_float <= 999.0:
-                  odds_map[no_val] = o_float
-                  break
-          else:
-            o_float = safe_float(raw_o, None)
-            if o_float is not None and 1.1 <= o_float <= 999.0:
-              odds_map[no_val] = o_float
-              break
+          o_float = _extract_odds_number(node[ok])
+          if o_float is not None:
+            odds_map[no_val] = o_float
+            break
 
     for v in node.values():
       extract_odds_from_json_tree(v, odds_map)
@@ -966,16 +967,16 @@ async def fetch_win_odds_worker(
     page.on("response", on_resp)
     try:
       await page.goto(odds_url, wait_until="domcontentloaded", timeout=14000)
-      await page.wait_for_timeout(650)
+      await page.wait_for_timeout(700)
       if graphql_hits and len(odds_map) < len(runner_names):
-        await page.wait_for_timeout(550)
+        await page.wait_for_timeout(600)
     except Exception as exc:
       print(f"{race_label} odds fetch warning: {exc}")
     finally:
       page.remove_listener("response", on_resp)
       await page.close()
 
-  if len(odds_map) < 3:
+  if len(odds_map) < 2:
     odds_map.clear()
 
   diag = {
@@ -1031,7 +1032,6 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
     page = await context.new_page()
 
     try:
-      # 1. 抓取本地賽馬排位表
       initial_url = build_local_url(
           race_date=os.getenv("HKJC_RACE_DATE", "").strip(),
           course=os.getenv("HKJC_RACE_COURSE", "").strip().upper(),
@@ -1093,7 +1093,6 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
       await page.close()
       sem = asyncio.Semaphore(concurrency)
 
-      # 2. 並發探測及抓取海外轉播賽馬排位表 (S1, S2, S3, S4)
       if include_overseas and race_date:
         cand_dates = [race_date]
         try:
@@ -1132,7 +1131,6 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
                 f"[{elapsed()}] [Overseas] {item['race_label']} ({item['race_date_used']}): extracted {len(item['runners'])} runners."
             )
 
-      # 3. 並發抓取尚未取得賠率的場次實時獨贏賠率
       races_needing_odds = [
           r_obj
           for r_obj in races
