@@ -13,8 +13,8 @@ OUT_JSON = Path("output/predictions.json")
 OUT_MD = Path("output/report.md")
 OUT_PDF = Path("output/report.pdf")
 
-TOP_JOCKEYS = frozenset({"潘頓", "布文", "田泰安", "鍾易禮", "艾兆禮", "巴度", "何澤堯"})
-TOP_TRAINERS = frozenset({"伍鵬志", "呂健威", "告東尼", "蔡約翰", "方嘉柏", "沈集成", "羅富全"})
+TOP_JOCKEYS = frozenset({"潘頓", "布文", "田泰安", "鍾易禮", "艾兆禮", "巴度", "何澤堯", "莫雷拉", "麥道朗", "莫雅", "布宜學", "李慕華", "川田將雅", "武豐"})
+TOP_TRAINERS = frozenset({"伍鵬志", "呂健威", "告東尼", "蔡約翰", "方嘉柏", "沈集成", "羅富全", "岳伯仁", "高仕登", "艾柏賓", "矢作芳人", "堀宣行"})
 
 POS_SCORE_MAP = {1: 100.0, 2: 85.0, 3: 75.0, 4: 55.0, 5: 55.0}
 RUN_WEIGHTS = (6, 5, 4, 3, 2, 1)
@@ -129,6 +129,8 @@ def evaluate_value(hri: float, odds_val: float | None) -> str:
 
 def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
   race_no = race.get("race_no", 0)
+  race_label = str(race.get("race_label") or f"第{race_no}場")
+  race_type = str(race.get("race_type", "local"))
   distance = str(race.get("distance", "N/A"))
   course = str(race.get("course", "沙田"))
   class_name = str(race.get("class_name", "N/A"))
@@ -197,7 +199,9 @@ def analyze_race(race: dict[str, Any]) -> dict[str, Any]:
 
   analyzed.sort(key=lambda x: x["綜合指數(HRI)"], reverse=True)
   return {
+      "race_type": race_type,
       "race_no": race_no,
+      "race_label": race_label,
       "course": course,
       "class_name": class_name,
       "distance": distance,
@@ -213,7 +217,6 @@ def build_pdf_report(
     headers: list[str],
     output_pdf: Path,
 ) -> None:
-  """Render a clean landscape A4 PDF report with Traditional Chinese CJK fonts."""
   race_sections: list[str] = []
 
   for r in all_analyzed:
@@ -221,6 +224,8 @@ def build_pdf_report(
         f"{r['distance']}米" if str(r["distance"]).isdigit() else str(r["distance"])
     )
     th_html = "".join(f"<th>{html.escape(h)}</th>" for h in headers)
+    is_overseas = r.get("race_type") == "overseas"
+    badge_cls = "race-header overseas" if is_overseas else "race-header"
 
     rows_html: list[str] = []
     for idx, h in enumerate(r["runners"]):
@@ -245,8 +250,8 @@ def build_pdf_report(
 
     race_sections.append(f"""
     <section class="race-block">
-      <div class="race-header">
-        <span class="race-title">※ 第 {html.escape(str(r['race_no']))} 場</span>
+      <div class="{badge_cls}">
+        <span class="race-title">※ {html.escape(str(r['race_label']))}</span>
         <span class="meta-pill">馬場：<b>{html.escape(str(r['course']))}</b></span>
         <span class="meta-pill">班次：<b>{html.escape(str(r['class_name']))}</b></span>
         <span class="meta-pill">途程：<b>{html.escape(dist_txt)}</b></span>
@@ -308,11 +313,18 @@ def build_pdf_report(
     margin-bottom: 5px;
     border-radius: 0 4px 4px 0;
   }}
+  .race-header.overseas {{
+    background-color: #fefce8;
+    border-left: 4px solid #b45309;
+  }}
   .race-title {{
     font-size: 10.5pt;
     font-weight: bold;
     color: #1e3a8a;
     margin-right: 12px;
+  }}
+  .race-header.overseas .race-title {{
+    color: #92400e;
   }}
   .meta-pill {{
     display: inline-block;
@@ -365,9 +377,9 @@ def build_pdf_report(
 </head>
 <body>
   <div class="doc-banner">
-    <h1>HKJC 多代理 (Multi-Agent) 賽事預測系統 — 綜合指數 (HRI) 戰報</h1>
+    <h1>HKJC 多代理 (Multi-Agent) 賽事預測系統 — 綜合指數 (HRI) 戰報（本地 + 海外轉播）</h1>
     <div class="sub">
-      比賽日期：<b>{html.escape(race_date)}</b> ｜ 已完成場次：第 1 至 {len(all_analyzed)} 場 ｜ 更新時間 (HKT)：{html.escape(fetched_at)}
+      比賽日期：<b>{html.escape(race_date)}</b> ｜ 總計場次：{len(all_analyzed)} 場 ｜ 更新時間 (HKT)：{html.escape(fetched_at)}
     </div>
   </div>
   {''.join(race_sections)}
@@ -392,8 +404,8 @@ def run_analysis() -> None:
   all_analyzed = [analyze_race(race) for race in races]
 
   md_lines = [
-      "# HKJC 多代理 (Multi-Agent) 賽事預測系統",
-      f"**比賽日期：** {race_date} ｜ **更新時間 (HKT)：** `{fetched_at}` ｜ **已完成場次：** 第 1 至 {len(all_analyzed)} 場\n",
+      "# HKJC 多代理 (Multi-Agent) 賽事預測系統（本地 + 海外轉播）",
+      f"**比賽日期：** {race_date} ｜ **更新時間 (HKT)：** `{fetched_at}` ｜ **總計場次：** {len(all_analyzed)} 場\n",
   ]
 
   headers = [
@@ -406,9 +418,9 @@ def run_analysis() -> None:
     dist_txt = (
         f"{r['distance']}米" if str(r["distance"]).isdigit() else r["distance"]
     )
-    md_lines.append(f"## ※第{r['race_no']}場")
+    md_lines.append(f"## ※{r['race_label']}")
     md_lines.append(
-        f"**賽事元數據：** 馬場 `{r['course']}` ｜ 場次 `第{r['race_no']}場` ｜ "
+        f"**賽事元數據：** 馬場 `{r['course']}` ｜ 場次 `{r['race_label']}` ｜ "
         f"班次 `{r['class_name']}` ｜ 途程 `{dist_txt}` ｜ 跑道特色 `{r['track_feature']}`\n"
     )
     md_lines.append("| " + " | ".join(headers) + " |")
@@ -451,7 +463,9 @@ def run_analysis() -> None:
   OUT_MD.write_text("\n".join(md_lines), encoding="utf-8")
 
   build_pdf_report(race_date, fetched_at, all_analyzed, headers, OUT_PDF)
-  print(f"Generated Markdown, JSON, and PDF report ({OUT_PDF}) for {len(all_analyzed)} races.")
+  print(
+      f"Generated Markdown, JSON, and PDF report ({OUT_PDF}) for {len(all_analyzed)} races."
+  )
 
 
 if __name__ == "__main__":
