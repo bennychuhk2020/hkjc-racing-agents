@@ -107,6 +107,23 @@ def clean_person_name(raw_text: str, default: str = "N/A") -> str:
   return cleaned_no_paren or cleaned
 
 
+def parse_combined_horse_jt(text: str) -> tuple[str, str, str]:
+  """從合併字串（例如 '登天橋騎薛恩練白敬雅' 或 '暖火追昔騎郎馨寧 (a)練莫敦'）拆出馬名、騎師、練馬師。"""
+  cleaned = re.sub(r"\s+", " ", text or "").strip()
+  m = re.match(
+      r"^(.+?)\s*騎\s*(.+?)\s*練\s*(.+)$",
+      cleaned,
+  )
+  if m:
+    horse = re.sub(r"\s*\([a-zA-Z]+\)\s*$", "", m.group(1)).strip()
+    jockey = clean_person_name(m.group(2), "N/A")
+    trainer = clean_person_name(m.group(3), "N/A")
+    return horse, jockey, trainer
+
+  horse_only = re.sub(r"\s*\([a-zA-Z]+\)\s*$", "", cleaned).strip()
+  return horse_only, "N/A", "N/A"
+
+
 def infer_running_style(
     recent_runs: str, draw: int, distance_str: str
 ) -> str:
@@ -186,6 +203,47 @@ async def detect_meeting_params(page: Page) -> tuple[str, str]:
   return race_date, course
 
 
+def extract_overseas_meta_from_text(
+    full_text: str, s_code: str, race_no: int
+) -> dict[str, str]:
+  """從海外賽事頁面全文擷取馬場、途程、班次與跑道特色。"""
+  flat = re.sub(r"\s+", " ", full_text or "")
+  meta = {
+      "distance": "",
+      "course": f"海外轉播 ({s_code})",
+      "class_name": "海外賽事",
+      "track_feature": "草地跑道",
+  }
+
+  dist_m = re.search(r"(\d{3,4})\s*米", flat)
+  if dist_m:
+    meta["distance"] = dist_m.group(1)
+
+  venue_m = re.search(
+      r"(沙丘園|雅士谷|費明頓|蘭域|玫瑰崗|考菲爾德|滿利谷|新市場|約克|古活|唐加士打|京士頓公園|東京|中山|阪神|京都|中京|美丹|邱吉爾園|聖雅尼塔|德爾馬|雅息特)\s*(?:馬場)?",
+      flat,
+  )
+  if venue_m:
+    v_name = venue_m.group(1)
+    if not v_name.endswith("馬場"):
+      v_name = f"{v_name}馬場"
+    meta["course"] = f"{v_name} ({s_code})"
+
+  class_match = re.search(
+      r"(第[一二三四五六]班|公開賽|表列賽|三級賽|二級賽|一級賽|國際[一二三]級賽|讓賽)",
+      flat,
+  )
+  if class_match:
+    meta["class_name"] = class_match.group(1)
+
+  if "全天候" in flat or "膠沙地" in flat or "泥地" in flat:
+    meta["track_feature"] = "全天候/泥地"
+  elif "草地" in flat:
+    meta["track_feature"] = "草地跑道"
+
+  return meta
+
+
 def extract_race_meta(
     body_text: str,
     default_course: str,
@@ -195,46 +253,30 @@ def extract_race_meta(
   full_text = re.sub(r"\s+", " ", body_text or "")
 
   if simulcast_code:
-    anchor = re.search(
-        rf"({re.escape(simulcast_code)}\s*[-－]\s*{race_no}|第\s*{race_no}\s*場)",
-        full_text,
-        re.I,
-    )
-  else:
-    anchor = re.search(rf"第\s*{race_no}\s*場", full_text)
+    return extract_overseas_meta_from_text(full_text, simulcast_code, race_no)
 
+  anchor = re.search(rf"第\s*{race_no}\s*場", full_text)
   snippet = (
       full_text[anchor.start() : anchor.start() + 1000]
       if anchor
-      else full_text[:2800]
+      else full_text[:3500]
   )
 
   meta: dict[str, str] = {
       "distance": "",
-      "course": (
-          f"海外轉播 ({simulcast_code})"
-          if simulcast_code
-          else ("跑馬地" if default_course == "HV" else "沙田")
-      ),
-      "class_name": "海外賽事" if simulcast_code else "N/A",
-      "track_feature": "草地跑道" if simulcast_code else "標準賽道",
+      "course": "跑馬地" if default_course == "HV" else "沙田",
+      "class_name": "N/A",
+      "track_feature": "標準賽道",
   }
 
   dist_match = re.search(r"(\d{3,4})\s*米", snippet)
   if dist_match:
     meta["distance"] = dist_match.group(1)
 
-  if simulcast_code:
-    venue_match = re.search(
-        r"(?:馬場|場地|轉播)\s*[:：]?\s*([^\s｜|（(]{2,10})", snippet
-    )
-    if venue_match and "賽道" not in venue_match.group(1):
-      meta["course"] = f"{venue_match.group(1)} ({simulcast_code})"
-  else:
-    if "跑馬地" in snippet[:300]:
-      meta["course"] = "跑馬地"
-    elif "沙田" in snippet[:300]:
-      meta["course"] = "沙田"
+  if "跑馬地" in snippet[:300]:
+    meta["course"] = "跑馬地"
+  elif "沙田" in snippet[:300]:
+    meta["course"] = "沙田"
 
   class_match = re.search(
       r"(第[一二三四五六]班|公開賽|表列賽|三級賽|二級賽|一級賽|國際[一二三]級賽|讓賽)",
@@ -348,8 +390,18 @@ async def parse_runners_from_dom(
       if not (1 <= horse_no <= 24) or horse_no in seen_nos:
         continue
 
-      horse_name = row[col_map["name"]].strip()
-      if not horse_name or re.fullmatch(r"[A-Za-z]\d{3}", horse_name):
+      raw_name = row[col_map["name"]].strip()
+      if (
+          not raw_name
+          or "(備)" in raw_name
+          or re.fullmatch(r"[A-Za-z]\d{3}", raw_name)
+      ):
+        continue
+
+      horse_name, parsed_jockey, parsed_trainer = parse_combined_horse_jt(
+          raw_name
+      )
+      if not horse_name or "(備)" in horse_name:
         continue
 
       weight_lbs = (
@@ -418,14 +470,14 @@ async def parse_runners_from_dom(
             )
 
       jockey = (
-          clean_person_name(row[col_map["jockey"]], "N/A")
+          clean_person_name(row[col_map["jockey"]], parsed_jockey)
           if "jockey" in col_map
-          else "N/A"
+          else parsed_jockey
       )
       trainer = (
-          clean_person_name(row[col_map["trainer"]], "N/A")
+          clean_person_name(row[col_map["trainer"]], parsed_trainer)
           if "trainer" in col_map
-          else "N/A"
+          else parsed_trainer
       )
       recent_runs = (
           row[col_map["recent_runs"]].strip() or "N/A"
@@ -463,7 +515,7 @@ async def parse_runners_from_dom(
 def extract_runners_from_bet_graphql(
     node: Any, collected: dict[int, dict[str, Any]]
 ) -> None:
-  """從 bet.hkjc.com GraphQL 回應提取海外賽事出賽馬匹、檔位、負磅、騎練及獨贏賠率。"""
+  """從 bet.hkjc.com GraphQL 回應提取出賽馬匹、檔位、負磅、騎師、練馬師及獨贏賠率。"""
   if isinstance(node, dict):
     no_val = None
     for k in ("runnerNo", "horseNo", "clothNo", "no"):
@@ -479,19 +531,25 @@ def extract_runners_from_bet_graphql(
         name_val = node[nk].strip()
         break
 
-    if no_val is not None and name_val and not re.fullmatch(r"\d+", name_val):
+    if (
+        no_val is not None
+        and name_val
+        and "(備)" not in name_val
+        and not re.fullmatch(r"\d+", name_val)
+    ):
+      parsed_h, parsed_j, parsed_t = parse_combined_horse_jt(name_val)
       entry = collected.setdefault(
           no_val,
           {
               "no": no_val,
-              "name": name_val,
+              "name": parsed_h or name_val,
               "draw": 7,
               "weight_lbs": 125.0,
               "weight_display": "125",
               "rating": 85.0,
               "rating_display": "85",
-              "jockey": "N/A",
-              "trainer": "N/A",
+              "jockey": parsed_j,
+              "trainer": parsed_t,
               "recent_runs": "N/A",
               "running_style": "前置機動",
               "body_weight": "N/A",
@@ -499,7 +557,8 @@ def extract_runners_from_bet_graphql(
               "win_odds": None,
           },
       )
-      entry["name"] = name_val
+      if parsed_h:
+        entry["name"] = parsed_h
 
       for dk in ("barrierDrawNumber", "draw", "barrier"):
         if dk in node and node[dk] is not None:
@@ -516,17 +575,31 @@ def extract_runners_from_bet_graphql(
             entry["weight_display"] = f"{int(round(w_flt))}"
             break
 
-      j_raw = node.get("jockey") or node.get("jockeyNameCh") or node.get("jockeyName")
+      for rk in ("rating", "currentRating", "handicapRating"):
+        if rk in node and node[rk] is not None:
+          r_flt = safe_float(node[rk], None)
+          if r_flt is not None and 10.0 <= r_flt <= 150.0:
+            entry["rating"] = r_flt
+            entry["rating_display"] = f"{int(round(r_flt))}"
+            break
+
+      j_raw = (
+          node.get("jockey") or node.get("jockeyNameCh") or node.get("jockeyName")
+      )
       if isinstance(j_raw, dict):
         j_raw = j_raw.get("nameCh") or j_raw.get("name") or ""
       if isinstance(j_raw, str) and j_raw.strip():
-        entry["jockey"] = clean_person_name(j_raw, "N/A")
+        entry["jockey"] = clean_person_name(j_raw, entry["jockey"])
 
-      t_raw = node.get("trainer") or node.get("trainerNameCh") or node.get("trainerName")
+      t_raw = (
+          node.get("trainer")
+          or node.get("trainerNameCh")
+          or node.get("trainerName")
+      )
       if isinstance(t_raw, dict):
         t_raw = t_raw.get("nameCh") or t_raw.get("name") or ""
       if isinstance(t_raw, str) and t_raw.strip():
-        entry["trainer"] = clean_person_name(t_raw, "N/A")
+        entry["trainer"] = clean_person_name(t_raw, entry["trainer"])
 
       for ok in ("winOdds", "currentOdds"):
         if ok in node and node[ok] not in (None, "", "-", "---"):
@@ -557,7 +630,7 @@ async def fetch_overseas_race_via_bet_page(
     s_code: str,
     r_no: int,
 ) -> tuple[dict[str, Any] | None, str]:
-  """直接從 bet.hkjc.com/ch/racing/wp/{YYYY-MM-DD}/{S1}/{r_no} 擷取海外轉播排位與賠率。"""
+  """從 bet.hkjc.com 擷取海外轉播排位、檔位、負磅、騎練、途程與賠率。"""
   date_hyphen = race_date.replace("/", "-")
   bet_url = f"{BET_WP_BASE_URL}/{date_hyphen}/{s_code.upper()}/{r_no}"
   collected: dict[int, dict[str, Any]] = {}
@@ -576,72 +649,116 @@ async def fetch_overseas_race_via_bet_page(
   def on_resp(resp: Response) -> None:
     asyncio.create_task(_handle_resp(resp))
 
-  page.on("response", on_resp)
-  body_preview = ""
+  full_text = ""
   try:
     await page.goto(bet_url, wait_until="domcontentloaded", timeout=14000)
     await page.wait_for_timeout(1200)
-    body_text = await page.evaluate(
-        "() => document.body ? document.body.innerText.slice(0, 4000) : ''"
+    full_text = await page.evaluate(
+        "() => document.body ? document.body.innerText : ''"
     )
-    body_preview = re.sub(r"\s+", " ", body_text)[:220]
 
-    # 若 GraphQL 未完整返回，補充解析頁面表格中的馬號與馬名
-    if len(collected) < 4:
-      dom_rows = await page.evaluate("""
-        () => Array.from(document.querySelectorAll("tr, [role='row']")).map(r =>
-          Array.from(r.querySelectorAll("th, td, [role='cell']")).map(c => c.innerText.replace(/\\s+/g, " ").trim())
-        )
-      """)
-      for row in dom_rows:
-        if len(row) >= 2 and re.fullmatch(r"\d{1,2}", row[0]):
-          h_no = int(row[0])
-          h_name = row[1].strip()
-          if (
-              1 <= h_no <= 24
-              and h_name
-              and not re.fullmatch(r"[\d.]+", h_name)
-              and h_no not in collected
-          ):
-            odds_val = None
-            for cell in row[2:]:
-              m_o = re.fullmatch(r"\d{1,3}\.\d{1,2}", cell)
-              if m_o:
-                odds_val = float(m_o.group(0))
-                break
-            collected[h_no] = {
-                "no": h_no,
-                "name": h_name,
-                "draw": 7,
-                "weight_lbs": 125.0,
-                "weight_display": "125",
-                "rating": 85.0,
-                "rating_display": "85",
-                "jockey": "N/A",
-                "trainer": "N/A",
-                "recent_runs": "N/A",
-                "running_style": "前置機動",
-                "body_weight": "N/A",
-                "bw_display": "N/A",
-                "win_odds": odds_val,
-            }
-  except Exception as exc:
-    body_preview = f"error: {exc}"
+    rows_data = await page.evaluate("""
+      () => Array.from(document.querySelectorAll("tr, [role='row']")).map(r => {
+        const cells = Array.from(r.querySelectorAll("th, td, [role='cell']"));
+        return {
+          cells: cells.map(c => c.innerText.replace(/\\s+/g, " ").trim()).filter(Boolean),
+          text: r.innerText.replace(/\\s+/g, " ").trim()
+        };
+      })
+    """)
+
+    for item in rows_data:
+      cells = item.get("cells", [])
+      line = item.get("text", "")
+      if "(備)" in line:
+        continue
+
+      h_no = None
+      if cells and re.fullmatch(r"\d{1,2}", cells[0]):
+        h_no = int(cells[0])
+      else:
+        m_no = re.match(r"^(\d{1,2})\s+", line)
+        if m_no:
+          h_no = int(m_no.group(1))
+
+      if h_no is None or not (1 <= h_no <= 24):
+        continue
+
+      combined_str = ""
+      for c in cells[1:]:
+        if "騎" in c and "練" in c:
+          combined_str = c
+          break
+      if not combined_str and len(cells) >= 2:
+        combined_str = cells[1]
+      if not combined_str:
+        combined_str = re.sub(r"^\d{1,2}\s+", "", line)
+
+      h_name, h_jockey, h_trainer = parse_combined_horse_jt(combined_str)
+      if not h_name or "(備)" in h_name or re.fullmatch(r"[\d.]+", h_name):
+        continue
+
+      draw_val = 7
+      m_draw = re.search(r"\b(?:檔|檔位)?\s*(\d{1,2})\s*(?:磅|\b)", line)
+      if m_draw:
+        d_cand = int(m_draw.group(1))
+        if 1 <= d_cand <= 18:
+          draw_val = d_cand
+
+      weight_val = 125.0
+      m_wt = re.search(r"\b(1[0-4]\d)\b", line)
+      if m_wt:
+        weight_val = float(m_wt.group(1))
+
+      odds_val = None
+      m_odds = re.search(r"\b(\d{1,3}\.\d{1,2})\b", line)
+      if m_odds:
+        o_cand = float(m_odds.group(1))
+        if 1.1 <= o_cand <= 500.0:
+          odds_val = o_cand
+
+      if h_no not in collected:
+        collected[h_no] = {
+            "no": h_no,
+            "name": h_name,
+            "draw": draw_val,
+            "weight_lbs": weight_val,
+            "weight_display": f"{int(weight_val)}",
+            "rating": 85.0,
+            "rating_display": "85",
+            "jockey": h_jockey,
+            "trainer": h_trainer,
+            "recent_runs": "N/A",
+            "running_style": "前置機動",
+            "body_weight": "N/A",
+            "bw_display": "N/A",
+            "win_odds": odds_val,
+        }
+      else:
+        collected[h_no]["name"] = h_name
+        if h_jockey != "N/A":
+          collected[h_no]["jockey"] = h_jockey
+        if h_trainer != "N/A":
+          collected[h_no]["trainer"] = h_trainer
+        if odds_val is not None and collected[h_no]["win_odds"] is None:
+          collected[h_no]["win_odds"] = odds_val
+  except Exception:
+    pass
   finally:
     page.remove_listener("response", on_resp)
     await page.close()
 
   if len(collected) < 4:
-    return None, f"{bet_url} -> {body_preview}"
+    return None, bet_url
 
-  runners = [collected[k] for k in sorted(collected.keys())]
-  meta = extract_race_meta(
-      body_preview, s_code, race_no=r_no, simulcast_code=s_code
-  )
-  for r in runners:
+  meta = extract_overseas_meta_from_text(full_text, s_code.upper(), r_no)
+  runners = []
+  for k in sorted(collected.keys()):
+    r = collected[k]
     r["running_style"] = infer_running_style(
         r["recent_runs"], r["draw"], meta.get("distance", "1600")
     )
+    runners.append(r)
 
   return (
       {
