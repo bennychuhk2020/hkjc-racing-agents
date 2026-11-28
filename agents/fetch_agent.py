@@ -19,11 +19,14 @@ HKT = timezone(timedelta(hours=8))
 LOCAL_RACECARD_URL = (
     "https://racing.hkjc.com/zh-hk/local/information/racecard"
 )
-OVERSEAS_RACECARD_URL = "https://racing.hkjc.com/zh-hk/overseas/race-card"
+OVERSEAS_RACECARD_V1 = "https://racing.hkjc.com/zh-hk/overseas/race-card"
+OVERSEAS_RACECARD_V2 = (
+    "https://racing.hkjc.com/zh-hk/overseas/information/racecard"
+)
 OVERSEAS_HUB_URL = "https://racing.hkjc.com/zh-hk/overseas/"
 BET_WP_BASE_URL = "https://bet.hkjc.com/ch/racing/wp"
 
-BLOCKED_RESOURCE_TYPES = {"image", "media", "font", "stylesheet"}
+BLOCKED_RESOURCE_TYPES = {"image", "media", "font"}
 BLOCKED_URL_KEYWORDS = (
     "google-analytics",
     "googletagmanager",
@@ -51,20 +54,29 @@ def build_local_url(
   return f"{base_url}{sep}{'&'.join(params)}"
 
 
-def build_overseas_url(
-    race_date: str = "", simulcast_code: str = "S1", race_no: int | None = None
-) -> str:
+def build_overseas_urls(
+    race_date: str = "", simulcast_code: str = "S1", race_no: int = 1
+) -> list[str]:
+  """同時產生新版 (/overseas/race-card) 與舊版 (/overseas/information/racecard) 網址。"""
   compact_date = re.sub(r"[^\d]", "", race_date or "")
-  params = []
+  slash_date = (
+      f"{compact_date[:4]}/{compact_date[4:6]}/{compact_date[6:8]}"
+      if len(compact_date) == 8
+      else race_date
+  )
+  s_code = simulcast_code.upper()
+  urls = []
   if compact_date:
-    params.append(f"RaceDate={compact_date}")
-  if simulcast_code:
-    params.append(f"Racecourse={simulcast_code.upper()}")
-  if race_no is not None:
-    params.append(f"RaceNo={race_no}")
-  if not params:
-    return OVERSEAS_RACECARD_URL
-  return f"{OVERSEAS_RACECARD_URL}?{'&'.join(params)}"
+    urls.append(
+        f"{OVERSEAS_RACECARD_V1}?RaceDate={compact_date}&Racecourse={s_code}&RaceNo={race_no}"
+    )
+    urls.append(
+        f"{OVERSEAS_RACECARD_V2}?raceDate={slash_date}&Simulcast={s_code}&RaceNo={race_no}"
+    )
+  else:
+    urls.append(f"{OVERSEAS_RACECARD_V1}?Racecourse={s_code}&RaceNo={race_no}")
+    urls.append(f"{OVERSEAS_RACECARD_V2}?Simulcast={s_code}&RaceNo={race_no}")
+  return urls
 
 
 def parse_simulcast_spec(spec_str: str) -> dict[str, list[int]]:
@@ -194,70 +206,6 @@ async def detect_meeting_params(page: Page) -> tuple[str, str]:
       course = "ST"
 
   return race_date, course
-
-
-async def discover_simulcast_meetings(
-    page: Page, race_date: str
-) -> dict[str, tuple[str, list[int]]]:
-  """自動偵測當日及鄰近日期的 HKJC 海外轉播組別（例如 S1, S2, S3）與場次。"""
-  discovered: dict[str, tuple[str, set[int]]] = {}
-
-  candidate_dates: list[str] = []
-  if race_date:
-    candidate_dates.append(race_date)
-    try:
-      dt = datetime.strptime(race_date, "%Y/%m/%d")
-      candidate_dates.append((dt - timedelta(days=1)).strftime("%Y/%m/%d"))
-      candidate_dates.append((dt + timedelta(days=1)).strftime("%Y/%m/%d"))
-    except ValueError:
-      pass
-
-  for cand_date in candidate_dates:
-    compact = re.sub(r"[^\d]", "", cand_date)
-    hub_url = f"{OVERSEAS_HUB_URL}?RaceDate={compact}"
-    try:
-      await page.goto(hub_url, wait_until="domcontentloaded", timeout=15000)
-      await page.wait_for_selector(
-          "a[href*='Racecourse=S'], a[href*='Simulcast=S']", timeout=4500
-      )
-      info = await page.evaluate("""
-        () => ({
-          hrefs: Array.from(document.querySelectorAll("a[href]")).map(a => a.href),
-          body: document.body ? document.body.innerText.slice(0, 5000) : ""
-        })
-      """)
-
-      for href in info.get("hrefs", []):
-        m_s = re.search(r"(?:Racecourse|Simulcast)=(S\d+)", href, re.I)
-        m_r = re.search(r"RaceNo=(\d+)", href, re.I)
-        m_d = re.search(r"RaceDate=(\d{8})", href, re.I)
-        if m_s:
-          s_code = m_s.group(1).upper()
-          d_str = (
-              f"{m_d.group(1)[:4]}/{m_d.group(1)[4:6]}/{m_d.group(1)[6:8]}"
-              if m_d
-              else cand_date
-          )
-          if s_code not in discovered:
-            discovered[s_code] = (d_str, set())
-          discovered[s_code][1].add(int(m_r.group(1)) if m_r else 1)
-
-      for m_tag in re.finditer(
-          r"\b(S\d+)\s*[-－]\s*(\d{1,2})\b",
-          info.get("body", ""),
-          re.I,
-      ):
-        s_code = m_tag.group(1).upper()
-        r_no = int(m_tag.group(2))
-        if 1 <= r_no <= 15:
-          discovered.setdefault(s_code, (cand_date, set()))[1].add(r_no)
-    except Exception:
-      continue
-
-  return {
-      k: (d_str, sorted(nos))
-      for k, (d_str, nos) in sorted(discovered.items())
-  }
 
 
 def extract_race_meta(
@@ -534,43 +482,118 @@ async def parse_runners_from_dom(
   return runners, meta, eval_result
 
 
-async def fetch_overseas_race_worker(
-    sem: asyncio.Semaphore,
+async def try_fetch_single_overseas_race(
     context: BrowserContext,
     race_date: str,
     s_code: str,
     r_no: int,
-) -> dict[str, Any] | None:
-  """並發抓取單場海外轉播排位表。"""
-  s_url = build_overseas_url(
+    preferred_template_idx: int | None = None,
+) -> tuple[dict[str, Any] | None, int | None, str]:
+  """嘗試讀取單場海外排位表，自動兼容新版與舊版 HKJC URL。"""
+  urls = build_overseas_urls(
       race_date=race_date, simulcast_code=s_code, race_no=r_no
   )
+  order = (
+      [preferred_template_idx]
+      if preferred_template_idx is not None and 0 <= preferred_template_idx < len(urls)
+      else list(range(len(urls)))
+  )
+
+  page = await context.new_page()
+  last_snippet = ""
+  try:
+    for idx in order:
+      url = urls[idx]
+      try:
+        await page.goto(url, wait_until="domcontentloaded", timeout=14000)
+        # Angular SPA 需要一點時間渲染排位 table
+        try:
+          await page.wait_for_selector("table", timeout=4500)
+        except Exception:
+          await page.wait_for_timeout(1200)
+
+        runners, meta, eval_info = await parse_runners_from_dom(
+            page, s_code, race_no=r_no, simulcast_code=s_code
+        )
+        last_snippet = eval_info.get("bodySnippet", "")[:250]
+        if runners:
+          race_label = f"{s_code}-{r_no}"
+          return (
+              {
+                  "race_type": "overseas",
+                  "venue_code": s_code,
+                  "race_date_used": race_date,
+                  "race_no": r_no,
+                  "race_label": race_label,
+                  "distance": meta.get("distance", ""),
+                  "course": meta.get("course", f"海外轉播 ({s_code})"),
+                  "class_name": meta.get("class_name", "海外賽事"),
+                  "track_feature": meta.get("track_feature", "草地跑道"),
+                  "runners": runners,
+              },
+              idx,
+              url,
+          )
+      except Exception:
+        continue
+  finally:
+    await page.close()
+
+  return None, None, last_snippet
+
+
+async def fetch_overseas_group_worker(
+    sem: asyncio.Semaphore,
+    context: BrowserContext,
+    cand_dates: list[str],
+    s_code: str,
+    target_race_nos: list[int] | None = None,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+  """針對單一海外轉播組別（例如 S1 / S2 / S3）自動尋找有效日期並抓取全組場次。"""
   async with sem:
-    page = await context.new_page()
-    try:
-      await page.goto(s_url, wait_until="domcontentloaded", timeout=15000)
-      await page.wait_for_selector("table", timeout=5000)
-      runners, meta, _ = await parse_runners_from_dom(
-          page, s_code, race_no=r_no, simulcast_code=s_code
+    group_races: list[dict[str, Any]] = []
+    diag: dict[str, Any] = {"simulcast": s_code, "found": False}
+    check_nos = target_race_nos if target_race_nos else list(range(1, 13))
+    first_no = check_nos[0]
+
+    matched_date = ""
+    template_idx: int | None = None
+    first_runner_name = ""
+
+    for d_str in cand_dates:
+      race_obj, t_idx, info = await try_fetch_single_overseas_race(
+          context, d_str, s_code, first_no
       )
-      if not runners:
-        return None
-      race_label = f"{s_code}-{r_no}"
-      return {
-          "race_type": "overseas",
-          "venue_code": s_code,
-          "race_no": r_no,
-          "race_label": race_label,
-          "distance": meta.get("distance", ""),
-          "course": meta.get("course", f"海外轉播 ({s_code})"),
-          "class_name": meta.get("class_name", "海外賽事"),
-          "track_feature": meta.get("track_feature", "草地跑道"),
-          "runners": runners,
-      }
-    except Exception:
-      return None
-    finally:
-      await page.close()
+      if race_obj is not None:
+        matched_date = d_str
+        template_idx = t_idx
+        first_runner_name = race_obj["runners"][0]["name"]
+        group_races.append(race_obj)
+        diag.update({
+            "found": True,
+            "matched_date": d_str,
+            "url_template": t_idx,
+            "first_url": info,
+        })
+        break
+      else:
+        diag[f"probe_{d_str}"] = info
+
+    if not matched_date:
+      return [], diag
+
+    for r_no in check_nos[1:]:
+      race_obj, _, _ = await try_fetch_single_overseas_race(
+          context, matched_date, s_code, r_no, preferred_template_idx=template_idx
+      )
+      if race_obj is None:
+        break
+      if race_obj["runners"][0]["name"] == first_runner_name:
+        break
+      group_races.append(race_obj)
+
+    diag["total_extracted"] = len(group_races)
+    return group_races, diag
 
 
 def extract_odds_from_json_tree(node: Any, odds_map: dict[int, float]) -> None:
@@ -630,7 +653,6 @@ async def fetch_win_odds_worker(
     race_label: str,
     runner_names: dict[int, str],
 ) -> tuple[str, dict[int, float], dict[str, Any]]:
-  """並發抓取獨贏賠率；若未開盤則快速跳過多餘等待。"""
   date_hyphen = race_date.replace("/", "-")
   odds_url = f"{BET_WP_BASE_URL}/{date_hyphen}/{venue_code}/{race_no}"
   odds_map: dict[int, float] = {}
@@ -695,6 +717,7 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
 
   races: list[dict[str, Any]] = []
   debug_summary: list[dict[str, Any]] = []
+  overseas_debug: list[dict[str, Any]] = []
   odds_diagnostics: list[dict[str, Any]] = []
 
   max_local_races = int(os.getenv("HKJC_MAX_RACES", "11"))
@@ -775,6 +798,7 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
         races.append({
             "race_type": "local",
             "venue_code": course,
+            "race_date_used": race_date,
             "race_no": race_no,
             "race_label": race_label,
             "distance": meta.get("distance", ""),
@@ -787,39 +811,40 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
             f"[{elapsed()}] [Local] {race_label}: extracted {len(runners)} runners."
         )
 
+      await page.close()
       sem = asyncio.Semaphore(concurrency)
 
-      # 2. 並發抓取海外轉播賽馬排位表 (S1-1..S1-3, S2-1..S2-9, S3-1...)
+      # 2. 並發探測及抓取海外轉播賽馬排位表 (S1, S2, S3, S4)
       if include_overseas and race_date:
-        if simulcast_spec:
-          overseas_tasks = [
-              fetch_overseas_race_worker(sem, context, race_date, s_code, r_no)
-              for s_code, race_nos in simulcast_spec.items()
-              for r_no in race_nos
-          ]
-        else:
-          discovered_map = await discover_simulcast_meetings(page, race_date)
-          print(
-              f"[{elapsed()}] Discovered overseas simulcasts: {discovered_map}"
-          )
-          overseas_tasks = [
-              fetch_overseas_race_worker(
-                  sem, context, s_date, s_code, r_no
-              )
-              for s_code, (s_date, race_nos) in discovered_map.items()
-              for r_no in race_nos
-          ]
+        cand_dates = [race_date]
+        try:
+          dt = datetime.strptime(race_date, "%Y/%m/%d")
+          cand_dates.append((dt - timedelta(days=1)).strftime("%Y/%m/%d"))
+          cand_dates.append((dt + timedelta(days=1)).strftime("%Y/%m/%d"))
+        except ValueError:
+          pass
 
-        if overseas_tasks:
-          overseas_results = await asyncio.gather(*overseas_tasks)
-          for item in overseas_results:
-            if item is not None:
-              races.append(item)
-              print(
-                  f"[{elapsed()}] [Overseas] {item['race_label']}: extracted {len(item['runners'])} runners."
-              )
+        groups_to_check = (
+            list(simulcast_spec.items())
+            if simulcast_spec
+            else [("S1", None), ("S2", None), ("S3", None), ("S4", None)]
+        )
+        print(
+            f"[{elapsed()}] Probing overseas simulcasts {[g[0] for g in groups_to_check]} across {cand_dates}..."
+        )
+        group_tasks = [
+            fetch_overseas_group_worker(sem, context, cand_dates, s_code, r_nos)
+            for s_code, r_nos in groups_to_check
+        ]
+        group_results = await asyncio.gather(*group_tasks)
 
-      await page.close()
+        for g_races, g_diag in group_results:
+          overseas_debug.append(g_diag)
+          for item in g_races:
+            races.append(item)
+            print(
+                f"[{elapsed()}] [Overseas] {item['race_label']} ({item['race_date_used']}): extracted {len(item['runners'])} runners."
+            )
 
       # 3. 並發抓取所有本地 + 海外場次實時獨贏賠率
       if race_date and races:
@@ -830,7 +855,7 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
             fetch_win_odds_worker(
                 sem,
                 context,
-                race_date,
+                race_obj.get("race_date_used") or race_date,
                 race_obj["venue_code"],
                 race_obj["race_no"],
                 race_obj["race_label"],
@@ -858,6 +883,7 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
               "total_races": len(races),
               "elapsed_seconds": round(time.perf_counter() - t0, 2),
               "racecard_summary": debug_summary,
+              "overseas_debug": overseas_debug,
               "odds_diagnostics": odds_diagnostics,
           },
           ensure_ascii=False,
