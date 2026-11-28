@@ -122,20 +122,49 @@ def normalize_time_str(raw: Any) -> str:
   return ""
 
 
+def extract_race_start_time_from_text(text: str, race_no: int = 1) -> str:
+  """優先從場次標題或開跑時間標籤擷取開跑時間（HH:MM）。"""
+  flat = re.sub(r"\s+", " ", text or "")
+  # 1. 明確關鍵字附近的時間（如 開跑時間 12:45 / 16:18）
+  m_kw = re.search(
+      r"(?:開跑時間|開跑|首場開跑|鳴鑼|Race\s*Time|Post\s*Time|Start\s*Time)\s*[:：]?\s*(\d{1,2}:\d{2}(?:\s*(?:AM|PM))?)",
+      flat,
+      re.I,
+  )
+  if m_kw:
+    norm = normalize_time_str(m_kw.group(1))
+    if norm:
+      return norm
+
+  # 2. 場次標題附近的時間（例如「第1場 ... 12:45」或「S1-1 ... 16:18」）
+  for pat in (rf"第\s*{race_no}\s*場.{{0,120}}", rf"S\d+-{race_no}.{{0,120}}"):
+    m_sec = re.search(pat, flat, re.I)
+    if m_sec:
+      norm = normalize_time_str(m_sec.group(0))
+      if norm:
+        return norm
+
+  return ""
+
+
 def build_race_datetime_key(race: dict[str, Any]) -> tuple[datetime, int, int]:
-  """產生用於按日期與開跑時間排序的鍵值（未知時間排在當日較後位置）。"""
-  date_str = str(race.get("race_date_used") or race.get("race_date") or "")
-  date_str = date_str.replace("-", "/")
-  dt_base = datetime(2099, 12, 31, 23, 59, tzinfo=HKT)
+  """按賽事日期與開跑時間排序；無開跑時間者排在當日較後位置。"""
+  date_str = str(
+      race.get("race_date_used") or race.get("race_date") or ""
+  ).replace("-", "/")
   m_d = re.fullmatch(r"(\d{4})/(\d{2})/(\d{2})", date_str)
   if m_d:
     y, m, d = int(m_d.group(1)), int(m_d.group(2)), int(m_d.group(3))
-    t_str = normalize_time_str(race.get("race_time") or race.get("race_datetime"))
+    t_str = normalize_time_str(
+        race.get("race_time") or race.get("race_datetime")
+    )
     if t_str:
       hh, mm = map(int, t_str.split(":"))
       dt_base = datetime(y, m, d, hh, mm, tzinfo=HKT)
     else:
-      dt_base = datetime(y, m, d, 23, 50, tzinfo=HKT)
+      dt_base = datetime(y, m, d, 23, 55, tzinfo=HKT)
+  else:
+    dt_base = datetime(2099, 12, 31, 23, 59, tzinfo=HKT)
 
   type_order = 0 if str(race.get("race_type", "")).lower() == "local" else 1
   r_no = safe_int(race.get("race_no"), 99)
@@ -262,7 +291,7 @@ def extract_overseas_meta_from_text(
       "course": f"海外轉播 ({s_code})",
       "class_name": "海外賽事",
       "track_feature": "草地跑道",
-      "race_time": normalize_time_str(flat),
+      "race_time": extract_race_start_time_from_text(flat, race_no=race_no),
   }
 
   dist_m = re.search(r"(\d{3,4})\s*米", flat)
@@ -317,7 +346,7 @@ def extract_race_meta(
       "course": "跑馬地" if default_course == "HV" else "沙田",
       "class_name": "N/A",
       "track_feature": "標準賽道",
-      "race_time": normalize_time_str(snippet),
+      "race_time": extract_race_start_time_from_text(snippet, race_no=race_no),
   }
 
   dist_match = re.search(r"(\d{3,4})\s*米", snippet)
@@ -567,11 +596,11 @@ def _extract_odds_number(raw_o: Any) -> float | None:
     for sub_k in ("oddsValue", "value", "winOdds", "wpOdds", "odds"):
       if sub_k in raw_o:
         val = safe_float(raw_o[sub_k], None)
-        if val is not None and 1.1 <= val <= 999.0:
+        if val is not None and 1.0 <= val <= 999.0:
           return val
     return None
   val = safe_float(raw_o, None)
-  if val is not None and 1.1 <= val <= 999.0:
+  if val is not None and 1.0 <= val <= 999.0:
     return val
   return None
 
@@ -579,7 +608,6 @@ def _extract_odds_number(raw_o: Any) -> float | None:
 def extract_odds_from_json_tree(node: Any, odds_map: dict[int, float]) -> None:
   """支援 runner/horse 物件與 HKJC pmPools (oddsType == 'WIN', oddsNodes) 兩種結構。"""
   if isinstance(node, dict):
-    # HKJC GraphQL pmPools 獨贏彩池格式
     if str(node.get("oddsType", "")).upper() == "WIN" and isinstance(
         node.get("oddsNodes"), list
     ):
@@ -778,7 +806,7 @@ async def fetch_overseas_race_via_bet_page(
   full_text = ""
   try:
     await page.goto(bet_url, wait_until="domcontentloaded", timeout=15000)
-    await page.wait_for_timeout(1300)
+    await page.wait_for_timeout(1500)
 
     final_url = page.url.upper()
     if f"/{s_upper}/{r_no}" not in final_url or date_hyphen not in final_url:
@@ -831,6 +859,7 @@ async def fetch_overseas_race_via_bet_page(
 
       draw_val = 7
       weight_val = 125.0
+      row_odds: float | None = None
       for cell in cells[2:]:
         if re.fullmatch(r"\d{1,2}", cell):
           cand_d = int(cell)
@@ -838,6 +867,10 @@ async def fetch_overseas_race_via_bet_page(
             draw_val = cand_d
         elif re.fullmatch(r"1[0-4]\d", cell):
           weight_val = float(cell)
+        elif re.fullmatch(r"\d{1,3}\.\d", cell):
+          cand_o = float(cell)
+          if 1.0 <= cand_o <= 999.0:
+            row_odds = cand_o
 
       if h_no not in collected:
         collected[h_no] = {
@@ -854,7 +887,7 @@ async def fetch_overseas_race_via_bet_page(
             "running_style": "前置機動",
             "body_weight": "N/A",
             "bw_display": "N/A",
-            "win_odds": None,
+            "win_odds": row_odds,
         }
       else:
         collected[h_no]["name"] = h_name
@@ -862,6 +895,8 @@ async def fetch_overseas_race_via_bet_page(
           collected[h_no]["jockey"] = h_jockey
         if h_trainer != "N/A":
           collected[h_no]["trainer"] = h_trainer
+        if row_odds is not None and collected[h_no]["win_odds"] is None:
+          collected[h_no]["win_odds"] = row_odds
   except Exception:
     pass
   finally:
@@ -1016,6 +1051,7 @@ async def _parse_graphql_resp(
     graphql_hits: list[dict[str, Any]],
     odds_map: dict[int, float],
     meta_out: dict[str, str],
+    race_no: int,
 ) -> None:
   try:
     payload = await resp.json()
@@ -1024,7 +1060,7 @@ async def _parse_graphql_resp(
       extract_odds_from_json_tree(payload, odds_map)
       if not meta_out.get("race_time"):
         raw_dump = json.dumps(payload, ensure_ascii=False)
-        t_norm = normalize_time_str(raw_dump)
+        t_norm = extract_race_start_time_from_text(raw_dump, race_no=race_no)
         if t_norm:
           meta_out["race_time"] = t_norm
   except Exception:
@@ -1053,21 +1089,39 @@ async def fetch_win_odds_worker(
       if "graphql" not in resp.url.lower():
         return
       asyncio.create_task(
-          _parse_graphql_resp(resp, graphql_hits, odds_map, meta_out)
+          _parse_graphql_resp(resp, graphql_hits, odds_map, meta_out, race_no)
       )
 
     page.on("response", on_resp)
     try:
       await page.goto(odds_url, wait_until="domcontentloaded", timeout=15000)
-      await page.wait_for_timeout(800)
+      await page.wait_for_timeout(900)
       if graphql_hits and len(odds_map) < len(runner_names):
-        await page.wait_for_timeout(700)
+        await page.wait_for_timeout(800)
+
+      # DOM 後備：從含馬號/馬名的列中擷取單一小數獨贏賠率
+      if len(odds_map) < len(runner_names):
+        dom_rows = await page.evaluate("""
+          () => Array.from(document.querySelectorAll("tr, [role='row']")).map(r =>
+            r.innerText.replace(/\\s+/g, " ").trim()
+          ).filter(Boolean)
+        """)
+        for row_txt in dom_rows:
+          for h_no, h_name in runner_names.items():
+            if h_no in odds_map or not h_name or h_name not in row_txt:
+              continue
+            after_name = row_txt.split(h_name, 1)[1]
+            m = re.search(r"\b(\d{1,3}\.\d{1,2})\b", after_name)
+            if m:
+              val = safe_float(m.group(1), None)
+              if val is not None and 1.0 <= val <= 999.0:
+                odds_map[h_no] = val
 
       if not meta_out.get("race_time"):
         page_txt = await page.evaluate(
             "() => document.body ? document.body.innerText.slice(0, 1500) : ''"
         )
-        t_dom = normalize_time_str(page_txt)
+        t_dom = extract_race_start_time_from_text(page_txt, race_no=race_no)
         if t_dom:
           meta_out["race_time"] = t_dom
     except Exception as exc:
@@ -1232,7 +1286,7 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
                 f"[{elapsed()}] [Overseas] {item['race_label']} ({item['race_date_used']}): extracted {len(item['runners'])} runners."
             )
 
-      # 對所有本地 + 海外場次抓取獨贏賠率（即使是海外場次，若尚未拿到賠率也會再查一次 WP 彩池）
+      # 對所有本地與海外場次抓取獨贏賠率
       if race_date and races:
         print(
             f"[{elapsed()}] Fetching live win odds concurrently for {len(races)} races (workers={concurrency})..."
