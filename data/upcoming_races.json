@@ -2,11 +2,12 @@
   "race_date": "2026/11/29",
   "course_code": "ST",
   "source_url": "https://racing.hkjc.com/zh-hk/local/information/racecard?raceDate=2026/11/29&Racecourse=ST&RaceNo=1",
-  "fetched_at_hkt": "2026-11-28T08:43:37.854151+08:00",
+  "fetched_at_hkt": "2026-11-28T08:50:18.819986+08:00",
   "races": [
     {
       "race_type": "local",
       "venue_code": "ST",
+      "race_date_used": "2026/11/29",
       "race_no": 1,
       "race_label": "第1場",
       "distance": "1400",
@@ -243,6 +244,7 @@
     {
       "race_type": "local",
       "venue_code": "ST",
+      "race_date_used": "2026/11/29",
       "race_no": 2,
       "race_label": "第2場",
       "distance": "1200",
@@ -447,6 +449,7 @@
     {
       "race_type": "local",
       "venue_code": "ST",
+      "race_date_used": "2026/11/29",
       "race_no": 3,
       "race_label": "第3場",
       "distance": "1200",
@@ -651,6 +654,7 @@
     {
       "race_type": "local",
       "venue_code": "ST",
+      "race_date_used": "2026/11/29",
       "race_no": 4,
       "race_label": "第4場",
       "distance": "1400",
@@ -887,6 +891,7 @@
     {
       "race_type": "local",
       "venue_code": "ST",
+      "race_date_used": "2026/11/29",
       "race_no": 5,
       "race_label": "第5場",
       "distance": "1000",
@@ -1059,6 +1064,7 @@
     {
       "race_type": "local",
       "venue_code": "ST",
+      "race_date_used": "2026/11/29",
       "race_no": 6,
       "race_label": "第6場",
       "distance": "1600",
@@ -1295,6 +1301,7 @@
     {
       "race_type": "local",
       "venue_code": "ST",
+      "race_date_used": "2026/11/29",
       "race_no": 7,
       "race_label": "第7場",
       "distance": "1600",
@@ -1515,6 +1522,7 @@
     {
       "race_type": "local",
       "venue_code": "ST",
+      "race_date_used": "2026/11/29",
       "race_no": 8,
       "race_label": "第8場",
       "distance": "1200",
@@ -1719,6 +1727,7 @@
     {
       "race_type": "local",
       "venue_code": "ST",
+      "race_date_used": "2026/11/29",
       "race_no": 9,
       "race_label": "第9場",
       "distance": "1600",
@@ -1955,6 +1964,7 @@
     {
       "race_type": "local",
       "venue_code": "ST",
+      "race_date_used": "2026/11/29",
       "race_no": 10,
       "race_label": "第10場",
       "distance": "1400",
@@ -2191,6 +2201,7 @@
     {
       "race_type": "local",
       "venue_code": "ST",
+      "race_date_used": "2026/11/29",
       "race_no": 11,
       "race_label": "第11場",
       "distance": "1200",

@@ -1,6 +1,6 @@
 {
   "total_races": 11,
-  "elapsed_seconds": 30.96,
+  "elapsed_seconds": 53.38,
   "racecard_summary": [
     {
       "race_no": 1,
@@ -14,18 +14,48 @@
       "runner_count": 14
     }
   ],
+  "overseas_debug": [
+    {
+      "simulcast": "S1",
+      "found": false,
+      "probe_2026/11/29": "The requested content does not exist.\n\nHttpStatusCode: 404\nErrorCode: WebContentNotFound\nRequestId : c663dfbb-801e-001e-18d2-7e2b93000000\nTimeStamp : 2026-11-28T00:49:41.8223566Z",
+      "probe_2026/11/28": "The requested content does not exist.\n\nHttpStatusCode: 404\nErrorCode: WebContentNotFound\nRequestId : 777ed791-e01e-0028-4fd2-7e0625000000\nTimeStamp : 2026-11-28T00:49:52.4151364Z",
+      "probe_2026/11/30": "The requested content does not exist.\n\nHttpStatusCode: 404\nErrorCode: WebContentNotFound\nRequestId : d3bc616f-a01e-0070-7fd2-7e35f7000000\nTimeStamp : 2026-11-28T00:50:05.2666975Z"
+    },
+    {
+      "simulcast": "S2",
+      "found": false,
+      "probe_2026/11/29": "The requested content does not exist.\n\nHttpStatusCode: 404\nErrorCode: WebContentNotFound\nRequestId : b64a6f86-001e-0029-34d2-7e07d8000000\nTimeStamp : 2026-11-28T00:49:41.8406046Z",
+      "probe_2026/11/28": "The requested content does not exist.\n\nHttpStatusCode: 404\nErrorCode: WebContentNotFound\nRequestId : 18405895-201e-000c-4ed2-7e1b08000000\nTimeStamp : 2026-11-28T00:49:52.4690351Z",
+      "probe_2026/11/30": "The requested content does not exist.\n\nHttpStatusCode: 404\nErrorCode: WebContentNotFound\nRequestId : c663e16f-801e-001e-1fd2-7e2b93000000\nTimeStamp : 2026-11-28T00:50:04.8174702Z"
+    },
+    {
+      "simulcast": "S3",
+      "found": false,
+      "probe_2026/11/29": "The requested content does not exist.\n\nHttpStatusCode: 404\nErrorCode: WebContentNotFound\nRequestId : 184057bf-201e-000c-10d2-7e1b08000000\nTimeStamp : 2026-11-28T00:49:41.9934323Z",
+      "probe_2026/11/28": "The requested content does not exist.\n\nHttpStatusCode: 404\nErrorCode: WebContentNotFound\nRequestId : 777ed797-e01e-0028-51d2-7e0625000000\nTimeStamp : 2026-11-28T00:49:53.2554562Z",
+      "probe_2026/11/30": "The requested content does not exist.\n\nHttpStatusCode: 404\nErrorCode: WebContentNotFound\nRequestId : 9f2784e1-401e-0047-74d2-7ee75b000000\nTimeStamp : 2026-11-28T00:50:05.7074216Z"
+    },
+    {
+      "simulcast": "S4",
+      "found": false,
+      "probe_2026/11/29": "The requested content does not exist.\n\nHttpStatusCode: 404\nErrorCode: WebContentNotFound\nRequestId : c663dfbc-801e-001e-19d2-7e2b93000000\nTimeStamp : 2026-11-28T00:49:41.8950363Z",
+      "probe_2026/11/28": "The requested content does not exist.\n\nHttpStatusCode: 404\nErrorCode: WebContentNotFound\nRequestId : c95b0f7a-701e-0001-4fd2-7ed3dc000000\nTimeStamp : 2026-11-28T00:49:52.6752848Z",
+      "probe_2026/11/30": "The requested content does not exist.\n\nHttpStatusCode: 404\nErrorCode: WebContentNotFound\nRequestId : 777ed820-e01e-0028-7fd2-7e0625000000\nTimeStamp : 2026-11-28T00:50:05.2307329Z"
+    }
+  ],
   "odds_diagnostics": [
     {
       "race_label": "第1場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/1",
-      "graphql_count": 0,
+      "graphql_count": 1,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "第2場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/2",
-      "graphql_count": 2,
+      "graphql_count": 0,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
@@ -39,7 +69,7 @@
     {
       "race_label": "第4場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/4",
-      "graphql_count": 10,
+      "graphql_count": 0,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
@@ -53,42 +83,42 @@
     {
       "race_label": "第6場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/6",
-      "graphql_count": 0,
+      "graphql_count": 2,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "第7場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/7",
-      "graphql_count": 10,
+      "graphql_count": 0,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "第8場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/8",
-      "graphql_count": 10,
+      "graphql_count": 9,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "第9場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/9",
-      "graphql_count": 0,
+      "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "第10場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/10",
-      "graphql_count": 0,
+      "graphql_count": 2,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "第11場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/11",
-      "graphql_count": 0,
+      "graphql_count": 1,
       "matched_odds_count": 0,
       "sample_odds": {}
     }
