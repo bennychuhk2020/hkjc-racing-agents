@@ -1,103 +1,80 @@
 {
-  "racecard_summary": [
-    {
-      "race_no": 1,
-      "url": "https://racing.hkjc.com/zh-hk/local/information/racecard?RaceNo=1",
-      "meta": {
-        "distance": "",
-        "course": "沙田",
-        "class_name": "二級賽",
-        "track_feature": "標準賽道"
-      },
-      "runner_count": 14
-    },
-    {
-      "race_no": 2,
-      "url": "https://racing.hkjc.com/zh-hk/local/information/racecard?raceDate=2026/11/29&Racecourse=ST&RaceNo=2",
-      "meta": {
-        "distance": "",
-        "course": "沙田",
-        "class_name": "二級賽",
-        "track_feature": "標準賽道"
-      },
-      "runner_count": 12
-    }
-  ],
+  "total_races": 11,
   "odds_diagnostics": [
     {
-      "race_no": 1,
+      "race_label": "第1場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/1",
-      "graphql_count": 5,
+      "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
-      "race_no": 2,
+      "race_label": "第2場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/2",
       "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
-      "race_no": 3,
+      "race_label": "第3場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/3",
-      "graphql_count": 9,
+      "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
-      "race_no": 4,
+      "race_label": "第4場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/4",
-      "graphql_count": 8,
+      "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
-      "race_no": 5,
+      "race_label": "第5場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/5",
       "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
-      "race_no": 6,
+      "race_label": "第6場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/6",
       "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
-      "race_no": 7,
+      "race_label": "第7場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/7",
-      "graphql_count": 8,
+      "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
-      "race_no": 8,
+      "race_label": "第8場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/8",
       "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
-      "race_no": 9,
+      "race_label": "第9場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/9",
       "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
-      "race_no": 10,
+      "race_label": "第10場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/10",
       "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
-      "race_no": 11,
+      "race_label": "第11場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/11",
-      "graphql_count": 5,
+      "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     }

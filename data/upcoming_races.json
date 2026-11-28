@@ -2,14 +2,17 @@
   "race_date": "2026/11/29",
   "course_code": "ST",
   "source_url": "https://racing.hkjc.com/zh-hk/local/information/racecard?raceDate=2026/11/29&Racecourse=ST&RaceNo=1",
-  "fetched_at_hkt": "2026-11-27T17:26:01.589843+08:00",
+  "fetched_at_hkt": "2026-11-28T08:11:43.548302+08:00",
   "races": [
     {
+      "race_type": "local",
+      "venue_code": "ST",
       "race_no": 1,
-      "distance": "",
+      "race_label": "第1場",
+      "distance": "1400",
       "course": "沙田",
-      "class_name": "二級賽",
-      "track_feature": "標準賽道",
+      "class_name": "讓賽",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -238,11 +241,14 @@
       ]
     },
     {
+      "race_type": "local",
+      "venue_code": "ST",
       "race_no": 2,
-      "distance": "",
+      "race_label": "第2場",
+      "distance": "1200",
       "course": "沙田",
-      "class_name": "二級賽",
-      "track_feature": "標準賽道",
+      "class_name": "讓賽",
+      "track_feature": "全天候/泥地",
       "runners": [
         {
           "no": 1,
@@ -439,11 +445,14 @@
       ]
     },
     {
+      "race_type": "local",
+      "venue_code": "ST",
       "race_no": 3,
-      "distance": "",
+      "race_label": "第3場",
+      "distance": "1200",
       "course": "沙田",
-      "class_name": "二級賽",
-      "track_feature": "標準賽道",
+      "class_name": "讓賽",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -600,7 +609,7 @@
           "jockey": "班德禮",
           "trainer": "丁冠豪",
           "recent_runs": "-",
-          "running_style": "前置機動",
+          "running_style": "領放",
           "body_weight": "N/A",
           "bw_display": "N/A",
           "win_odds": null
@@ -640,11 +649,14 @@
       ]
     },
     {
+      "race_type": "local",
+      "venue_code": "ST",
       "race_no": 4,
-      "distance": "",
+      "race_label": "第4場",
+      "distance": "1400",
       "course": "沙田",
-      "class_name": "二級賽",
-      "track_feature": "標準賽道",
+      "class_name": "讓賽",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -873,11 +885,14 @@
       ]
     },
     {
+      "race_type": "local",
+      "venue_code": "ST",
       "race_no": 5,
-      "distance": "",
+      "race_label": "第5場",
+      "distance": "1000",
       "course": "沙田",
-      "class_name": "二級賽",
-      "track_feature": "標準賽道",
+      "class_name": "讓賽",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -1042,11 +1057,14 @@
       ]
     },
     {
+      "race_type": "local",
+      "venue_code": "ST",
       "race_no": 6,
-      "distance": "",
+      "race_label": "第6場",
+      "distance": "1600",
       "course": "沙田",
-      "class_name": "二級賽",
-      "track_feature": "標準賽道",
+      "class_name": "讓賽",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -1275,11 +1293,14 @@
       ]
     },
     {
+      "race_type": "local",
+      "venue_code": "ST",
       "race_no": 7,
-      "distance": "",
+      "race_label": "第7場",
+      "distance": "1600",
       "course": "沙田",
-      "class_name": "二級賽",
-      "track_feature": "標準賽道",
+      "class_name": "讓賽",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -1356,7 +1377,7 @@
           "jockey": "潘頓",
           "trainer": "沈集成",
           "recent_runs": "1/1/1/2/5/6",
-          "running_style": "領放",
+          "running_style": "前置機動",
           "body_weight": "N/A",
           "bw_display": "N/A",
           "win_odds": null
@@ -1492,11 +1513,14 @@
       ]
     },
     {
+      "race_type": "local",
+      "venue_code": "ST",
       "race_no": 8,
-      "distance": "",
+      "race_label": "第8場",
+      "distance": "1200",
       "course": "沙田",
-      "class_name": "二級賽",
-      "track_feature": "標準賽道",
+      "class_name": "讓賽",
+      "track_feature": "全天候/泥地",
       "runners": [
         {
           "no": 1,
@@ -1693,11 +1717,14 @@
       ]
     },
     {
+      "race_type": "local",
+      "venue_code": "ST",
       "race_no": 9,
-      "distance": "",
+      "race_label": "第9場",
+      "distance": "1600",
       "course": "沙田",
-      "class_name": "二級賽",
-      "track_feature": "標準賽道",
+      "class_name": "讓賽",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -1926,11 +1953,14 @@
       ]
     },
     {
+      "race_type": "local",
+      "venue_code": "ST",
       "race_no": 10,
-      "distance": "",
+      "race_label": "第10場",
+      "distance": "1400",
       "course": "沙田",
-      "class_name": "二級賽",
-      "track_feature": "標準賽道",
+      "class_name": "讓賽",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
@@ -2159,11 +2189,14 @@
       ]
     },
     {
+      "race_type": "local",
+      "venue_code": "ST",
       "race_no": 11,
-      "distance": "",
+      "race_label": "第11場",
+      "distance": "1200",
       "course": "沙田",
-      "class_name": "二級賽",
-      "track_feature": "標準賽道",
+      "class_name": "讓賽",
+      "track_feature": "\"C\" 賽道",
       "runners": [
         {
           "no": 1,
