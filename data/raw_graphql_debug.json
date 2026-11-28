@@ -1,6 +1,6 @@
 {
   "total_races": 24,
-  "elapsed_seconds": 56.33,
+  "elapsed_seconds": 62.65,
   "racecard_summary": [
     {
       "race_no": 1,
@@ -67,21 +67,21 @@
     {
       "race_label": "第3場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/3",
-      "graphql_count": 0,
+      "graphql_count": 3,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "第4場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/4",
-      "graphql_count": 2,
+      "graphql_count": 0,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "第5場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/5",
-      "graphql_count": 2,
+      "graphql_count": 0,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
@@ -95,7 +95,7 @@
     {
       "race_label": "第7場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/7",
-      "graphql_count": 5,
+      "graphql_count": 2,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
@@ -130,35 +130,35 @@
     {
       "race_label": "S1-1",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S1/1",
-      "graphql_count": 1,
+      "graphql_count": 0,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "S1-2",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S1/2",
-      "graphql_count": 4,
+      "graphql_count": 0,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "S1-3",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S1/3",
-      "graphql_count": 5,
+      "graphql_count": 0,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "S2-1",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S2/1",
-      "graphql_count": 2,
+      "graphql_count": 1,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "S2-2",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S2/2",
-      "graphql_count": 5,
+      "graphql_count": 0,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
@@ -179,21 +179,21 @@
     {
       "race_label": "S2-5",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S2/5",
-      "graphql_count": 5,
+      "graphql_count": 0,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "S2-6",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S2/6",
-      "graphql_count": 0,
+      "graphql_count": 1,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "S2-7",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S2/7",
-      "graphql_count": 0,
+      "graphql_count": 1,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
@@ -207,7 +207,7 @@
     {
       "race_label": "S2-9",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S2/9",
-      "graphql_count": 9,
+      "graphql_count": 2,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
