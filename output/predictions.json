@@ -1,9 +1,11 @@
 {
   "race_date": "2026/11/29",
-  "fetched_at_hkt": "2026-11-28T08:11:43.548302+08:00",
+  "fetched_at_hkt": "2026-11-28T08:16:49.184482+08:00",
   "races": [
     {
+      "race_type": "local",
       "race_no": 1,
+      "race_label": "第1場",
       "course": "沙田",
       "class_name": "讓賽",
       "distance": "1400",
@@ -236,7 +238,9 @@
       ]
     },
     {
+      "race_type": "local",
       "race_no": 2,
+      "race_label": "第2場",
       "course": "沙田",
       "class_name": "讓賽",
       "distance": "1200",
@@ -437,7 +441,9 @@
       ]
     },
     {
+      "race_type": "local",
       "race_no": 3,
+      "race_label": "第3場",
       "course": "沙田",
       "class_name": "讓賽",
       "distance": "1200",
@@ -638,7 +644,9 @@
       ]
     },
     {
+      "race_type": "local",
       "race_no": 4,
+      "race_label": "第4場",
       "course": "沙田",
       "class_name": "讓賽",
       "distance": "1400",
@@ -871,7 +879,9 @@
       ]
     },
     {
+      "race_type": "local",
       "race_no": 5,
+      "race_label": "第5場",
       "course": "沙田",
       "class_name": "讓賽",
       "distance": "1000",
@@ -1040,7 +1050,9 @@
       ]
     },
     {
+      "race_type": "local",
       "race_no": 6,
+      "race_label": "第6場",
       "course": "沙田",
       "class_name": "讓賽",
       "distance": "1600",
@@ -1273,7 +1285,9 @@
       ]
     },
     {
+      "race_type": "local",
       "race_no": 7,
+      "race_label": "第7場",
       "course": "沙田",
       "class_name": "讓賽",
       "distance": "1600",
@@ -1490,7 +1504,9 @@
       ]
     },
     {
+      "race_type": "local",
       "race_no": 8,
+      "race_label": "第8場",
       "course": "沙田",
       "class_name": "讓賽",
       "distance": "1200",
@@ -1691,7 +1707,9 @@
       ]
     },
     {
+      "race_type": "local",
       "race_no": 9,
+      "race_label": "第9場",
       "course": "沙田",
       "class_name": "讓賽",
       "distance": "1600",
@@ -1924,7 +1942,9 @@
       ]
     },
     {
+      "race_type": "local",
       "race_no": 10,
+      "race_label": "第10場",
       "course": "沙田",
       "class_name": "讓賽",
       "distance": "1400",
@@ -2157,7 +2177,9 @@
       ]
     },
     {
+      "race_type": "local",
       "race_no": 11,
+      "race_label": "第11場",
       "course": "沙田",
       "class_name": "讓賽",
       "distance": "1200",
