@@ -58,7 +58,6 @@ def build_overseas_aspx_url(
 
 
 def parse_simulcast_spec(spec_str: str) -> dict[str, list[int]]:
-  """解析如 'S1:1-3,S2:1-9,S3:1' 的指定海外場次清單。"""
   result: dict[str, list[int]] = {}
   if not spec_str.strip():
     return result
@@ -108,12 +107,9 @@ def clean_person_name(raw_text: str, default: str = "N/A") -> str:
 
 
 def parse_combined_horse_jt(text: str) -> tuple[str, str, str]:
-  """從合併字串（例如 '登天橋騎薛恩練白敬雅' 或 '暖火追昔騎郎馨寧 (a)練莫敦'）拆出馬名、騎師、練馬師。"""
+  """從合併字串（例如 '登天橋騎薛恩練白敬雅'）拆出馬名、騎師、練馬師。"""
   cleaned = re.sub(r"\s+", " ", text or "").strip()
-  m = re.match(
-      r"^(.+?)\s*騎\s*(.+?)\s*練\s*(.+)$",
-      cleaned,
-  )
+  m = re.match(r"^(.+?)\s*騎\s*(.+?)\s*練\s*(.+)$", cleaned)
   if m:
     horse = re.sub(r"\s*\([a-zA-Z]+\)\s*$", "", m.group(1)).strip()
     jockey = clean_person_name(m.group(2), "N/A")
@@ -125,16 +121,17 @@ def parse_combined_horse_jt(text: str) -> tuple[str, str, str]:
 
 
 def infer_running_style(
-    recent_runs: str, draw: int, distance_str: str
+    recent_runs: str, draw: int | None, distance_str: str
 ) -> str:
   runs = [int(x) for x in re.findall(r"\b\d+\b", recent_runs.replace("/", " "))]
   dist = safe_int(distance_str, 1400)
+  d_val = draw if isinstance(draw, int) and 1 <= draw <= 24 else 7
 
   if runs:
     recent_3 = runs[:3]
     avg_pos = sum(recent_3) / len(recent_3)
     best_pos = min(recent_3)
-    if best_pos == 1 and draw <= 4 and dist <= 1400:
+    if best_pos == 1 and d_val <= 4 and dist <= 1400:
       return "領放"
     if avg_pos <= 4.0:
       return "前置機動"
@@ -142,11 +139,11 @@ def infer_running_style(
       return "居中順走"
     return "後上"
 
-  if draw <= 2 and dist <= 1200:
+  if d_val <= 2 and dist <= 1200:
     return "領放"
-  if draw <= 6:
+  if d_val <= 6:
     return "前置機動"
-  if draw <= 10:
+  if d_val <= 10:
     return "居中順走"
   return "後上"
 
@@ -206,7 +203,6 @@ async def detect_meeting_params(page: Page) -> tuple[str, str]:
 def extract_overseas_meta_from_text(
     full_text: str, s_code: str, race_no: int
 ) -> dict[str, str]:
-  """從海外賽事頁面全文擷取馬場、途程、班次與跑道特色。"""
   flat = re.sub(r"\s+", " ", full_text or "")
   meta = {
       "distance": "",
@@ -513,10 +509,20 @@ async def parse_runners_from_dom(
 
 
 def extract_runners_from_bet_graphql(
-    node: Any, collected: dict[int, dict[str, Any]]
+    node: Any,
+    collected: dict[int, dict[str, Any]],
+    race_meta: dict[str, str] | None = None,
 ) -> None:
-  """從 bet.hkjc.com GraphQL 回應提取出賽馬匹、檔位、負磅、騎師、練馬師及獨贏賠率。"""
+  """從 bet.hkjc.com GraphQL 回應提取出賽馬匹、檔位、負磅、騎練、途程及獨贏賠率。"""
   if isinstance(node, dict):
+    if race_meta is not None:
+      dist_v = node.get("distance")
+      if isinstance(dist_v, (int, float)) and 800 <= int(dist_v) <= 4000:
+        race_meta["distance"] = str(int(dist_v))
+      cls_v = node.get("raceClassCh") or node.get("classNameCh")
+      if isinstance(cls_v, str) and cls_v.strip():
+        race_meta["class_name"] = cls_v.strip()
+
     no_val = None
     for k in ("runnerNo", "horseNo", "clothNo", "no"):
       if k in node and node[k] is not None:
@@ -618,10 +624,10 @@ def extract_runners_from_bet_graphql(
               break
 
     for v in node.values():
-      extract_runners_from_bet_graphql(v, collected)
+      extract_runners_from_bet_graphql(v, collected, race_meta)
   elif isinstance(node, list):
     for item in node:
-      extract_runners_from_bet_graphql(item, collected)
+      extract_runners_from_bet_graphql(item, collected, race_meta)
 
 
 async def fetch_overseas_race_via_bet_page(
@@ -630,10 +636,12 @@ async def fetch_overseas_race_via_bet_page(
     s_code: str,
     r_no: int,
 ) -> tuple[dict[str, Any] | None, str]:
-  """從 bet.hkjc.com 擷取海外轉播排位、檔位、負磅、騎練、途程與賠率。"""
+  """從 bet.hkjc.com 擷取海外轉播排位、真實檔位、負磅、騎練、途程與賠率。"""
   date_hyphen = race_date.replace("/", "-")
-  bet_url = f"{BET_WP_BASE_URL}/{date_hyphen}/{s_code.upper()}/{r_no}"
+  s_upper = s_code.upper()
+  bet_url = f"{BET_WP_BASE_URL}/{date_hyphen}/{s_upper}/{r_no}"
   collected: dict[int, dict[str, Any]] = {}
+  gql_meta: dict[str, str] = {}
   page = await context.new_page()
 
   async def _handle_resp(resp: Response) -> None:
@@ -642,21 +650,29 @@ async def fetch_overseas_race_via_bet_page(
     try:
       payload = await resp.json()
       if isinstance(payload, dict):
-        extract_runners_from_bet_graphql(payload, collected)
+        extract_runners_from_bet_graphql(payload, collected, gql_meta)
     except Exception:
       pass
 
   def on_resp(resp: Response) -> None:
     asyncio.create_task(_handle_resp(resp))
 
+  page.on("response", on_resp)
   full_text = ""
   try:
-    await page.goto(bet_url, wait_until="domcontentloaded", timeout=14000)
-    await page.wait_for_timeout(1200)
+    await page.goto(bet_url, wait_until="domcontentloaded", timeout=15000)
+    await page.wait_for_timeout(1300)
+
+    # 檢查頁面是否被重定向至其他日期或組別（避免 S2/S4 誤抓成 S1）
+    final_url = page.url.upper()
+    if f"/{s_upper}/{r_no}" not in final_url or date_hyphen not in final_url:
+      return None, f"redirected:{page.url}"
+
     full_text = await page.evaluate(
         "() => document.body ? document.body.innerText : ''"
     )
 
+    # 若 GraphQL 尚未覆蓋全部馬匹，從結構化表格補充
     rows_data = await page.evaluate("""
       () => Array.from(document.querySelectorAll("tr, [role='row']")).map(r => {
         const cells = Array.from(r.querySelectorAll("th, td, [role='cell']"));
@@ -698,24 +714,16 @@ async def fetch_overseas_race_via_bet_page(
       if not h_name or "(備)" in h_name or re.fullmatch(r"[\d.]+", h_name):
         continue
 
+      # 僅從明確獨立欄位讀取檔位與負磅，絕不誤把馬號當作檔位
       draw_val = 7
-      m_draw = re.search(r"\b(?:檔|檔位)?\s*(\d{1,2})\s*(?:磅|\b)", line)
-      if m_draw:
-        d_cand = int(m_draw.group(1))
-        if 1 <= d_cand <= 18:
-          draw_val = d_cand
-
       weight_val = 125.0
-      m_wt = re.search(r"\b(1[0-4]\d)\b", line)
-      if m_wt:
-        weight_val = float(m_wt.group(1))
-
-      odds_val = None
-      m_odds = re.search(r"\b(\d{1,3}\.\d{1,2})\b", line)
-      if m_odds:
-        o_cand = float(m_odds.group(1))
-        if 1.1 <= o_cand <= 500.0:
-          odds_val = o_cand
+      for cell in cells[2:]:
+        if re.fullmatch(r"\d{1,2}", cell):
+          cand_d = int(cell)
+          if 1 <= cand_d <= 20:
+            draw_val = cand_d
+        elif re.fullmatch(r"1[0-4]\d", cell):
+          weight_val = float(cell)
 
       if h_no not in collected:
         collected[h_no] = {
@@ -732,7 +740,7 @@ async def fetch_overseas_race_via_bet_page(
             "running_style": "前置機動",
             "body_weight": "N/A",
             "bw_display": "N/A",
-            "win_odds": odds_val,
+            "win_odds": None,
         }
       else:
         collected[h_no]["name"] = h_name
@@ -740,8 +748,6 @@ async def fetch_overseas_race_via_bet_page(
           collected[h_no]["jockey"] = h_jockey
         if h_trainer != "N/A":
           collected[h_no]["trainer"] = h_trainer
-        if odds_val is not None and collected[h_no]["win_odds"] is None:
-          collected[h_no]["win_odds"] = odds_val
   except Exception:
     pass
   finally:
@@ -751,7 +757,9 @@ async def fetch_overseas_race_via_bet_page(
   if len(collected) < 4:
     return None, bet_url
 
-  meta = extract_overseas_meta_from_text(full_text, s_code.upper(), r_no)
+  meta = extract_overseas_meta_from_text(full_text, s_upper, r_no)
+  meta.update({k: v for k, v in gql_meta.items() if v})
+
   runners = []
   for k in sorted(collected.keys()):
     r = collected[k]
@@ -763,12 +771,12 @@ async def fetch_overseas_race_via_bet_page(
   return (
       {
           "race_type": "overseas",
-          "venue_code": s_code.upper(),
+          "venue_code": s_upper,
           "race_date_used": race_date,
           "race_no": r_no,
-          "race_label": f"{s_code.upper()}-{r_no}",
+          "race_label": f"{s_upper}-{r_no}",
           "distance": meta.get("distance", ""),
-          "course": meta.get("course", f"海外轉播 ({s_code.upper()})"),
+          "course": meta.get("course", f"海外轉播 ({s_upper})"),
           "class_name": meta.get("class_name", "海外賽事"),
           "track_feature": meta.get("track_feature", "草地跑道"),
           "runners": runners,
@@ -961,24 +969,6 @@ async def fetch_win_odds_worker(
       await page.wait_for_timeout(650)
       if graphql_hits and len(odds_map) < len(runner_names):
         await page.wait_for_timeout(550)
-
-      if len(odds_map) < len(runner_names) and graphql_hits:
-        dom_rows = await page.evaluate("""
-          () => {
-            const rows = Array.from(document.querySelectorAll("tr, [role='row']"));
-            return rows.map(r => r.innerText.replace(/\\s+/g, " ").trim()).filter(Boolean);
-          }
-          """)
-        for row_txt in dom_rows:
-          for h_no, h_name in runner_names.items():
-            if h_no in odds_map or not h_name or h_name not in row_txt:
-              continue
-            after_name = row_txt.split(h_name, 1)[1]
-            m = re.search(r"\b(\d{1,3}\.\d{1,2})\b", after_name)
-            if m:
-              val = safe_float(m.group(1), None)
-              if val is not None and 1.1 <= val <= 500.0:
-                odds_map[h_no] = val
     except Exception as exc:
       print(f"{race_label} odds fetch warning: {exc}")
     finally:
@@ -1127,8 +1117,15 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
         ]
         group_results = await asyncio.gather(*group_tasks)
 
+        seen_overseas_sigs: set[tuple[str, int]] = set()
         for g_races, g_diag in group_results:
           overseas_debug.append(g_diag)
+          if not g_races:
+            continue
+          sig = (g_races[0]["runners"][0]["name"], len(g_races[0]["runners"]))
+          if sig in seen_overseas_sigs:
+            continue
+          seen_overseas_sigs.add(sig)
           for item in g_races:
             races.append(item)
             print(
