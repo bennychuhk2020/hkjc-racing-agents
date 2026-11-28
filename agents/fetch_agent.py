@@ -4,6 +4,7 @@ import asyncio
 import json
 import os
 import re
+import time
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
@@ -202,8 +203,8 @@ async def discover_simulcast_meetings(
   url = build_overseas_url(race_date=race_date, simulcast_code="S1", race_no=1)
   discovered: dict[str, set[int]] = {}
   try:
-    await page.goto(url, wait_until="domcontentloaded", timeout=30000)
-    await page.wait_for_timeout(1200)
+    await page.goto(url, wait_until="domcontentloaded", timeout=20000)
+    await page.wait_for_selector("table, a[href*='Simulcast']", timeout=6000)
     links_and_text = await page.evaluate("""
       () => {
         const hrefs = Array.from(document.querySelectorAll("a[href]")).map(a => a.href);
@@ -220,7 +221,6 @@ async def discover_simulcast_meetings(
             int(m_r.group(1)) if m_r else 1
         )
 
-    # 同時掃描頁面文字中的 S1-1, S2-9 等場次標籤
     for m_tag in re.finditer(
         r"\b(S\d+)\s*[-－]\s*(\d{1,2})\b",
         links_and_text.get("body", ""),
@@ -275,7 +275,6 @@ def extract_race_meta(
     meta["distance"] = dist_match.group(1)
 
   if simulcast_code:
-    # 嘗試提取海外馬場名稱（例如 雅士谷、東京、阪神、沙丘園、美丹 等）
     venue_match = re.search(
         r"(?:馬場|場地|轉播)\s*[:：]?\s*([^\s｜|（(]{2,10})", snippet
     )
@@ -396,7 +395,6 @@ async def parse_runners_from_dom(
       if not re.fullmatch(r"\d{1,2}", raw_no):
         continue
       horse_no = int(raw_no)
-      # 海外賽事有時多達 24 匹出賽馬
       if not (1 <= horse_no <= 24) or horse_no in seen_nos:
         continue
 
@@ -512,6 +510,45 @@ async def parse_runners_from_dom(
   return runners, meta, eval_result
 
 
+async def fetch_overseas_race_worker(
+    sem: asyncio.Semaphore,
+    context: BrowserContext,
+    race_date: str,
+    s_code: str,
+    r_no: int,
+) -> dict[str, Any] | None:
+  """並發抓取單場海外轉播排位表。"""
+  s_url = build_overseas_url(
+      race_date=race_date, simulcast_code=s_code, race_no=r_no
+  )
+  async with sem:
+    page = await context.new_page()
+    try:
+      await page.goto(s_url, wait_until="domcontentloaded", timeout=18000)
+      await page.wait_for_selector("table", timeout=6000)
+      runners, meta, _ = await parse_runners_from_dom(
+          page, s_code, race_no=r_no, simulcast_code=s_code
+      )
+      if not runners:
+        return None
+      race_label = f"{s_code}-{r_no}"
+      return {
+          "race_type": "overseas",
+          "venue_code": s_code,
+          "race_no": r_no,
+          "race_label": race_label,
+          "distance": meta.get("distance", ""),
+          "course": meta.get("course", f"海外轉播 ({s_code})"),
+          "class_name": meta.get("class_name", "海外賽事"),
+          "track_feature": meta.get("track_feature", "草地跑道"),
+          "runners": runners,
+      }
+    except Exception:
+      return None
+    finally:
+      await page.close()
+
+
 def extract_odds_from_json_tree(node: Any, odds_map: dict[int, float]) -> None:
   if isinstance(node, dict):
     no_val = None
@@ -569,7 +606,7 @@ async def fetch_win_odds_worker(
     race_label: str,
     runner_names: dict[int, str],
 ) -> tuple[str, dict[int, float], dict[str, Any]]:
-  """支援本地 (ST/HV) 及海外轉播 (S1/S2/S3) 的並發獨贏賠率抓取。"""
+  """並發抓取獨贏賠率；若未開盤則快速跳過多餘等待。"""
   date_hyphen = race_date.replace("/", "-")
   odds_url = f"{BET_WP_BASE_URL}/{date_hyphen}/{venue_code}/{race_no}"
   odds_map: dict[int, float] = {}
@@ -585,10 +622,13 @@ async def fetch_win_odds_worker(
 
     page.on("response", on_resp)
     try:
-      await page.goto(odds_url, wait_until="domcontentloaded", timeout=20000)
-      await page.wait_for_timeout(1600)
+      await page.goto(odds_url, wait_until="domcontentloaded", timeout=15000)
+      await page.wait_for_timeout(700)
+      # 若已有 GraphQL 賠率回應但未齊全，再多等 600ms；若完全未開盤則不浪費時間
+      if graphql_hits and len(odds_map) < len(runner_names):
+        await page.wait_for_timeout(600)
 
-      if len(odds_map) < len(runner_names):
+      if len(odds_map) < len(runner_names) and graphql_hits:
         dom_rows = await page.evaluate("""
           () => {
             const rows = Array.from(document.querySelectorAll("tr, [role='row']"));
@@ -625,6 +665,11 @@ async def fetch_win_odds_worker(
 
 
 async def fetch_hkjc_race_data_async() -> dict[str, Any]:
+  t0 = time.perf_counter()
+
+  def elapsed() -> str:
+    return f"+{time.perf_counter() - t0:.1f}s"
+
   races: list[dict[str, Any]] = []
   debug_summary: list[dict[str, Any]] = []
   odds_diagnostics: list[dict[str, Any]] = []
@@ -667,13 +712,14 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
           course=os.getenv("HKJC_RACE_COURSE", "").strip().upper(),
           race_no=1,
       )
-      print(f"Loading initial local racecard: {initial_url}")
-      await page.goto(initial_url, wait_until="domcontentloaded", timeout=40000)
-      await page.wait_for_selector("table", timeout=12000)
-      await page.wait_for_timeout(500)
+      print(f"[{elapsed()}] Loading initial local racecard: {initial_url}")
+      await page.goto(initial_url, wait_until="domcontentloaded", timeout=30000)
+      await page.wait_for_selector("table", timeout=10000)
 
       race_date, course = await detect_meeting_params(page)
-      print(f"Detected meeting -> race_date={race_date}, local_course={course}")
+      print(
+          f"[{elapsed()}] Detected meeting -> race_date={race_date}, local_course={course}"
+      )
 
       local_first_runner = ""
       for race_no in range(1, max_local_races + 1):
@@ -682,10 +728,9 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
         )
         if race_no > 1:
           await page.goto(
-              target_url, wait_until="domcontentloaded", timeout=35000
+              target_url, wait_until="domcontentloaded", timeout=25000
           )
-          await page.wait_for_selector("table", timeout=10000)
-          await page.wait_for_timeout(350)
+          await page.wait_for_selector("table", timeout=8000)
 
         runners, meta, eval_info = await parse_runners_from_dom(
             page, course, race_no=race_no
@@ -694,6 +739,12 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
           break
         if race_no == 1:
           local_first_runner = runners[0]["name"]
+          debug_summary.append({
+              "race_no": race_no,
+              "url": eval_info.get("url"),
+              "meta": meta,
+              "runner_count": len(runners),
+          })
         elif runners[0]["name"] == local_first_runner:
           break
 
@@ -709,66 +760,43 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
             "track_feature": meta.get("track_feature", "標準賽道"),
             "runners": runners,
         })
-        print(f"[Local] {race_label}: extracted {len(runners)} runners.")
+        print(
+            f"[{elapsed()}] [Local] {race_label}: extracted {len(runners)} runners."
+        )
 
-      # 2. 抓取海外轉播賽馬排位表 (S1-1..S1-3, S2-1..S2-9, S3-1...)
+      sem = asyncio.Semaphore(concurrency)
+
+      # 2. 並發抓取海外轉播賽馬排位表 (S1-1..S1-3, S2-1..S2-9, S3-1...)
       if include_overseas and race_date:
         target_simulcasts = (
             simulcast_spec
             if simulcast_spec
             else await discover_simulcast_meetings(page, race_date)
         )
-        print(f"Target overseas simulcasts: {target_simulcasts}")
+        print(
+            f"[{elapsed()}] Target overseas simulcasts: {target_simulcasts}"
+        )
 
-        for s_code, race_nos in target_simulcasts.items():
-          first_overseas_runner = ""
-          for r_no in race_nos:
-            s_url = build_overseas_url(
-                race_date=race_date, simulcast_code=s_code, race_no=r_no
-            )
-            try:
-              await page.goto(
-                  s_url, wait_until="domcontentloaded", timeout=30000
+        overseas_tasks = [
+            fetch_overseas_race_worker(sem, context, race_date, s_code, r_no)
+            for s_code, race_nos in target_simulcasts.items()
+            for r_no in race_nos
+        ]
+        if overseas_tasks:
+          overseas_results = await asyncio.gather(*overseas_tasks)
+          for item in overseas_results:
+            if item is not None:
+              races.append(item)
+              print(
+                  f"[{elapsed()}] [Overseas] {item['race_label']}: extracted {len(item['runners'])} runners."
               )
-              await page.wait_for_selector("table", timeout=8000)
-              await page.wait_for_timeout(350)
-            except Exception:
-              print(f"[Overseas] {s_code}-{r_no} page unavailable, skipping.")
-              break
-
-            runners, meta, _ = await parse_runners_from_dom(
-                page, s_code, race_no=r_no, simulcast_code=s_code
-            )
-            if not runners:
-              break
-            if not first_overseas_runner:
-              first_overseas_runner = runners[0]["name"]
-            elif r_no > race_nos[0] and runners[0]["name"] == first_overseas_runner:
-              break
-
-            race_label = f"{s_code}-{r_no}"
-            races.append({
-                "race_type": "overseas",
-                "venue_code": s_code,
-                "race_no": r_no,
-                "race_label": race_label,
-                "distance": meta.get("distance", ""),
-                "course": meta.get("course", f"海外轉播 ({s_code})"),
-                "class_name": meta.get("class_name", "海外賽事"),
-                "track_feature": meta.get("track_feature", "草地跑道"),
-                "runners": runners,
-            })
-            print(
-                f"[Overseas] {race_label}: extracted {len(runners)} runners."
-            )
 
       await page.close()
 
       # 3. 並發抓取所有本地 + 海外場次實時獨贏賠率
       if race_date and races:
-        sem = asyncio.Semaphore(concurrency)
         print(
-            f"Fetching live win odds concurrently for {len(races)} races (workers={concurrency})..."
+            f"[{elapsed()}] Fetching live win odds concurrently for {len(races)} races (workers={concurrency})..."
         )
         odds_tasks = [
             fetch_win_odds_worker(
@@ -792,9 +820,6 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
           for r in race_obj["runners"]:
             if r["no"] in o_map:
               r["win_odds"] = o_map[r["no"]]
-          print(
-              f"{lbl} odds: matched {len(o_map)}/{len(race_obj['runners'])} runners."
-          )
     finally:
       await browser.close()
 
@@ -803,6 +828,8 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
       json.dumps(
           {
               "total_races": len(races),
+              "elapsed_seconds": round(time.perf_counter() - t0, 2),
+              "racecard_summary": debug_summary,
               "odds_diagnostics": odds_diagnostics,
           },
           ensure_ascii=False,
@@ -826,7 +853,9 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
       json.dumps(result, ensure_ascii=False, indent=2),
       encoding="utf-8",
   )
-  print(f"Saved {len(races)} total races (local + overseas) to {OUTPUT_DATA_PATH}")
+  print(
+      f"[{elapsed()}] Saved {len(races)} total races to {OUTPUT_DATA_PATH}"
+  )
   return result
 
 
