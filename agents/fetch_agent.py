@@ -19,9 +19,8 @@ HKT = timezone(timedelta(hours=8))
 LOCAL_RACECARD_URL = (
     "https://racing.hkjc.com/zh-hk/local/information/racecard"
 )
-OVERSEAS_RACECARD_URL = (
-    "https://racing.hkjc.com/zh-hk/overseas/information/racecard"
-)
+OVERSEAS_RACECARD_URL = "https://racing.hkjc.com/zh-hk/overseas/race-card"
+OVERSEAS_HUB_URL = "https://racing.hkjc.com/zh-hk/overseas/"
 BET_WP_BASE_URL = "https://bet.hkjc.com/ch/racing/wp"
 
 BLOCKED_RESOURCE_TYPES = {"image", "media", "font", "stylesheet"}
@@ -55,11 +54,12 @@ def build_local_url(
 def build_overseas_url(
     race_date: str = "", simulcast_code: str = "S1", race_no: int | None = None
 ) -> str:
+  compact_date = re.sub(r"[^\d]", "", race_date or "")
   params = []
-  if race_date:
-    params.append(f"raceDate={race_date}")
+  if compact_date:
+    params.append(f"RaceDate={compact_date}")
   if simulcast_code:
-    params.append(f"Simulcast={simulcast_code}")
+    params.append(f"Racecourse={simulcast_code.upper()}")
   if race_no is not None:
     params.append(f"RaceNo={race_no}")
   if not params:
@@ -198,42 +198,66 @@ async def detect_meeting_params(page: Page) -> tuple[str, str]:
 
 async def discover_simulcast_meetings(
     page: Page, race_date: str
-) -> dict[str, list[int]]:
-  """自動偵測 HKJC 海外賽事頁面中的所有轉播組別（例如 S1, S2, S3）及對應場次編號。"""
-  url = build_overseas_url(race_date=race_date, simulcast_code="S1", race_no=1)
-  discovered: dict[str, set[int]] = {}
-  try:
-    await page.goto(url, wait_until="domcontentloaded", timeout=20000)
-    await page.wait_for_selector("table, a[href*='Simulcast']", timeout=6000)
-    links_and_text = await page.evaluate("""
-      () => {
-        const hrefs = Array.from(document.querySelectorAll("a[href]")).map(a => a.href);
-        const body = document.body ? document.body.innerText.slice(0, 4000) : "";
-        return { hrefs, body };
-      }
-    """)
-    for href in links_and_text.get("hrefs", []):
-      m_s = re.search(r"Simulcast=(S\d+)", href, re.I)
-      m_r = re.search(r"RaceNo=(\d+)", href, re.I)
-      if m_s:
-        s_code = m_s.group(1).upper()
-        discovered.setdefault(s_code, set()).add(
-            int(m_r.group(1)) if m_r else 1
-        )
+) -> dict[str, tuple[str, list[int]]]:
+  """自動偵測當日及鄰近日期的 HKJC 海外轉播組別（例如 S1, S2, S3）與場次。"""
+  discovered: dict[str, tuple[str, set[int]]] = {}
 
-    for m_tag in re.finditer(
-        r"\b(S\d+)\s*[-－]\s*(\d{1,2})\b",
-        links_and_text.get("body", ""),
-        re.I,
-    ):
-      s_code = m_tag.group(1).upper()
-      r_no = int(m_tag.group(2))
-      if 1 <= r_no <= 15:
-        discovered.setdefault(s_code, set()).add(r_no)
-  except Exception as exc:
-    print(f"Simulcast discovery note: {exc}")
+  candidate_dates: list[str] = []
+  if race_date:
+    candidate_dates.append(race_date)
+    try:
+      dt = datetime.strptime(race_date, "%Y/%m/%d")
+      candidate_dates.append((dt - timedelta(days=1)).strftime("%Y/%m/%d"))
+      candidate_dates.append((dt + timedelta(days=1)).strftime("%Y/%m/%d"))
+    except ValueError:
+      pass
 
-  return {k: sorted(v) for k, v in sorted(discovered.items())}
+  for cand_date in candidate_dates:
+    compact = re.sub(r"[^\d]", "", cand_date)
+    hub_url = f"{OVERSEAS_HUB_URL}?RaceDate={compact}"
+    try:
+      await page.goto(hub_url, wait_until="domcontentloaded", timeout=15000)
+      await page.wait_for_selector(
+          "a[href*='Racecourse=S'], a[href*='Simulcast=S']", timeout=4500
+      )
+      info = await page.evaluate("""
+        () => ({
+          hrefs: Array.from(document.querySelectorAll("a[href]")).map(a => a.href),
+          body: document.body ? document.body.innerText.slice(0, 5000) : ""
+        })
+      """)
+
+      for href in info.get("hrefs", []):
+        m_s = re.search(r"(?:Racecourse|Simulcast)=(S\d+)", href, re.I)
+        m_r = re.search(r"RaceNo=(\d+)", href, re.I)
+        m_d = re.search(r"RaceDate=(\d{8})", href, re.I)
+        if m_s:
+          s_code = m_s.group(1).upper()
+          d_str = (
+              f"{m_d.group(1)[:4]}/{m_d.group(1)[4:6]}/{m_d.group(1)[6:8]}"
+              if m_d
+              else cand_date
+          )
+          if s_code not in discovered:
+            discovered[s_code] = (d_str, set())
+          discovered[s_code][1].add(int(m_r.group(1)) if m_r else 1)
+
+      for m_tag in re.finditer(
+          r"\b(S\d+)\s*[-－]\s*(\d{1,2})\b",
+          info.get("body", ""),
+          re.I,
+      ):
+        s_code = m_tag.group(1).upper()
+        r_no = int(m_tag.group(2))
+        if 1 <= r_no <= 15:
+          discovered.setdefault(s_code, (cand_date, set()))[1].add(r_no)
+    except Exception:
+      continue
+
+  return {
+      k: (d_str, sorted(nos))
+      for k, (d_str, nos) in sorted(discovered.items())
+  }
 
 
 def extract_race_meta(
@@ -524,8 +548,8 @@ async def fetch_overseas_race_worker(
   async with sem:
     page = await context.new_page()
     try:
-      await page.goto(s_url, wait_until="domcontentloaded", timeout=18000)
-      await page.wait_for_selector("table", timeout=6000)
+      await page.goto(s_url, wait_until="domcontentloaded", timeout=15000)
+      await page.wait_for_selector("table", timeout=5000)
       runners, meta, _ = await parse_runners_from_dom(
           page, s_code, race_no=r_no, simulcast_code=s_code
       )
@@ -622,11 +646,10 @@ async def fetch_win_odds_worker(
 
     page.on("response", on_resp)
     try:
-      await page.goto(odds_url, wait_until="domcontentloaded", timeout=15000)
-      await page.wait_for_timeout(700)
-      # 若已有 GraphQL 賠率回應但未齊全，再多等 600ms；若完全未開盤則不浪費時間
+      await page.goto(odds_url, wait_until="domcontentloaded", timeout=14000)
+      await page.wait_for_timeout(650)
       if graphql_hits and len(odds_map) < len(runner_names):
-        await page.wait_for_timeout(600)
+        await page.wait_for_timeout(550)
 
       if len(odds_map) < len(runner_names) and graphql_hits:
         dom_rows = await page.evaluate("""
@@ -713,8 +736,8 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
           race_no=1,
       )
       print(f"[{elapsed()}] Loading initial local racecard: {initial_url}")
-      await page.goto(initial_url, wait_until="domcontentloaded", timeout=30000)
-      await page.wait_for_selector("table", timeout=10000)
+      await page.goto(initial_url, wait_until="domcontentloaded", timeout=25000)
+      await page.wait_for_selector("table", timeout=8000)
 
       race_date, course = await detect_meeting_params(page)
       print(
@@ -728,9 +751,9 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
         )
         if race_no > 1:
           await page.goto(
-              target_url, wait_until="domcontentloaded", timeout=25000
+              target_url, wait_until="domcontentloaded", timeout=20000
           )
-          await page.wait_for_selector("table", timeout=8000)
+          await page.wait_for_selector("table", timeout=6000)
 
         runners, meta, eval_info = await parse_runners_from_dom(
             page, course, race_no=race_no
@@ -768,20 +791,25 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
 
       # 2. 並發抓取海外轉播賽馬排位表 (S1-1..S1-3, S2-1..S2-9, S3-1...)
       if include_overseas and race_date:
-        target_simulcasts = (
-            simulcast_spec
-            if simulcast_spec
-            else await discover_simulcast_meetings(page, race_date)
-        )
-        print(
-            f"[{elapsed()}] Target overseas simulcasts: {target_simulcasts}"
-        )
+        if simulcast_spec:
+          overseas_tasks = [
+              fetch_overseas_race_worker(sem, context, race_date, s_code, r_no)
+              for s_code, race_nos in simulcast_spec.items()
+              for r_no in race_nos
+          ]
+        else:
+          discovered_map = await discover_simulcast_meetings(page, race_date)
+          print(
+              f"[{elapsed()}] Discovered overseas simulcasts: {discovered_map}"
+          )
+          overseas_tasks = [
+              fetch_overseas_race_worker(
+                  sem, context, s_date, s_code, r_no
+              )
+              for s_code, (s_date, race_nos) in discovered_map.items()
+              for r_no in race_nos
+          ]
 
-        overseas_tasks = [
-            fetch_overseas_race_worker(sem, context, race_date, s_code, r_no)
-            for s_code, race_nos in target_simulcasts.items()
-            for r_no in race_nos
-        ]
         if overseas_tasks:
           overseas_results = await asyncio.gather(*overseas_tasks)
           for item in overseas_results:
