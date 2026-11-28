@@ -98,6 +98,50 @@ def safe_int(value: Any, default: int) -> int:
   return int(round(val if val is not None else float(default)))
 
 
+def normalize_time_str(raw: Any) -> str:
+  """將各類時間字串正規化為 'HH:MM'（24小時制）。"""
+  if not raw:
+    return ""
+  s = str(raw).strip()
+  m_iso = re.search(r"T(\d{2}:\d{2})(?::\d{2})?", s)
+  if m_iso:
+    return m_iso.group(1)
+  m_ampm = re.search(r"\b(\d{1,2}):(\d{2})\s*(AM|PM)\b", s, re.I)
+  if m_ampm:
+    hh = int(m_ampm.group(1))
+    mm = int(m_ampm.group(2))
+    mer = m_ampm.group(3).upper()
+    if mer == "PM" and hh < 12:
+      hh += 12
+    elif mer == "AM" and hh == 12:
+      hh = 0
+    return f"{hh:02d}:{mm:02d}"
+  m_24 = re.search(r"\b([01]?\d|2[0-3]):([0-5]\d)\b", s)
+  if m_24:
+    return f"{int(m_24.group(1)):02d}:{m_24.group(2)}"
+  return ""
+
+
+def build_race_datetime_key(race: dict[str, Any]) -> tuple[datetime, int, int]:
+  """產生用於按日期與開跑時間排序的鍵值（未知時間排在當日較後位置）。"""
+  date_str = str(race.get("race_date_used") or race.get("race_date") or "")
+  date_str = date_str.replace("-", "/")
+  dt_base = datetime(2099, 12, 31, 23, 59, tzinfo=HKT)
+  m_d = re.fullmatch(r"(\d{4})/(\d{2})/(\d{2})", date_str)
+  if m_d:
+    y, m, d = int(m_d.group(1)), int(m_d.group(2)), int(m_d.group(3))
+    t_str = normalize_time_str(race.get("race_time") or race.get("race_datetime"))
+    if t_str:
+      hh, mm = map(int, t_str.split(":"))
+      dt_base = datetime(y, m, d, hh, mm, tzinfo=HKT)
+    else:
+      dt_base = datetime(y, m, d, 23, 50, tzinfo=HKT)
+
+  type_order = 0 if str(race.get("race_type", "")).lower() == "local" else 1
+  r_no = safe_int(race.get("race_no"), 99)
+  return (dt_base, type_order, r_no)
+
+
 def clean_person_name(raw_text: str, default: str = "N/A") -> str:
   cleaned = re.sub(r"\s+", " ", str(raw_text or "")).strip()
   if not cleaned or cleaned in {"-", "--", "N/A"}:
@@ -107,7 +151,6 @@ def clean_person_name(raw_text: str, default: str = "N/A") -> str:
 
 
 def parse_combined_horse_jt(text: str) -> tuple[str, str, str]:
-  """從合併字串（例如 '登天橋騎薛恩練白敬雅'）拆出馬名、騎師、練馬師。"""
   cleaned = re.sub(r"\s+", " ", text or "").strip()
   m = re.match(r"^(.+?)\s*騎\s*(.+?)\s*練\s*(.+)$", cleaned)
   if m:
@@ -123,7 +166,6 @@ def parse_combined_horse_jt(text: str) -> tuple[str, str, str]:
 def estimate_overseas_rating(
     horse_no: int, weight_lbs: float, draw: int
 ) -> float:
-  """當海外賽卡未提供官方評分時，按負磅、馬號與檔位推算具區分度的參考評分。"""
   weight_component = (weight_lbs - 120.0) * 1.15
   cloth_component = max(0.0, (15 - horse_no) * 0.45)
   draw_component = max(0.0, (9 - draw) * 0.25)
@@ -220,6 +262,7 @@ def extract_overseas_meta_from_text(
       "course": f"海外轉播 ({s_code})",
       "class_name": "海外賽事",
       "track_feature": "草地跑道",
+      "race_time": normalize_time_str(flat),
   }
 
   dist_m = re.search(r"(\d{3,4})\s*米", flat)
@@ -264,7 +307,7 @@ def extract_race_meta(
 
   anchor = re.search(rf"第\s*{race_no}\s*場", full_text)
   snippet = (
-      full_text[anchor.start() : anchor.start() + 1000]
+      full_text[anchor.start() : anchor.start() + 1200]
       if anchor
       else full_text[:3500]
   )
@@ -274,6 +317,7 @@ def extract_race_meta(
       "course": "跑馬地" if default_course == "HV" else "沙田",
       "class_name": "N/A",
       "track_feature": "標準賽道",
+      "race_time": normalize_time_str(snippet),
   }
 
   dist_match = re.search(r"(\d{3,4})\s*米", snippet)
@@ -449,7 +493,9 @@ async def parse_runners_from_dom(
         rating = fallback_rating
 
       rating_display = (
-          f"{rating:.1f}" if simulcast_code and "rating" not in col_map else f"{int(round(rating))}"
+          f"{rating:.1f}"
+          if simulcast_code and "rating" not in col_map
+          else f"{int(round(rating))}"
       )
 
       body_weight: int | str = "N/A"
@@ -530,6 +576,50 @@ def _extract_odds_number(raw_o: Any) -> float | None:
   return None
 
 
+def extract_odds_from_json_tree(node: Any, odds_map: dict[int, float]) -> None:
+  """支援 runner/horse 物件與 HKJC pmPools (oddsType == 'WIN', oddsNodes) 兩種結構。"""
+  if isinstance(node, dict):
+    # HKJC GraphQL pmPools 獨贏彩池格式
+    if str(node.get("oddsType", "")).upper() == "WIN" and isinstance(
+        node.get("oddsNodes"), list
+    ):
+      for n_item in node["oddsNodes"]:
+        if not isinstance(n_item, dict):
+          continue
+        comb = str(n_item.get("combString") or "").strip()
+        if re.fullmatch(r"\d{1,2}", comb):
+          h_no = int(comb)
+          o_val = _extract_odds_number(
+              n_item.get("oddsValue")
+              if "oddsValue" in n_item
+              else n_item.get("winOdds")
+          )
+          if 1 <= h_no <= 24 and o_val is not None:
+            odds_map[h_no] = o_val
+
+    no_val = None
+    for k in ("runnerNo", "horseNo", "clothNo"):
+      if k in node and node[k] is not None:
+        cand = safe_int(node[k], -1)
+        if 1 <= cand <= 24:
+          no_val = cand
+          break
+
+    if no_val is not None:
+      for ok in ("winOdds", "currentOdds", "wpOdds", "odds"):
+        if ok in node and node[ok] not in (None, "", "-", "---"):
+          o_float = _extract_odds_number(node[ok])
+          if o_float is not None:
+            odds_map[no_val] = o_float
+            break
+
+    for v in node.values():
+      extract_odds_from_json_tree(v, odds_map)
+  elif isinstance(node, list):
+    for item in node:
+      extract_odds_from_json_tree(item, odds_map)
+
+
 def extract_runners_from_bet_graphql(
     node: Any,
     collected: dict[int, dict[str, Any]],
@@ -543,6 +633,22 @@ def extract_runners_from_bet_graphql(
       cls_v = node.get("raceClassCh") or node.get("classNameCh")
       if isinstance(cls_v, str) and cls_v.strip():
         race_meta["class_name"] = cls_v.strip()
+      for tk in ("raceTime", "postTime", "startTime", "raceStartTime"):
+        t_norm = normalize_time_str(node.get(tk))
+        if t_norm and not race_meta.get("race_time"):
+          race_meta["race_time"] = t_norm
+
+    if str(node.get("oddsType", "")).upper() == "WIN" and isinstance(
+        node.get("oddsNodes"), list
+    ):
+      for n_item in node["oddsNodes"]:
+        if isinstance(n_item, dict) and re.fullmatch(
+            r"\d{1,2}", str(n_item.get("combString") or "").strip()
+        ):
+          h_no = int(str(n_item["combString"]).strip())
+          o_val = _extract_odds_number(n_item.get("oddsValue"))
+          if 1 <= h_no <= 24 and o_val is not None and h_no in collected:
+            collected[h_no]["win_odds"] = o_val
 
     no_val = None
     for k in ("runnerNo", "horseNo", "clothNo", "no"):
@@ -785,6 +891,7 @@ async def fetch_overseas_race_via_bet_page(
           "race_type": "overseas",
           "venue_code": s_upper,
           "race_date_used": race_date,
+          "race_time": meta.get("race_time", ""),
           "race_no": r_no,
           "race_label": f"{s_upper}-{r_no}",
           "distance": meta.get("distance", ""),
@@ -824,6 +931,7 @@ async def try_fetch_single_overseas_race(
                   "race_type": "overseas",
                   "venue_code": s_code.upper(),
                   "race_date_used": race_date,
+                  "race_time": meta.get("race_time", ""),
                   "race_no": r_no,
                   "race_label": f"{s_code.upper()}-{r_no}",
                   "distance": meta.get("distance", ""),
@@ -903,41 +1011,22 @@ async def fetch_overseas_group_worker(
     return group_races, diag
 
 
-def extract_odds_from_json_tree(node: Any, odds_map: dict[int, float]) -> None:
-  if isinstance(node, dict):
-    no_val = None
-    for k in ("runnerNo", "horseNo", "clothNo"):
-      if k in node and node[k] is not None:
-        cand = safe_int(node[k], -1)
-        if 1 <= cand <= 24:
-          no_val = cand
-          break
-
-    if no_val is not None:
-      for ok in ("winOdds", "currentOdds", "wpOdds", "odds"):
-        if ok in node and node[ok] not in (None, "", "-", "---"):
-          o_float = _extract_odds_number(node[ok])
-          if o_float is not None:
-            odds_map[no_val] = o_float
-            break
-
-    for v in node.values():
-      extract_odds_from_json_tree(v, odds_map)
-  elif isinstance(node, list):
-    for item in node:
-      extract_odds_from_json_tree(item, odds_map)
-
-
 async def _parse_graphql_resp(
     resp: Response,
     graphql_hits: list[dict[str, Any]],
     odds_map: dict[int, float],
+    meta_out: dict[str, str],
 ) -> None:
   try:
     payload = await resp.json()
     if isinstance(payload, dict):
       graphql_hits.append(payload)
       extract_odds_from_json_tree(payload, odds_map)
+      if not meta_out.get("race_time"):
+        raw_dump = json.dumps(payload, ensure_ascii=False)
+        t_norm = normalize_time_str(raw_dump)
+        if t_norm:
+          meta_out["race_time"] = t_norm
   except Exception:
     pass
 
@@ -950,11 +1039,12 @@ async def fetch_win_odds_worker(
     race_no: int,
     race_label: str,
     runner_names: dict[int, str],
-) -> tuple[str, dict[int, float], dict[str, Any]]:
+) -> tuple[str, dict[int, float], dict[str, Any], dict[str, str]]:
   date_hyphen = race_date.replace("/", "-")
   odds_url = f"{BET_WP_BASE_URL}/{date_hyphen}/{venue_code}/{race_no}"
   odds_map: dict[int, float] = {}
   graphql_hits: list[dict[str, Any]] = []
+  meta_out: dict[str, str] = {}
 
   async with sem:
     page = await context.new_page()
@@ -962,14 +1052,24 @@ async def fetch_win_odds_worker(
     def on_resp(resp: Response) -> None:
       if "graphql" not in resp.url.lower():
         return
-      asyncio.create_task(_parse_graphql_resp(resp, graphql_hits, odds_map))
+      asyncio.create_task(
+          _parse_graphql_resp(resp, graphql_hits, odds_map, meta_out)
+      )
 
     page.on("response", on_resp)
     try:
-      await page.goto(odds_url, wait_until="domcontentloaded", timeout=14000)
-      await page.wait_for_timeout(700)
+      await page.goto(odds_url, wait_until="domcontentloaded", timeout=15000)
+      await page.wait_for_timeout(800)
       if graphql_hits and len(odds_map) < len(runner_names):
-        await page.wait_for_timeout(600)
+        await page.wait_for_timeout(700)
+
+      if not meta_out.get("race_time"):
+        page_txt = await page.evaluate(
+            "() => document.body ? document.body.innerText.slice(0, 1500) : ''"
+        )
+        t_dom = normalize_time_str(page_txt)
+        if t_dom:
+          meta_out["race_time"] = t_dom
     except Exception as exc:
       print(f"{race_label} odds fetch warning: {exc}")
     finally:
@@ -986,7 +1086,7 @@ async def fetch_win_odds_worker(
       "matched_odds_count": len(odds_map),
       "sample_odds": dict(list(odds_map.items())[:5]),
   }
-  return race_label, odds_map, diag
+  return race_label, odds_map, diag, meta_out
 
 
 async def fetch_hkjc_race_data_async() -> dict[str, Any]:
@@ -1078,6 +1178,7 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
             "race_type": "local",
             "venue_code": course,
             "race_date_used": race_date,
+            "race_time": meta.get("race_time", ""),
             "race_no": race_no,
             "race_label": race_label,
             "distance": meta.get("distance", ""),
@@ -1131,14 +1232,10 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
                 f"[{elapsed()}] [Overseas] {item['race_label']} ({item['race_date_used']}): extracted {len(item['runners'])} runners."
             )
 
-      races_needing_odds = [
-          r_obj
-          for r_obj in races
-          if not any(r.get("win_odds") is not None for r in r_obj["runners"])
-      ]
-      if race_date and races_needing_odds:
+      # 對所有本地 + 海外場次抓取獨贏賠率（即使是海外場次，若尚未拿到賠率也會再查一次 WP 彩池）
+      if race_date and races:
         print(
-            f"[{elapsed()}] Fetching live win odds concurrently for {len(races_needing_odds)} races (workers={concurrency})..."
+            f"[{elapsed()}] Fetching live win odds concurrently for {len(races)} races (workers={concurrency})..."
         )
         odds_tasks = [
             fetch_win_odds_worker(
@@ -1150,18 +1247,38 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
                 race_obj["race_label"],
                 {r["no"]: r["name"] for r in race_obj["runners"]},
             )
-            for race_obj in races_needing_odds
+            for race_obj in races
         ]
         odds_results = await asyncio.gather(*odds_tasks)
-        odds_by_label = {lbl: o_map for lbl, o_map, _ in odds_results}
-        odds_diagnostics = [diag for _, _, diag in odds_results]
+        odds_by_label: dict[str, dict[int, float]] = {}
+        meta_by_label: dict[str, dict[str, str]] = {}
+        for lbl, o_map, diag, m_out in odds_results:
+          odds_by_label[lbl] = o_map
+          meta_by_label[lbl] = m_out
+          odds_diagnostics.append(diag)
 
-        for race_obj in races_needing_odds:
+        for race_obj in races:
           lbl = race_obj["race_label"]
           o_map = odds_by_label.get(lbl, {})
+          m_out = meta_by_label.get(lbl, {})
+          if m_out.get("race_time") and not race_obj.get("race_time"):
+            race_obj["race_time"] = m_out["race_time"]
           for r in race_obj["runners"]:
             if r["no"] in o_map:
               r["win_odds"] = o_map[r["no"]]
+
+      # 按賽事日期與開跑時間重新排序所有場次
+      races.sort(key=build_race_datetime_key)
+      for idx, r_obj in enumerate(races, start=1):
+        r_obj["schedule_order"] = idx
+        d_used = r_obj.get("race_date_used") or race_date or ""
+        t_used = r_obj.get("race_time") or ""
+        if d_used and t_used:
+          r_obj["race_datetime"] = f"{d_used.replace('/', '-')}T{t_used}:00+08:00"
+        elif d_used:
+          r_obj["race_datetime"] = d_used.replace("/", "-")
+        else:
+          r_obj["race_datetime"] = ""
     finally:
       await browser.close()
 
@@ -1197,7 +1314,7 @@ async def fetch_hkjc_race_data_async() -> dict[str, Any]:
       encoding="utf-8",
   )
   print(
-      f"[{elapsed()}] Saved {len(races)} total races to {OUTPUT_DATA_PATH}"
+      f"[{elapsed()}] Saved {len(races)} ordered races to {OUTPUT_DATA_PATH}"
   )
   return result
 
