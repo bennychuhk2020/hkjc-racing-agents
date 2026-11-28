@@ -1,6 +1,6 @@
 {
-  "total_races": 25,
-  "elapsed_seconds": 59.13,
+  "total_races": 15,
+  "elapsed_seconds": 31.57,
   "racecard_summary": [
     {
       "race_no": 1,
@@ -18,20 +18,18 @@
     {
       "simulcast": "S1",
       "found": true,
-      "probe_2026/11/29": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/S1/1 -> 主頁 馬場活動 賽馬資訊 足球資訊 馬會會員 慈善及社區貢獻 馬會知多少 ENG 賽馬 足智彩 六合彩 網上渠道 投注處及電話投注 投注資料 客戶支援 「優越」計劃 登入 申請網上 投注服務 無法登入 總注數: 0 總投注金額: $0 發送注項 傳媒通訊系統 博彩要有節制 未滿十八歲人士不得投注或進入可投注的地方。 向非法或海外莊家下注，即屬違法，且可被判監禁。 切勿沉迷賭博，如需尋求輔導協助，可致電平和基金熱線1834 633。 常見",
-      "matched_date": "2026/11/28",
+      "matched_date": "2026/11/29",
       "source_mode": "bet",
-      "first_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S1/1",
-      "total_extracted": 3
+      "first_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/S1/1",
+      "total_extracted": 1
     },
     {
       "simulcast": "S2",
       "found": true,
-      "probe_2026/11/29": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/S2/1 -> 主頁 馬場活動 賽馬資訊 足球資訊 馬會會員 慈善及社區貢獻 馬會知多少 ENG 賽馬 足智彩 六合彩 網上渠道 投注處及電話投注 投注資料 客戶支援 「優越」計劃 登入 申請網上 投注服務 無法登入 總注數: 0 總投注金額: $0 發送注項 傳媒通訊系統 博彩要有節制 未滿十八歲人士不得投注或進入可投注的地方。 向非法或海外莊家下注，即屬違法，且可被判監禁。 切勿沉迷賭博，如需尋求輔導協助，可致電平和基金熱線1834 633。 常見",
-      "matched_date": "2026/11/28",
+      "matched_date": "2026/11/29",
       "source_mode": "bet",
-      "first_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S2/1",
-      "total_extracted": 9
+      "first_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/S2/1",
+      "total_extracted": 1
     },
     {
       "simulcast": "S3",
@@ -82,7 +80,7 @@
     {
       "race_label": "第5場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/5",
-      "graphql_count": 1,
+      "graphql_count": 0,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
@@ -103,7 +101,7 @@
     {
       "race_label": "第8場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/8",
-      "graphql_count": 0,
+      "graphql_count": 2,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
@@ -117,7 +115,7 @@
     {
       "race_label": "第10場",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/ST/10",
-      "graphql_count": 0,
+      "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
@@ -129,37 +127,16 @@
       "sample_odds": {}
     },
     {
-      "race_label": "S1-2",
-      "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S1/2",
+      "race_label": "S1-1",
+      "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/S1/1",
       "graphql_count": 0,
-      "matched_odds_count": 0,
-      "sample_odds": {}
-    },
-    {
-      "race_label": "S1-3",
-      "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S1/3",
-      "graphql_count": 2,
-      "matched_odds_count": 0,
-      "sample_odds": {}
-    },
-    {
-      "race_label": "S2-7",
-      "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-28/S2/7",
-      "graphql_count": 2,
       "matched_odds_count": 0,
       "sample_odds": {}
     },
     {
       "race_label": "S3-1",
       "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/S3/1",
-      "graphql_count": 0,
-      "matched_odds_count": 0,
-      "sample_odds": {}
-    },
-    {
-      "race_label": "S4-1",
-      "odds_url": "https://bet.hkjc.com/ch/racing/wp/2026-11-29/S4/1",
-      "graphql_count": 0,
+      "graphql_count": 10,
       "matched_odds_count": 0,
       "sample_odds": {}
     }
